@@ -28,6 +28,9 @@ This guide outlines the steps to pre-train and fine-tune the T3-AV model for aud
 *   `scikit-learn` (for `accuracy_score`)
 *   `tqdm`
 
+此外还需要ffmpeg。
+* 'apt-get install ffmpeg' of 'module load ffmpeg'
+
 建议在conda或venv等虚拟环境中安装依赖。
 
 ## 2. 数据准备 (Data Preparation)
