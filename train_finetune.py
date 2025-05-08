@@ -49,7 +49,8 @@ def parse_args():
     
     # Dummy params for MAE/Projection heads if T3_AV_Model requires them in __init__
     # Their weights won't be used if not part of the fine-tuning task.
-    parser.add_argument('--dec_heads', type=int, default=8, help='Dummy MAE decoder heads.')
+    parser.add_argument('--dec_layers', type=int, default=2, help='Dummy MAE decoder layers.') # Required for model init
+    parser.add_argument('--dec_heads', type=int, default=8, help='Dummy MAE decoder heads.') # Required for model init
     parser.add_argument('--proj_hidden_dim_contrastive', type=int, default=768, help='Dummy projection head hidden dim for contrastive.')
     parser.add_argument('--contrastive_dim', type=int, default=128, help='Dummy contrastive embedding dim.')
 
@@ -115,7 +116,7 @@ def main(args):
         'n_fft': 1024, 'hop_length': 512, 'output_embed_dim': 768
     }
     shared_backbone_params = {'num_heads': args.bb_heads, 'num_layers': args.bb_layers, 'mlp_dim': 768 * 4, 'dropout': 0.1}
-    mae_decoder_base_params = {'num_heads': args.dec_heads, 'num_decoder_layers': 1, 'mlp_dim': 768 * 2, 'dropout': 0.1} # Dummy
+    mae_decoder_base_params = {'num_heads': args.dec_heads, 'num_decoder_layers': args.dec_layers, 'mlp_dim': 768 * 4, 'dropout': 0.1} # Ensure this matches pre-training (e.g., 768*4)
     proj_head_base_params = {'hidden_dim': args.proj_hidden_dim_contrastive, 'use_gelu': True} # Dummy for contrastive head
     sound_clf_head_params = {'hidden_dim': args.clf_hidden_dim, 'num_classes': num_classes, 'use_gelu': True}
 
@@ -141,18 +142,31 @@ def main(args):
     print(f"Loading pretrained checkpoint from: {args.pretrained_checkpoint}")
     checkpoint = torch.load(args.pretrained_checkpoint, map_location='cpu')
     
+    # Get the state dict from the checkpoint
+    checkpoint_state_dict = checkpoint.get('model_state_dict', checkpoint)
+
+    # Remove the classifier weights from the checkpoint state dict
+    # as they have a different number of classes and should be randomly initialized.
+    keys_to_remove = [k for k in checkpoint_state_dict if k.startswith('sound_classifier.')]
+    if keys_to_remove:
+        print(f"Removing sound_classifier keys from checkpoint before loading: {keys_to_remove}")
+        for key in keys_to_remove:
+            del checkpoint_state_dict[key]
+    
     try:
-        # strict=False because the sound_classifier head is new and won't be in Stage1/2 checkpoints.
-        # Also, MAE decoders or projection heads might be in the checkpoint but not used here.
-        load_result = model.load_state_dict(checkpoint.get('model_state_dict', checkpoint), strict=False)
+        # Load the modified state dict. strict=False handles other potential mismatches 
+        # (e.g., MAE/projection heads existing in checkpoint but maybe not strictly needed now,
+        # although the current model structure includes them as dummies).
+        load_result = model.load_state_dict(checkpoint_state_dict, strict=False)
         print(f"Checkpoint load result: Missing keys: {load_result.missing_keys}, Unexpected keys: {load_result.unexpected_keys}")
+        # We expect sound_classifier keys to be missing now.
         if any('sound_classifier' not in key for key in load_result.missing_keys):
-             print("Warning: Some missing keys are not from the sound_classifier. Check model architecture alignment.")
+             print("Warning: Some missing keys other than sound_classifier were reported. Check model architecture alignment if unexpected.")
     except Exception as e:
         print(f"Error loading state dict: {e}")
         return
     model = model.to(device)
-    print("Pretrained weights loaded into model.")
+    print("Pretrained weights loaded into model (excluding classifier head).")
 
     # --- Freezing Components ---
     if args.freeze_all_except_head:

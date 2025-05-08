@@ -3,116 +3,57 @@ import argparse
 import os
 import random
 
-def select_subset(
-    csv_file_path: str,
-    output_csv_path: str,
-    num_classes_to_select: int,
-    num_train_per_class: int,
-    num_test_per_class: int,
-    video_dir_path: str,
-    file_extension: str = ".mp4"
-):
+def select_subset(csv_file_path: str, output_csv_path: str, num_classes_to_select: int):
     """
     Reads the VGGSound CSV, randomly selects a specified number of classes,
-    then for each class, selects a specified number of train and test samples
-    if their corresponding video files exist.
-    Saves the subset to a new CSV file.
+    filters the DataFrame to include only samples from these classes,
+    and saves the subset to a new CSV file.
 
     Args:
         csv_file_path (str): Path to the full vggsound.csv file.
         output_csv_path (str): Path where the new subset CSV will be saved.
         num_classes_to_select (int): The number of unique classes to select.
-        num_train_per_class (int): Number of train samples to select per class.
-        num_test_per_class (int): Number of test samples to select per class.
-        video_dir_path (str): Directory containing the video files.
-        file_extension (str): Extension of the video files (e.g., ".wav").
     """
     try:
+        # Read the CSV. Assuming format: youtube_id,start_seconds,label,split
+        # Adjust names if your CSV has a different header or no header.
         df = pd.read_csv(csv_file_path, header=None, names=['youtube_id', 'start_seconds', 'label', 'split'])
         print(f"Successfully read {len(df)} rows from {csv_file_path}")
     except FileNotFoundError:
         print(f"Error: CSV file not found at {csv_file_path}")
+        print("Please provide the correct path to your vggsound.csv file.")
         return
     except Exception as e:
         print(f"Error reading CSV file {csv_file_path}: {e}")
         return
 
+    # Ensure the 'label' column exists
     if 'label' not in df.columns:
-        print(f"Error: 'label' column not found. Columns: {df.columns.tolist()}")
-        return
-    if not os.path.isdir(video_dir_path):
-        print(f"Error: video directory not found at {video_dir_path}")
+        print(f"Error: 'label' column not found in the CSV. Columns found: {df.columns.tolist()}")
+        print("Please ensure your CSV is formatted correctly with a 'label' column (or adjust column names in the script).")
         return
 
+    # Get unique labels
     unique_labels = df['label'].unique()
     print(f"Found {len(unique_labels)} unique labels in the dataset.")
 
     if len(unique_labels) < num_classes_to_select:
-        print(f"Warning: Requested {num_classes_to_select} classes, but only {len(unique_labels)} available. Selecting all.")
+        print(f"Warning: Requested {num_classes_to_select} classes, but only {len(unique_labels)} unique classes are available. Selecting all available classes.")
         selected_classes = unique_labels.tolist()
     else:
         selected_classes = random.sample(list(unique_labels), num_classes_to_select)
+
     print(f"Randomly selected {len(selected_classes)} classes: {selected_classes}")
 
-    final_selected_rows = []
+    # Filter the DataFrame to include only rows with the selected labels
+    df_subset = df[df['label'].isin(selected_classes)]
 
-    for s_class in selected_classes:
-        class_df = df[df['label'] == s_class]
-
-        # Process train samples
-        train_samples_for_class = class_df[class_df['split'] == 'train']
-        eligible_train_samples_rows = []
-        for index, row in train_samples_for_class.iterrows():
-            # Construct filename as ID_startseconds_padded.extension
-            filename = f"{row['youtube_id']}_{int(row['start_seconds']):06d}{file_extension}"
-            potential_file_path = os.path.join(video_dir_path, filename)
-            print(f"Checking for TRAIN file: {potential_file_path}")
-            if os.path.exists(potential_file_path):
-                eligible_train_samples_rows.append(row)
-        
-        eligible_train_df = pd.DataFrame(eligible_train_samples_rows)
-        
-        if not eligible_train_df.empty:
-            if len(eligible_train_df) < num_train_per_class:
-                print(f"Warning: For class '{s_class}' (train), only {len(eligible_train_df)} existing samples found, requested {num_train_per_class}. Taking all available.")
-                final_selected_rows.extend(eligible_train_df.to_dict('records'))
-            else:
-                # Use random_state for reproducibility if desired, e.g., random_state=42
-                selected_train = eligible_train_df.sample(n=num_train_per_class) 
-                final_selected_rows.extend(selected_train.to_dict('records'))
-
-        # Process test samples
-        test_samples_for_class = class_df[class_df['split'] == 'test']
-        eligible_test_samples_rows = []
-        for index, row in test_samples_for_class.iterrows():
-            # Construct filename as ID_startseconds_padded.extension
-            filename = f"{row['youtube_id']}_{int(row['start_seconds']):06d}{file_extension}"
-            potential_file_path = os.path.join(video_dir_path, filename)
-            print(f"Checking for TEST file: {potential_file_path}")
-            if os.path.exists(potential_file_path):
-                eligible_test_samples_rows.append(row)
-
-        eligible_test_df = pd.DataFrame(eligible_test_samples_rows)
-
-        if not eligible_test_df.empty:
-            if len(eligible_test_df) < num_test_per_class:
-                print(f"Warning: For class '{s_class}' (test), only {len(eligible_test_df)} existing samples found, requested {num_test_per_class}. Taking all available.")
-                final_selected_rows.extend(eligible_test_df.to_dict('records'))
-            else:
-                selected_test = eligible_test_df.sample(n=num_test_per_class)
-                final_selected_rows.extend(selected_test.to_dict('records'))
-                
-    if not final_selected_rows:
-        print("Warning: The final subset is empty. No samples met the criteria.")
-        # Create an empty DataFrame with correct columns to avoid error on to_csv
-        df_subset = pd.DataFrame(columns=['youtube_id', 'start_seconds', 'label', 'split'])
+    if df_subset.empty:
+        print("Warning: The subset is empty. This might happen if selected classes have no samples or an issue occurred.")
     else:
-        df_subset = pd.DataFrame(final_selected_rows)
-        # Ensure correct column order if creating from list of dicts
-        if not df_subset.empty:
-             df_subset = df_subset[['youtube_id', 'start_seconds', 'label', 'split']]
-        print(f"Created a subset with {len(df_subset)} samples.")
+        print(f"Created a subset with {len(df_subset)} samples belonging to the selected classes.")
 
+    # Save the subset to a new CSV file without header and index
     try:
         df_subset.to_csv(output_csv_path, index=False, header=False)
         print(f"Subset CSV saved to {output_csv_path}")
@@ -120,17 +61,18 @@ def select_subset(
         print(f"Error saving subset CSV to {output_csv_path}: {e}")
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="Select a subset of classes and samples from VGGSound CSV, checking for file existence.")
+    parser = argparse.ArgumentParser(description="Select a subset of classes from VGGSound CSV.")
     parser.add_argument(
         '--input_csv',
         type=str,
-        default="vggsound.csv",
+        # !!! IMPORTANT: Replace with the ACTUAL path to your vggsound.csv if not providing via CLI !!!
+        default=os.path.join(os.path.expanduser("~"), "vggsound.csv"),
         help='Path to the input vggsound.csv file.'
     )
     parser.add_argument(
         '--output_csv',
         type=str,
-        default="vggsound_subset_selected.csv",
+        default="vggsound_subset_10_classes.csv",
         help='Path to save the output subset CSV file.'
     )
     parser.add_argument(
@@ -139,51 +81,16 @@ if __name__ == '__main__':
         default=10,
         help='Number of unique classes to randomly select.'
     )
-    parser.add_argument(
-        '--num_train',
-        type=int,
-        default=5,
-        help='Number of train samples to select per chosen class (if files exist).'
-    )
-    parser.add_argument(
-        '--num_test',
-        type=int,
-        default=2,
-        help='Number of test samples to select per chosen class (if files exist).'
-    )
-    parser.add_argument(
-        '--video_dir',
-        type=str,
-        required=True,
-        help='Path to the directory containing video files (e.g., wav, mp3).'
-    )
-    parser.add_argument(
-        '--file_extension',
-        type=str,
-        default=".mp4",
-        help='Extension of the video files (e.g., ".wav", ".mp3"). Default is ".mp4".'
-    )
     args = parser.parse_args()
 
     print(f"Input CSV: {args.input_csv}")
     print(f"Output CSV: {args.output_csv}")
     print(f"Number of classes to select: {args.num_classes}")
-    print(f"Number of train samples per class: {args.num_train}")
-    print(f"Number of test samples per class: {args.num_test}")
-    print(f"video directory: {args.video_dir}")
-    print(f"video file extension: {args.file_extension}")
 
+    # Check if input CSV exists before proceeding
     if not os.path.exists(args.input_csv):
         print(f"Error: Input CSV file '{args.input_csv}' not found.")
-    elif not os.path.isdir(args.video_dir):
-        print(f"Error: video directory '{args.video_dir}' not found or is not a directory.")
+        print("Please ensure the --input_csv argument points to your actual vggsound.csv file,")
+        print("or modify the 'default' value in the script if running without CLI arguments.")
     else:
-        select_subset(
-            args.input_csv,
-            args.output_csv,
-            args.num_classes,
-            args.num_train,
-            args.num_test,
-            args.video_dir,
-            args.file_extension
-        ) 
+        select_subset(args.input_csv, args.output_csv, args.num_classes) 

@@ -134,18 +134,17 @@ class T3_AV_Model(nn.Module):
             "Video and Audio ViT hidden sizes must match for shared backbone input."
         self.modal_embed_dim = self.video_encoder.vit_hidden_size # This will be embed_dim for shared_backbone
 
-        # 2. Configure and Instantiate Shared Backbone
-        # Max sequence length for shared backbone's positional encoding is the max number of *unmasked* patches + 1 (for CLS)
-        # from either modality. This is a bit dynamic, so set a sufficiently large max_len for pos_encoder in SharedBackbone,
-        # or calculate based on max possible unmasked patches.
-        # Let's use the max total patches from either modality initially for simplicity in SharedBackbone's PositionalEncoding max_len.
-        # The actual sequence length passed to shared_backbone.forward will be num_unmasked + 1.
-        max_possible_unmasked_video = int(self.video_encoder.mae_total_patches * (1 - self.mae_mask_ratio)) +1
-        max_possible_unmasked_audio = int(self.audio_encoder.mae_num_patches * (1 - self.mae_mask_ratio)) +1
+        # The actual sequence length passed to shared_backbone.forward depends on the stage:
+        # Stage 1: num_unmasked + 1
+        # Stage 2/Finetune: total_patches + 1
+        # Therefore, PositionalEncoding max_len must accommodate the largest possible full sequence.
+        max_total_patches_video = self.video_encoder.mae_total_patches
+        max_total_patches_audio = self.audio_encoder.mae_num_patches
+        max_full_seq_len_needed = max(max_total_patches_video, max_total_patches_audio) + 1
         
         _shared_backbone_params = {
             'embed_dim': self.modal_embed_dim,
-            'max_seq_len': max(max_possible_unmasked_video, max_possible_unmasked_audio, 256), # Ensure a min length too
+            'max_seq_len': max(max_full_seq_len_needed, 256), # Use max total patches + CLS, ensure min length
             **shared_backbone_params # num_heads, num_layers, mlp_dim, dropout
         }
         self.shared_backbone = SharedTransformerBackbone(**_shared_backbone_params)

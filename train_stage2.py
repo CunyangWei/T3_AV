@@ -48,7 +48,12 @@ def parse_args():
     parser.add_argument('--bb_heads', type=int, default=12, help='Number of attention heads in the shared backbone.')
     # Note: MAE decoder params not needed here, but proj head params are.
     parser.add_argument('--proj_hidden_dim', type=int, default=768, help='Hidden dimension for projection head MLP.') # Example
-    parser.add_argument('--dec_heads', type=int, default=8, help='Number of attention heads in MAE decoders.')
+    # Add dummy clf_hidden_dim needed for T3_AV_Model init
+    parser.add_argument('--clf_hidden_dim', type=int, default=512, 
+                        help='Dummy hidden dimension for classification head (Stage 3). Not used in Stage 2.')
+    # Dummy params for MAE decoders if T3_AV_Model requires them in __init__
+    parser.add_argument('--dec_layers', type=int, default=2, help='Dummy MAE decoder layers.') # Added for consistency
+    parser.add_argument('--dec_heads', type=int, default=8, help='Dummy MAE decoder heads.') 
     # dec_mlp_dim often derived
 
     # --- System Configuration --- 
@@ -85,8 +90,10 @@ def main(args):
     }
     shared_backbone_params = {'num_heads': args.bb_heads, 'num_layers': args.bb_layers, 'mlp_dim': 768 * 4, 'dropout': 0.1}
     # MAE decoders not strictly needed but T3_AV_Model expects the params
-    mae_decoder_base_params = {'num_heads': args.dec_heads, 'num_decoder_layers': 1, 'mlp_dim': 768 * 2, 'dropout': 0.1}
+    mae_decoder_base_params = {'num_heads': args.dec_heads, 'num_decoder_layers': args.dec_layers, 'mlp_dim': 768 * 4, 'dropout': 0.1}
     proj_head_base_params = {'hidden_dim': args.proj_hidden_dim, 'use_gelu': True}
+    # Dummy sound_clf_head_params required by T3_AV_Model init
+    sound_clf_head_params = {'hidden_dim': args.clf_hidden_dim, 'num_classes': 1, 'use_gelu': True}
 
     # --- Initialize Model --- 
     print("Initializing T3_AV_Model for Stage 2...")
@@ -97,6 +104,7 @@ def main(args):
         video_mae_decoder_base_params=mae_decoder_base_params, # Pass dummy/base params
         audio_mae_decoder_base_params=mae_decoder_base_params, # Pass dummy/base params
         proj_head_base_params=proj_head_base_params,
+        sound_clf_head_params=sound_clf_head_params,          # Added
         contrastive_embed_dim=args.contrastive_dim,
         contrastive_temperature=args.temperature,
         # mae_mask_ratio not used in stage 2 forward, but __init__ needs it
@@ -112,9 +120,28 @@ def main(args):
     print(f"Loading Stage 1 checkpoint from: {args.stage1_checkpoint}")
     checkpoint = torch.load(args.stage1_checkpoint, map_location='cpu')
     
-    # Load model state dict - use strict=False because projection heads are new
+    # Get the state dict from the checkpoint
+    checkpoint_state_dict = checkpoint.get('model_state_dict', checkpoint)
+
+    # Remove the classifier weights (if they exist in the checkpoint) 
+    # as they have a different number of classes (dummy 1 vs actual N).
+    keys_to_remove = [k for k in checkpoint_state_dict if k.startswith('sound_classifier.')]
+    # Also remove the positional encoding buffer due to potential size mismatch from different max_seq_len calculations
+    # between saving (Stage 1 - unmasked length) and loading (Stage 2 - full length).
+    pe_key = 'shared_backbone.pos_encoder.pe'
+    if pe_key in checkpoint_state_dict:
+        keys_to_remove.append(pe_key)
+
+    if keys_to_remove:
+        print(f"Removing keys from checkpoint before loading: {keys_to_remove}")
+        for key in keys_to_remove:
+            if key in checkpoint_state_dict: # Check again in case key wasn't present
+                del checkpoint_state_dict[key]
+            else:
+                print(f"  Warning: Attempted to remove key '{key}' but it was not found in checkpoint state_dict.")
+    
     try:
-        load_result = model.load_state_dict(checkpoint['model_state_dict'], strict=False)
+        load_result = model.load_state_dict(checkpoint_state_dict, strict=False)
         print(f"Checkpoint load result: {load_result}")
         # Check for missing/unexpected keys if needed
         if load_result.missing_keys:

@@ -1,0 +1,4 @@
+__pycache__/
+finetune_av_classification_output/
+stage1_output/
+stage2_output/

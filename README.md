@@ -121,18 +121,16 @@ python train_stage1.py \
 **命令示例**:
 ```bash
 python train_stage2.py \
---csv_path /path/to/your/vggsound_subset.csv \
---video_dir /path/to/your/vggsound_videos/ \
---stage1_checkpoint ./stage1_output/t3_av_stage1_epoch_XX.pt \
+--csv_path vggsound_subset.csv \
+--video_dir ./video \
+--stage1_checkpoint ./stage1_output/t3_av_stage1_epoch_5.pt \
 --output_dir ./stage2_output \
---epochs 30 \
---batch_size 32 \
---learning_rate 5e-5 \
+--epochs 5 \
+--batch_size 16 \
+--learning_rate 1e-4 \
 --warmup_epochs 3 \
 --contrastive_dim 128 \
 --temperature 0.07 \
-# --freeze_encoders \
-# --freeze_backbone \
 --num_frames 16 \
 --vit_model_name 'google/vit-base-patch16-224-in21k' \
 --audio_duration 10.0 \
@@ -143,6 +141,8 @@ python train_stage2.py \
 --num_workers 8 \
 --log_interval 50 \
 --checkpoint_interval 5
+# --freeze_encoders \
+# --freeze_backbone \
 ```
 *   **关键参数**:
     *   `--stage1_checkpoint`: Stage 1训练好的模型权重路径。如果跳过Stage 1，这里可以是一个基础的ViT权重，但模型结构需要对应。
@@ -158,17 +158,16 @@ python train_stage2.py \
 **命令示例**:
 ```bash
 python train_finetune.py \
---csv_path /path/to/your/vggsound_subset.csv \
---video_dir /path/to/your/vggsound_videos/ \
---pretrained_checkpoint ./stage2_output/t3_av_stage2_epoch_YY.pt \
+--csv_path vggsound_subset.csv \
+--video_dir ./video \
+--pretrained_checkpoint ./stage2_output/t3_av_stage2_epoch_5.pt \
 --output_dir ./finetune_av_classification_output \
---epochs 20 \
+--epochs 5 \
 --batch_size 16 \
---learning_rate 2e-5 \
---warmup_epochs 2 \
+--learning_rate 1e-4 \
+--warmup_epochs 3 \
 --unfreeze_backbone_layers 2 \
 --unfreeze_encoder_layers 1 \
-# 或者完全只微调分类头: --freeze_all_except_head \
 --num_frames 16 \
 --vit_model_name 'google/vit-base-patch16-224-in21k' \
 --audio_duration 10.0 \
@@ -180,6 +179,7 @@ python train_finetune.py \
 --log_interval 20 \
 --eval_interval 1 \
 --checkpoint_save_interval 1
+# 或者完全只微调分类头: --freeze_all_except_head \
 ```
 *   **关键参数**:
     *   `--pretrained_checkpoint`: Stage 2（或Stage 1）训练好的模型权重路径。
