@@ -1,0 +1,79 @@
+Loading ffmpeg/gcc/11.3.0/zen2/6.0
+  Loading requirement: gcc/11.3.0
+1
+4
+WARNING:__main__:
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+DDP enabled: 4 GPU(s). Rank 0 on device cuda:0
+Output directory: ./test_stage2_output
+[rank0]:[W509 11:05:31.139321408 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank2]:[W509 11:05:31.140914662 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank3]:[W509 11:05:31.150093917 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank1]:[W509 11:05:31.157313427 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Initializing VideoModality with google/vit-base-patch16-224-in21k...
+Process Rank 0: Using device: cuda:0
+Initializing VideoModality with google/vit-base-patch16-224-in21k...Initializing VideoModality with google/vit-base-patch16-224-in21k...Initializing T3_AV_Model for Stage 2...
+
+
+Initializing VideoModality with google/vit-base-patch16-224-in21k...
+VideoModality initialized.
+VideoModality initialized.
+VideoModality initialized.
+VideoModality initialized.
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+AudioModality initialized.AudioModality initialized.
+AudioModality initialized.
+
+Actual VideoModality and AudioModality instantiated.
+Actual VideoModality and AudioModality instantiated.
+Actual VideoModality and AudioModality instantiated.
+AudioModality initialized.
+Actual VideoModality and AudioModality instantiated.
+Actual SharedTransformerBackbone instantiated.Actual SharedTransformerBackbone instantiated.
+
+Actual SharedTransformerBackbone instantiated.
+Actual SharedTransformerBackbone instantiated.
+Actual MAEDecoders instantiated.
+Actual MAEDecoders instantiated.
+Actual MAEDecoders instantiated.
+Actual MAEDecoders instantiated.ProjectionHeads instantiated.
+
+ProjectionHeads instantiated.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+Model structure initialized.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+Loading Stage 1 checkpoint from: ./test_stage1_output/t3_av_stage1_epoch_50.pt
+/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage2.py:181: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  checkpoint = torch.load(args.stage1_checkpoint, map_location='cpu')
+Removing keys from checkpoint before loading: ['sound_classifier.fc1.weight', 'sound_classifier.fc1.bias', 'sound_classifier.fc2.weight', 'sound_classifier.fc2.bias', 'shared_backbone.pos_encoder.pe']
+Checkpoint load result (Rank 0): _IncompatibleKeys(missing_keys=['shared_backbone.pos_encoder.pe', 'sound_classifier.fc1.weight', 'sound_classifier.fc1.bias', 'sound_classifier.fc2.weight', 'sound_classifier.fc2.bias'], unexpected_keys=[])
+Missing keys (Rank 0): ['shared_backbone.pos_encoder.pe', 'sound_classifier.fc1.weight', 'sound_classifier.fc1.bias', 'sound_classifier.fc2.weight', 'sound_classifier.fc2.bias']
+Stage 1 weights loaded into model on Rank 0.
+Compiling model with torch.compile(mode='reduce-overhead')...
+Model compiled successfully.
+Model wrapped with DDP.
+Model parameters: 247,956,481 trainable / 247,956,481 total
+Initializing Dataset and DataLoader for Stage 2...
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.Dataset and DataLoader initialized.
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.
+Optimizer and Scheduler initialized for trainable parameters.
+
+Saved Stage 2 configuration to ./test_stage2_output/stage2_config.json
+Starting Stage 2 Contrastive Training on 4 GPU(s)...
+Epoch 1/50 (Rank 0):   0%|          | 0/38 [00:00<?, ?it/s]Epoch 1/50 (Rank 0):   0%|          | 0/38 [00:11<?, ?it/s, Contrastive Loss: 2.8213, LR: 0.000001]Epoch 1/50 (Rank 0):   3%|▎         | 1/38 [00:11<06:53, 11.18s/it, Contrastive Loss: 2.8213, LR: 0.000001]Epoch 1/50 (Rank 0):   3%|▎         | 1/38 [00:20<06:53, 11.18s/it, Contrastive Loss: 2.7678, LR: 0.000001]Epoch 1/50 (Rank 0):   5%|▌         | 2/38 [00:20<06:01, 10.03s/it, Contrastive Loss: 2.7678, LR: 0.000001]Epoch 1/50 (Rank 0):   5%|▌         | 2/38 [00:29<06:01, 10.03s/it, Contrastive Loss: 2.8021, LR: 0.000002]Epoch 1/50 (Rank 0):   8%|▊         | 3/38 [00:29<05:37,  9.64s/it, Contrastive Loss: 2.8021, LR: 0.000002]Epoch 1/50 (Rank 0):   8%|▊         | 3/38 [00:40<05:37,  9.64s/it, Contrastive Loss: 2.8095, LR: 0.000002]Epoch 1/50 (Rank 0):  11%|█         | 4/38 [00:40<05:43, 10.09s/it, Contrastive Loss: 2.8095, LR: 0.000002]Epoch 1/50 (Rank 0):  11%|█         | 4/38 [00:49<05:43, 10.09s/it, Contrastive Loss: 2.8062, LR: 0.000003]Epoch 1/50 (Rank 0):  13%|█▎        | 5/38 [00:49<05:22,  9.77s/it, Contrastive Loss: 2.8062, LR: 0.000003]Epoch 1/50 (Rank 0):  13%|█▎        | 5/38 [00:56<05:22,  9.77s/it, Contrastive Loss: 2.7851, LR: 0.000003]Epoch 1/50 (Rank 0):  16%|█▌        | 6/38 [00:56<04:46,  8.97s/it, Contrastive Loss: 2.7851, LR: 0.000003]Epoch 1/50 (Rank 0):  16%|█▌        | 6/38 [01:05<04:46,  8.97s/it, Contrastive Loss: 2.8147, LR: 0.000004]Epoch 1/50 (Rank 0):  18%|█▊        | 7/38 [01:05<04:31,  8.77s/it, Contrastive Loss: 2.8147, LR: 0.000004]Epoch 1/50 (Rank 0):  18%|█▊        | 7/38 [01:12<04:31,  8.77s/it, Contrastive Loss: 2.8511, LR: 0.000004]Epoch 1/50 (Rank 0):  21%|██        | 8/38 [01:12<04:03,  8.11s/it, Contrastive Loss: 2.8511, LR: 0.000004]Epoch 1/50 (Rank 0):  21%|██        | 8/38 [01:19<04:03,  8.11s/it, Contrastive Loss: 2.8267, LR: 0.000005]Epoch 1/50 (Rank 0):  24%|██▎       | 9/38 [01:19<03:53,  8.05s/it, Contrastive Loss: 2.8267, LR: 0.000005]Epoch 1/50 (Rank 0):  24%|██▎       | 9/38 [01:28<03:53,  8.05s/it, Contrastive Loss: 2.8212, LR: 0.000005]Epoch 1/50 (Rank 0):  26%|██▋       | 10/38 [01:28<03:49,  8.19s/it, Contrastive Loss: 2.8212, LR: 0.000005]Epoch 1/50 (Rank 0):  26%|██▋       | 10/38 [01:35<03:49,  8.19s/it, Contrastive Loss: 2.8049, LR: 0.000006]                                                                                                              Epoch 1/50, Step 10/38 - Contrastive Loss: 2.8049, LR: 0.000006
+Epoch 1/50 (Rank 0):  26%|██▋       | 10/38 [01:35<03:49,  8.19s/it, Contrastive Loss: 2.8049, LR: 0.000006]Epoch 1/50 (Rank 0):  29%|██▉       | 11/38 [01:35<03:35,  7.97s/it, Contrastive Loss: 2.8049, LR: 0.000006]Epoch 1/50 (Rank 0):  29%|██▉       | 11/38 [01:43<03:35,  7.97s/it, Contrastive Loss: 2.8308, LR: 0.000006]Epoch 1/50 (Rank 0):  32%|███▏      | 12/38 [01:43<03:24,  7.87s/it, Contrastive Loss: 2.8308, LR: 0.000006]slurmstepd: error: *** JOB 11683988 ON gpu-a6-3 CANCELLED AT 2025-05-09T11:07:33 ***

@@ -4,15 +4,17 @@ This guide outlines the steps to pre-train and fine-tune the T3-AV model for aud
 
 ## 目录 (Table of Contents)
 
-1.  [环境设置 (Environment Setup)](#环境设置)
-2.  [数据准备 (Data Preparation)](#数据准备)
-    *   [2.1. 下载 VGGSound 数据集 (Download VGGSound)](#21-下载-vggsound-数据集)
-    *   [2.2. 创建数据子集 (Optional - Create Data Subset)](#22-创建数据子集-optional---create-data-subset)
-3.  [模型训练阶段 (Model Training Stages)](#模型训练阶段)
-    *   [3.1. Stage 1: 掩码自动编码器 (MAE) 预训练 (Masked Autoencoder Pre-training)](#31-stage-1-掩码自动编码器-mae-预训练)
-    *   [3.2. Stage 2: 多模态对比学习 (Multimodal Contrastive Learning)](#32-stage-2-多模态对比学习)
-    *   [3.3. Stage 3: 音视频分类微调 (Audio-Visual Classification Fine-tuning)](#33-stage-3-音视频分类微调)
-4.  [注意事项和进阶调整 (Important Notes and Advanced Adjustments)](#注意事项和进阶调整)
+- [T3-AV Model Training and Fine-tuning Guide](#t3-av-model-training-and-fine-tuning-guide)
+  - [目录 (Table of Contents)](#目录-table-of-contents)
+  - [1. 环境设置 (Environment Setup)](#1-环境设置-environment-setup)
+  - [2. 数据准备 (Data Preparation)](#2-数据准备-data-preparation)
+    - [2.1. 下载 VGGSound 数据集](#21-下载-vggsound-数据集)
+    - [2.2. 创建数据子集 (Optional - Create Data Subset)](#22-创建数据子集-optional---create-data-subset)
+  - [3. 模型训练阶段 (Model Training Stages)](#3-模型训练阶段-model-training-stages)
+    - [3.1. Stage 1: 掩码自动编码器 (MAE) 预训练](#31-stage-1-掩码自动编码器-mae-预训练)
+    - [3.2. Stage 2: 多模态对比学习](#32-stage-2-多模态对比学习)
+    - [3.3. Stage 3: 音视频分类微调](#33-stage-3-音视频分类微调)
+  - [4. 注意事项和进阶调整](#4-注意事项和进阶调整)
 
 ## 1. 环境设置 (Environment Setup)
 
@@ -29,7 +31,7 @@ This guide outlines the steps to pre-train and fine-tune the T3-AV model for aud
 *   `tqdm`
 
 此外还需要ffmpeg。
-* 'apt-get install ffmpeg' of 'module load ffmpeg'
+*   `apt-get install ffmpeg`
 
 建议在conda或venv等虚拟环境中安装依赖。
 
@@ -51,12 +53,11 @@ This guide outlines the steps to pre-train and fine-tune the T3-AV model for aud
     ```bash
     python select_vggsound_subset.py \
     --input_csv vggsound.csv \
-    --output_csv vggsound_subset.csv \
-    --num_classes 10 \
+    --output_csv vggsound_subset_10.csv \
+    --num_classes 310 \
     --num_train 8 \
     --num_test 2 \
-    --audio_dir /home/wcy/848m/VGGSound_dataset/full_dataset_extracted/scratch/shared/beegfs/hchen/train_data/VGGSound_final/video \
-    --file_extension .mp4
+    --audio_dir /home/cunyang/scratch.bhatele-lab/vgg/full_dataset_extracted/scratch/shared/beegfs/hchen/train_data/VGGSound_final/video/ 
     ```
     在后续的训练命令中，您将使用这个新生成的子集CSV文件路径。
 
@@ -69,6 +70,13 @@ This guide outlines the steps to pre-train and fine-tune the T3-AV model for aud
     --destination_video_dir ./video
     ```
     保存子数据集。
+
+python select_vggsound_classes.py \
+    --input_csv vggsound.csv \
+    --output_csv ./vggsound_10_classes_all_samples.csv \
+    --num_classes 10 \
+    --video_dir /home/cunyang/scratch.bhatele-lab/vgg/full_dataset_extracted/scratch/shared/beegfs/hchen/train_data/VGGSound_final/video/ \
+    --seed 42
 
 <!-- 3.  **清理数据**:
     使用 `clean_vggsound_csv.py` 脚本清理数据集，删除不存在的视频文件。
@@ -90,11 +98,11 @@ This guide outlines the steps to pre-train and fine-tune the T3-AV model for aud
 **命令示例**:
 ```bash
 python train_stage1.py \
---csv_path ./vggsound_subset.csv \
---video_dir /home/wcy/848m/VGGSound_dataset/full_dataset_extracted/scratch/shared/beegfs/hchen/train_data/VGGSound_final/video \
+--csv_path ./vggsound_subset_40.csv \
+--video_dir /home/cunyang/scratch.bhatele-lab/vgg/full_dataset_extracted/scratch/shared/beegfs/hchen/train_data/VGGSound_final/video/ \
 --output_dir ./stage1_output \
---epochs 50 \
---batch_size 16 \
+--epochs 1 \
+--batch_size 128 \
 --learning_rate 1.5e-4 \
 --warmup_epochs 5 \
 --mask_ratio 0.75 \
@@ -106,7 +114,7 @@ python train_stage1.py \
 --dec_layers 2 \
 --dec_heads 8 \
 --device cuda \
---num_workers 8 \
+--num_workers 16 \
 --log_interval 50 \
 --checkpoint_interval 5
 ```
@@ -146,6 +154,31 @@ python train_stage2.py \
 --checkpoint_interval 5
 # --freeze_encoders \
 # --freeze_backbone \
+
+# python -m torch.distributed.run --nproc_per_node=1 train_stage2.py --ddp \
+python train_stage2.py \
+    --csv_path vggsound_subset_40.csv \
+    --video_dir /home/cunyang/scratch.bhatele-lab/vgg/full_dataset_extracted/scratch/shared/beegfs/hchen/train_data/VGGSound_final/video/ \
+    --stage1_checkpoint ./test_stage1_output/t3_av_stage1_epoch_50.pt \
+    --output_dir ./stage2_output \
+    --epochs 1 \
+    --batch_size 64 \
+    --learning_rate 1e-4 \
+    --warmup_epochs 1 \
+    --contrastive_dim 128 \
+    --temperature 0.07 \
+    --num_frames 16 \
+    --vit_model_name 'google/vit-base-patch16-224-in21k' \
+    --audio_duration 10.0 \
+    --bb_layers 6 \
+    --bb_heads 12 \
+    --proj_hidden_dim 768 \
+    --num_workers 16 \
+    --log_interval 10 \
+    --checkpoint_interval 1 \
+    --amp \
+    --compile_model \
+    --compile_mode reduce-overhead
 ```
 *   **关键参数**:
     *   `--stage1_checkpoint`: Stage 1训练好的模型权重路径。如果跳过Stage 1，这里可以是一个基础的ViT权重，但模型结构需要对应。

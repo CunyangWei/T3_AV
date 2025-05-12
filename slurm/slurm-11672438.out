@@ -1,0 +1,75 @@
+Loading ffmpeg/gcc/11.3.0/zen2/6.0
+  Loading requirement: gcc/11.3.0
+1
+4
+WARNING:__main__:
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+DDP enabled: 4 GPU(s). Rank 0 on device cuda:0
+Output directory: ./stage1_output
+[rank3]:[W509 00:09:56.562723697 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank2]:[W509 00:09:56.564327887 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank0]:[W509 00:09:56.564769323 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank1]:[W509 00:09:56.568337371 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Process Rank 0: Using device: cuda:0Initializing VideoModality with google/vit-base-patch16-224-in21k...
+Initializing VideoModality with google/vit-base-patch16-224-in21k...
+Initializing T3_AV_Model...Initializing VideoModality with google/vit-base-patch16-224-in21k...
+
+
+Initializing VideoModality with google/vit-base-patch16-224-in21k...
+VideoModality initialized.
+VideoModality initialized.
+VideoModality initialized.
+VideoModality initialized.Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+AudioModality initialized.
+AudioModality initialized.
+Actual VideoModality and AudioModality instantiated.
+Actual VideoModality and AudioModality instantiated.
+Actual SharedTransformerBackbone instantiated.Actual SharedTransformerBackbone instantiated.
+
+AudioModality initialized.
+Actual VideoModality and AudioModality instantiated.
+AudioModality initialized.
+Actual VideoModality and AudioModality instantiated.
+Actual MAEDecoders instantiated.
+Actual MAEDecoders instantiated.
+ProjectionHeads instantiated.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+Actual SharedTransformerBackbone instantiated.
+Actual SharedTransformerBackbone instantiated.
+Actual MAEDecoders instantiated.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+Actual MAEDecoders instantiated.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+Model initialized.
+Model has 247,956,481 trainable parameters (before DDP wrapping).
+Model wrapped with DDP.
+Initializing Dataset and DataLoader...
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.
+
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.
+VGGSoundDataset: Loaded 2472 samples for split 'train'. Found 309 classes.
+Dataset and DataLoader initialized.
+Optimizer and Scheduler initialized.
+Saved configuration to ./stage1_output/stage1_config.json
+Starting Stage 1 MAE Training on 4 GPU(s)...
+Epoch 1/1 (Rank 0):   0%|          | 0/6 [00:00<?, ?it/s]Epoch 1/1 (Rank 0):   0%|          | 0/6 [01:02<?, ?it/s, Loss: 1.4106, V_MAE: 0.6600, A_MAE: 0.7506, LR: 0.000025]Epoch 1/1 (Rank 0):  17%|█▋        | 1/6 [01:02<05:11, 62.34s/it, Loss: 1.4106, V_MAE: 0.6600, A_MAE: 0.7506, LR: 0.000025]Epoch 1/1 (Rank 0):  17%|█▋        | 1/6 [01:53<05:11, 62.34s/it, Loss: 1.4640, V_MAE: 0.7210, A_MAE: 0.7430, LR: 0.000050]Epoch 1/1 (Rank 0):  33%|███▎      | 2/6 [01:53<03:42, 55.51s/it, Loss: 1.4640, V_MAE: 0.7210, A_MAE: 0.7430, LR: 0.000050]Epoch 1/1 (Rank 0):  33%|███▎      | 2/6 [02:47<03:42, 55.51s/it, Loss: 1.2192, V_MAE: 0.6347, A_MAE: 0.5844, LR: 0.000075]Epoch 1/1 (Rank 0):  50%|█████     | 3/6 [02:47<02:45, 55.17s/it, Loss: 1.2192, V_MAE: 0.6347, A_MAE: 0.5844, LR: 0.000075]Epoch 1/1 (Rank 0):  50%|█████     | 3/6 [03:50<02:45, 55.17s/it, Loss: 0.9460, V_MAE: 0.5701, A_MAE: 0.3759, LR: 0.000100]Epoch 1/1 (Rank 0):  67%|██████▋   | 4/6 [03:50<01:55, 57.94s/it, Loss: 0.9460, V_MAE: 0.5701, A_MAE: 0.3759, LR: 0.000100]Epoch 1/1 (Rank 0):  67%|██████▋   | 4/6 [04:48<01:55, 57.94s/it, Loss: 0.7293, V_MAE: 0.5100, A_MAE: 0.2193, LR: 0.000125]Epoch 1/1 (Rank 0):  83%|████████▎ | 5/6 [04:48<00:57, 57.99s/it, Loss: 0.7293, V_MAE: 0.5100, A_MAE: 0.2193, LR: 0.000125]Epoch 1/1 (Rank 0):  83%|████████▎ | 5/6 [05:59<00:57, 57.99s/it, Loss: 0.6066, V_MAE: 0.4499, A_MAE: 0.1567, LR: 0.000150]Epoch 1/1 (Rank 0): 100%|██████████| 6/6 [05:59<00:00, 62.71s/it, Loss: 0.6066, V_MAE: 0.4499, A_MAE: 0.1567, LR: 0.000150]                                                                                                                           
+Epoch 1 Finished.
+  Average Loss (Rank 0): 1.0626
+  Average Video MAE Loss (Rank 0): 0.5910
+  Average Audio MAE Loss (Rank 0): 0.4717
+Checkpoint saved to ./stage1_output/t3_av_stage1_epoch_1.pt
+Stage 1 MAE Training finished.

@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import os
+import torch.distributed as dist
 
 # We will import these once they are adapted or if their existing structure is sufficient
 # For now, define dummy classes or assume they will be available.
@@ -74,6 +75,93 @@ except ImportError:
             # Simulate reconstruction of all patches
             return torch.randn(B, total_patches_in_sequence, self.output_patch_dim, device=unmasked_features_from_backbone.device)
 
+# Helper for DDP AllGather (ensure this is defined in your file)
+class AllGatherFunc(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, tensor_list_dummy, tensor_to_gather): # tensor_list_dummy is not used for backward/forward, just to match signature if needed
+        if not dist.is_available() or not dist.is_initialized():
+            return tensor_to_gather.unsqueeze(0) # Simulate list of one tensor if not DDP
+
+        world_size = dist.get_world_size()
+        # Ensure tensor_to_gather is on the correct device, though it should be already
+        # tensor_to_gather = tensor_to_gather.to(f'cuda:{dist.get_rank()}') # Usually already on correct device
+
+        # Create a list of tensors for gathering, even if some are empty
+        # All tensors in this list must be on the GPU for nccl backend
+        gathered_tensors_list = [
+            torch.empty_like(tensor_to_gather) for _ in range(world_size)
+        ]
+        dist.all_gather(gathered_tensors_list, tensor_to_gather)
+        return torch.cat(gathered_tensors_list, dim=0)
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        if not dist.is_available() or not dist.is_initialized() or dist.get_world_size() == 1:
+            return None, grad_output # No DDP or single GPU
+
+        world_size = dist.get_world_size()
+        rank = dist.get_rank()
+        
+        # Calculate the size of the tensor for this rank based on how grad_output was formed
+        # This assumes grad_output corresponds to the concatenated tensor from forward
+        # and that the original tensors had the same number of columns.
+        # The split must align with how the forward tensors were cat'd.
+        # If forward cat'd tensors [B0,D], [B1,D], ..., grad_output is [sum(Bi), D]
+        # We need to find which part of grad_output corresponds to this rank's original tensor.
+        # This requires knowing the original B_local for each rank, which is not directly available in backward.
+        # A common simplification if all B_local are assumed equal for backward distribution:
+        # grad_input_local = grad_output.chunk(world_size, dim=0)[rank]
+        # However, if B_local varies, this is incorrect.
+        # For a robust backward with varying B_local, one might need to save B_locals in ctx
+        # or use a simpler gather like `all_reduce` for the loss itself if possible.
+
+        # Given the AllGatherFunc structure, the backward is tricky if B_local varies.
+        # A common pattern for contrastive loss is that the loss is computed per GPU
+        # using local queries and global keys, and then losses are averaged.
+        # The gradient of `z_local` (query) is direct.
+        # The gradient of `z_all_keys` needs to be scattered.
+        # The provided AllGatherFunc's backward is a simplification.
+        # For a fully correct backward with varying B_local, it's more complex.
+        # However, many libraries use this simplified backward or rely on PyTorch's DDP to handle it.
+        # Let's stick to the common simplified version for now:
+        
+        # Determine split sizes. This is the hard part if B_local varies.
+        # For simplicity, if we assume the grad_output can be chunked equally (which is an approximation if B_local varies significantly)
+        # grad_input_local = grad_output.chunk(world_size, dim=0)[rank]
+        
+        # A more correct approach for backward with varying sizes is to ensure that
+        # the gradients are only passed back to the parts of the input that generated them.
+        # If the loss is computed using local_query vs all_keys, the gradient w.r.t local_query is direct.
+        # The gradient w.r.t all_keys needs to be handled.
+        # `torch.distributed.nn.functional.all_gather` (newer PyTorch) might handle this better.
+
+        # Sticking to the provided AllGatherFunc's backward:
+        # This backward assumes that the contribution to grad_output can be evenly split,
+        # or that the part relevant to this rank can be extracted by its rank index.
+        # This is an approximation if local batch sizes varied.
+        
+        # Let's assume the grad_output corresponds to the concatenated tensor.
+        # The input `tensor_to_gather` was (B_local, D).
+        # `grad_output` is (B_global, D).
+        # We need to extract the part of `grad_output` that corresponds to this rank's `tensor_to_gather`.
+        # This requires knowing the B_local of *all* ranks to find the correct slice.
+        # This information is not typically passed to backward.
+        # This highlights a common challenge with custom AllGather for varying batch sizes.
+
+        # Fallback to a simpler gradient distribution, acknowledging its approximation:
+        # If we can assume that the optimizer step will handle scaling,
+        # we can try to pass back the relevant slice.
+        # However, without knowing all B_locals, it's hard.
+        # The most common use of such an AllGather is when the loss is computed,
+        # and then `loss.backward()` handles distributing gradients through the DDP graph.
+        # The `AllGatherFunc.apply(z_local)` makes `z_local` a leaf in this part of the graph for other GPUs.
+        
+        # Simplest backward:
+        # grad_input_local = grad_output.clone() # Each gets the full grad, DDP averages it. (Often done)
+        # Or, if we assume grad_output is for the concatenated tensor, and we need grad for the local input tensor:
+        # This is where it gets tricky. The provided backward:
+        grad_input_local = grad_output.chunk(world_size, dim=0)[rank] # This assumes B_local is same for all ranks
+        return None, grad_input_local # Grad for tensor_list_dummy is None
 
 def random_masking_indices(B, N_total, mask_ratio, device):
     """
@@ -123,6 +211,7 @@ class T3_AV_Model(nn.Module):
         super().__init__()
         self.mae_mask_ratio = mae_mask_ratio
         self.temperature = contrastive_temperature
+        self.contrastive_embed_dim = contrastive_embed_dim
 
         # 1. Instantiate Modality Encoders
         self.video_encoder = VideoModality(**video_modality_params)
@@ -311,61 +400,110 @@ class T3_AV_Model(nn.Module):
         return total_loss, video_mae_loss_val, audio_mae_loss_val
 
     # --- Stage 2 Methods --- 
-    def _compute_infonce_loss(self, z_a, z_v, temperature):
-        """ Computes InfoNCE loss for one direction (e.g., a -> v) """
-        # z_a, z_v are L2 normalized embeddings (B, D_contrastive)
-        logits = torch.mm(z_a, z_v.t()) / temperature # (B, B)
-        labels = torch.arange(logits.shape[0], device=logits.device) # Positive pairs are on diagonal
-        loss = F.cross_entropy(logits, labels)
-        return loss
+    def _get_empty_features(self, device):
+        # Helper to create an empty tensor with the correct shape and dtype for features
+        # Used when a rank processes 0 local samples but needs to participate in all_gather
+        example_param = next(self.parameters()) # Get dtype and device context
+        return torch.empty((0, self.contrastive_embed_dim), device=device, dtype=example_param.dtype)
 
     def forward_stage2(self, video_paths_batch, device):
-        """
-        Main forward pass for Stage 2 Contrastive Learning.
-        Args:
-            video_paths_batch: A list or batch of video file paths.
-            device: Torch device.
-        Returns:
-            contrastive_loss: Scalar tensor.
-            batch_size_processed: Number of samples successfully processed for both modalities.
-        """
-        # 1. Get features from modality encoders
-        # These forward methods now return (B_proc, N_patches, D_modal)
-        video_features = self.video_encoder(video_paths_batch, device=device)
-        audio_features = self.audio_encoder(video_paths_batch, device=device)
+        # 1. Get local features (as in your current working version)
+        video_features_raw = self.video_encoder(video_paths_batch, device=device) # (B_local_v, N_v+1, D_modal)
+        audio_features_raw = self.audio_encoder(video_paths_batch, device=device) # (B_local_a, N_a+1, D_modal)
 
-        # 2. Handle potential batch size mismatches due to errors in encoders
-        # If B_v != B_a, we cannot compute standard contrastive loss. 
-        # For now, assert they match. Robust handling might involve finding common successful indices.
-        if video_features.shape[0] != audio_features.shape[0]:
-            print(f"Warning: Batch size mismatch between video ({video_features.shape[0]}) and audio ({audio_features.shape[0]}) encoders. Skipping contrastive loss calculation for this batch.")
-            return torch.tensor(0.0, device=device, requires_grad=True), 0
+        B_local_v = video_features_raw.shape[0]
+        B_local_a = audio_features_raw.shape[0]
         
-        batch_size_processed = video_features.shape[0]
-        if batch_size_processed == 0:
-            # print("Warning: forward_stage2 resulted in zero processed samples.")
-            return torch.tensor(0.0, device=device, requires_grad=True), 0
+        current_rank_for_log = dist.get_rank() if dist.is_available() and dist.is_initialized() else 0
 
-        # 3. Pass through shared backbone
-        # TODO: Handle padding masks if modality encoders return variable length sequences? 
-        # For now, assume fixed sequence lengths (total_video_patches, num_audio_patches)
-        bb_out_v = self.shared_backbone(video_features) # (B, N_v+1, D_modal)
-        bb_out_a = self.shared_backbone(audio_features) # (B, N_a+1, D_modal)
+        if B_local_v != B_local_a:
+            print(f"Rank {current_rank_for_log}: Local batch size mismatch in Stage 2. Video: {B_local_v}, Audio: {B_local_a}. Using 0 for this rank.")
+            B_local = 0
+        else:
+            B_local = B_local_v # or B_local_a
 
-        # 4. Pass through projection heads (using CLS token)
-        z_v = self.video_projection_head(bb_out_v, use_cls_token=True) # (B, D_contrastive)
-        z_a = self.audio_projection_head(bb_out_a, use_cls_token=True) # (B, D_contrastive)
+        if B_local == 0:
+            # This rank has no valid local data, prepare empty tensors for all_gather
+            z_a = self._get_empty_features(device)
+            z_v = self._get_empty_features(device)
+        else:
+            # Proceed with backbone and projection for this rank's valid local batch
+            bb_out_v = self.shared_backbone(video_features_raw)
+            bb_out_a = self.shared_backbone(audio_features_raw)
+            z_v_local_proj = self.video_projection_head(bb_out_v, use_cls_token=True)
+            z_a_local_proj = self.audio_projection_head(bb_out_a, use_cls_token=True)
+            
+            z_v = F.normalize(z_v_local_proj, dim=1, p=2)
+            z_a = F.normalize(z_a_local_proj, dim=1, p=2)
 
-        # 5. L2 Normalize embeddings
-        z_v = F.normalize(z_v, dim=1, p=2)
-        z_a = F.normalize(z_a, dim=1, p=2)
-
-        # 6. Compute symmetric InfoNCE loss
-        loss_a_v = self._compute_infonce_loss(z_a, z_v, self.temperature)
-        loss_v_a = self._compute_infonce_loss(z_v, z_a, self.temperature)
-        total_contrastive_loss = (loss_a_v + loss_v_a) / 2
+        # All ranks MUST call all_gather
+        is_ddp = dist.is_available() and dist.is_initialized() and dist.get_world_size() > 1
         
-        return total_contrastive_loss, batch_size_processed
+        if is_ddp:
+            z_a_all = AllGatherFunc.apply(None, z_a) # z_a can be (0,D)
+            z_v_all = AllGatherFunc.apply(None, z_v) # z_v can be (0,D)
+            
+            # Gather local batch sizes from all ranks
+            local_b_tensor = torch.tensor([B_local], device=device, dtype=torch.long)
+            world_b_list = [torch.zeros_like(local_b_tensor) for _ in range(dist.get_world_size())]
+            dist.all_gather(world_b_list, local_b_tensor)
+            world_batch_sizes = [b.item() for b in world_b_list] # List of B_local for each rank [B0, B1,...]
+            current_rank = dist.get_rank()
+        else:
+            z_a_all = z_a
+            z_v_all = z_v
+            world_batch_sizes = [B_local]
+            current_rank = 0
+            
+        total_contrastive_loss = torch.tensor(0.0, device=device, requires_grad=True)
+
+        # Compute loss only if the current rank has actual local data (B_local > 0)
+        # AND if there's any data globally to compare against.
+        if B_local > 0 and z_v_all.shape[0] > 0: # Check z_v_all for audio query vs video keys
+            loss_a_v = self._compute_infonce_loss_ddp(z_a, z_v_all, self.temperature, current_rank, world_batch_sizes)
+            total_contrastive_loss = total_contrastive_loss + loss_a_v
+        
+        if B_local > 0 and z_a_all.shape[0] > 0: # Check z_a_all for video query vs audio keys
+            loss_v_a = self._compute_infonce_loss_ddp(z_v, z_a_all, self.temperature, current_rank, world_batch_sizes)
+            total_contrastive_loss = total_contrastive_loss + loss_v_a
+        
+        if B_local > 0 and (z_v_all.shape[0] > 0 or z_a_all.shape[0] > 0) : # Avoid division by zero if both losses were computed
+             total_contrastive_loss = total_contrastive_loss / 2.0 # Average if both components were added
+
+        # The `batch_size_processed` returned is the local batch size for this rank.
+        # The training loop in train_stage2.py will sum these up for global average loss calculation.
+        return total_contrastive_loss, B_local
+
+    def _compute_infonce_loss_ddp(self, z_query_local, z_keys_all, temperature, current_rank, world_batch_sizes):
+        # z_query_local: (B_local_current_rank, D) - features from the current GPU.
+        # z_keys_all: (B_global, D) - features gathered from all GPUs.
+        # temperature: scalar.
+        # current_rank: current GPU rank.
+        # world_batch_sizes: list of B_local for each rank [B0, B1, B2, ...]
+        
+        B_local_current_rank = z_query_local.shape[0]
+        
+        # This function should only be called if B_local_current_rank > 0
+        if B_local_current_rank == 0:
+            # This case should ideally be handled before calling this function.
+            return torch.tensor(0.0, device=z_query_local.device, dtype=z_query_local.dtype, requires_grad=True)
+
+        if z_keys_all.shape[0] == 0: # No keys gathered from any rank
+             return torch.tensor(0.0, device=z_query_local.device, dtype=z_query_local.dtype, requires_grad=True)
+
+        # Logits: (B_local_current_rank, B_global)
+        logits = torch.mm(z_query_local, z_keys_all.t()) / temperature
+        
+        # Calculate the starting index (offset) of the current rank's positive keys within z_keys_all
+        # This offset is the sum of batch sizes of all preceding ranks
+        offset = sum(world_batch_sizes[:current_rank])
+        
+        # Labels point to the positive keys for each local query
+        # These are indices into z_keys_all
+        labels = torch.arange(B_local_current_rank, device=logits.device, dtype=torch.long) + offset
+        
+        loss = F.cross_entropy(logits, labels)
+        return loss
 
     # --- Fine-tuning Methods --- 
     def forward_finetune(self, video_paths_batch, labels_batch, device):

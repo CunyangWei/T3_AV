@@ -9,6 +9,14 @@ from tqdm import tqdm
 import numpy as np
 from transformers import get_cosine_schedule_with_warmup
 
+# DDP imports
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data.distributed import DistributedSampler
+
+# AMP imports
+from torch.cuda.amp import GradScaler
+
 # Import project modules
 from t3_av_model import T3_AV_Model
 from vggsound_dataset import VGGSoundDataset, vggsound_collate_fn
@@ -63,21 +71,65 @@ def parse_args():
     parser.add_argument('--log_interval', type=int, default=50, help='Log training status every N steps.')
     parser.add_argument('--checkpoint_interval', type=int, default=5, help='Save checkpoint every N epochs.')
 
+    # --- DDP Configuration ---
+    parser.add_argument('--ddp', action='store_true', help='Enable Distributed Data Parallel training.')
+    # local_rank is typically provided by the launch utility
+
+    # --- AMP Configuration ---
+    parser.add_argument('--amp', action='store_true', help='Enable Automatic Mixed Precision training.')
+
+    # --- Torch Compile Configuration ---
+    parser.add_argument('--compile_model', action='store_true', help='Enable torch.compile() for the model.')
+    parser.add_argument('--compile_mode', type=str, default='reduce-overhead', 
+                        choices=['default', 'reduce-overhead', 'max-autotune', 'max-autotune-no-cudagraphs'],
+                        help='Mode for torch.compile().')
+
     args = parser.parse_args()
     return args
 
 def main(args):
-    # --- Setup --- 
-    torch.manual_seed(args.seed)
-    np.random.seed(args.seed)
-    if args.device == 'cuda' and not torch.cuda.is_available():
-        print("Warning: CUDA requested but not available, using CPU.")
-        args.device = 'cpu'
-    device = torch.device(args.device)
+    # --- DDP Setup (if enabled) ---
+    is_ddp = args.ddp
+    rank = 0
+    world_size = 1
+    local_rank = 0 # Default for non-DDP or master process
 
-    os.makedirs(args.output_dir, exist_ok=True)
-    print(f"Output directory: {args.output_dir}")
-    print(f"Using device: {device}")
+    if is_ddp:
+        if "LOCAL_RANK" not in os.environ:
+            raise RuntimeError("DDP enabled but LOCAL_RANK not set. Use torchrun or similar.")
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend='nccl', init_method='env://')
+        rank = dist.get_rank()
+        world_size = dist.get_world_size()
+        device = torch.device(f"cuda:{local_rank}")
+        if rank == 0: print(f"DDP enabled: {world_size} GPU(s). Rank {rank} on device cuda:{local_rank}")
+    else:
+        if args.device == 'cuda' and not torch.cuda.is_available():
+            print("Warning: CUDA requested but not available, using CPU.")
+            args.device = 'cpu'
+        device = torch.device(args.device)
+        if rank == 0: print(f"DDP not enabled. Using device: {device}")
+
+    # --- Setup --- 
+    torch.manual_seed(args.seed + rank) # Add rank for different seeds per process
+    np.random.seed(args.seed + rank)
+    
+    # AMP: Initialize GradScaler if AMP is enabled and device is CUDA
+    scaler = None
+    use_amp = args.amp and device.type == 'cuda'
+    if use_amp:
+        scaler = GradScaler()
+        if rank == 0: print("AMP enabled, GradScaler initialized.")
+    elif args.amp and device.type != 'cuda' and rank == 0:
+        print("Warning: AMP requested but device is not CUDA. AMP will be disabled.")
+        
+    if rank == 0:
+        os.makedirs(args.output_dir, exist_ok=True)
+        print(f"Output directory: {args.output_dir}")
+    if is_ddp: dist.barrier() # Ensure output_dir is created before other ranks might try to write
+    if rank == 0 or not is_ddp: print(f"Process Rank {rank}: Using device: {device}")
+
 
     # --- Model Configuration --- 
     # Reconstruct necessary model config based on args (should match stage 1 setup)
@@ -96,7 +148,7 @@ def main(args):
     sound_clf_head_params = {'hidden_dim': args.clf_hidden_dim, 'num_classes': 1, 'use_gelu': True}
 
     # --- Initialize Model --- 
-    print("Initializing T3_AV_Model for Stage 2...")
+    if rank == 0: print("Initializing T3_AV_Model for Stage 2...")
     model = T3_AV_Model(
         video_modality_params=video_modality_params,
         audio_modality_params=audio_modality_params,
@@ -110,103 +162,147 @@ def main(args):
         # mae_mask_ratio not used in stage 2 forward, but __init__ needs it
         mae_mask_ratio=0.75 
     )
-    print("Model structure initialized.")
+    if rank == 0: print("Model structure initialized.")
 
     # --- Load Stage 1 Checkpoint --- 
-    if not os.path.exists(args.stage1_checkpoint):
-        print(f"Error: Stage 1 checkpoint not found at {args.stage1_checkpoint}")
-        return
-    
-    print(f"Loading Stage 1 checkpoint from: {args.stage1_checkpoint}")
-    checkpoint = torch.load(args.stage1_checkpoint, map_location='cpu')
-    
-    # Get the state dict from the checkpoint
-    checkpoint_state_dict = checkpoint.get('model_state_dict', checkpoint)
+    # Rank 0 loads the checkpoint, then DDP synchronizes the model state.
+    if rank == 0:
+        if not os.path.exists(args.stage1_checkpoint):
+            print(f"Error: Stage 1 checkpoint not found at {args.stage1_checkpoint}")
+            # Signal other processes to exit if checkpoint is missing
+            # A simple way is to let them error out when model isn't loaded,
+            # or use dist.broadcast to send a status flag.
+            # For now, we'll let DDP model sync fail if rank 0 doesn't load.
+            # A more robust solution would involve explicit signaling.
+            dist.barrier() # Wait for other ranks before potentially erroring them
+            raise FileNotFoundError(f"Stage 1 checkpoint not found: {args.stage1_checkpoint}")
 
-    # Remove the classifier weights (if they exist in the checkpoint) 
-    # as they have a different number of classes (dummy 1 vs actual N).
-    keys_to_remove = [k for k in checkpoint_state_dict if k.startswith('sound_classifier.')]
-    # Also remove the positional encoding buffer due to potential size mismatch from different max_seq_len calculations
-    # between saving (Stage 1 - unmasked length) and loading (Stage 2 - full length).
-    pe_key = 'shared_backbone.pos_encoder.pe'
-    if pe_key in checkpoint_state_dict:
-        keys_to_remove.append(pe_key)
+        print(f"Loading Stage 1 checkpoint from: {args.stage1_checkpoint}")
+        checkpoint = torch.load(args.stage1_checkpoint, map_location='cpu')
+        checkpoint_state_dict = checkpoint.get('model_state_dict', checkpoint)
 
-    if keys_to_remove:
-        print(f"Removing keys from checkpoint before loading: {keys_to_remove}")
-        for key in keys_to_remove:
-            if key in checkpoint_state_dict: # Check again in case key wasn't present
-                del checkpoint_state_dict[key]
-            else:
-                print(f"  Warning: Attempted to remove key '{key}' but it was not found in checkpoint state_dict.")
-    
-    try:
-        load_result = model.load_state_dict(checkpoint_state_dict, strict=False)
-        print(f"Checkpoint load result: {load_result}")
-        # Check for missing/unexpected keys if needed
-        if load_result.missing_keys:
-            print("Missing keys:", load_result.missing_keys) # Expected: proj head keys
-        if load_result.unexpected_keys:
-            print("Warning: Unexpected keys found:", load_result.unexpected_keys)
-    except KeyError:
-        print("Error: 'model_state_dict' not found in checkpoint. Attempting to load the whole checkpoint as state_dict.")
-        try:
-           load_result = model.load_state_dict(checkpoint, strict=False)
-           print(f"Checkpoint load result (alternate attempt): {load_result}")
-        except Exception as e:
-           print(f"Error: Could not load state dict from checkpoint: {e}")
-           return
-    except Exception as e:
-        print(f"Error loading state dict: {e}")
-        return
+        # --- CRITICAL CHANGE: Do NOT remove shared_backbone.pos_encoder.pe ---
+        keys_to_remove = []
+        # pe_key = 'shared_backbone.pos_encoder.pe'
+        # if pe_key in checkpoint_state_dict:
+        #     print(f"Warning: Explicitly removing {pe_key} from Stage 1 checkpoint for Stage 2 loading. Ensure this is intended.")
+        #     keys_to_remove.append(pe_key)
         
-    model = model.to(device)
-    print("Stage 1 weights loaded into model.")
+        # Remove keys that might cause issues if architectures slightly differ
+        # (e.g., MAE decoders not present or differently structured in a model aimed only at contrastive)
+        # Or if certain parts are meant to be re-initialized.
+        # Example:
+        # for key_pattern in ['mae_video_decoder.', 'mae_audio_decoder.']:
+        #     keys_to_remove.extend([k for k in checkpoint_state_dict if k.startswith(key_pattern)])
+
+        # If Stage 1 had a classification head not used in Stage 2
+        # for key_pattern in ['sound_classifier.']:
+        #    keys_to_remove.extend([k for k in checkpoint_state_dict if k.startswith(key_pattern)])
+
+        for key in keys_to_remove:
+            if key in checkpoint_state_dict:
+                del checkpoint_state_dict[key]
+                if rank == 0: print(f"Removed key from Stage 1 checkpoint: {key}")
+        
+        try:
+            load_result = model.load_state_dict(checkpoint_state_dict, strict=False)
+            print(f"Checkpoint load result (Rank 0): {load_result}")
+            if load_result.missing_keys: print("Missing keys (Rank 0):", load_result.missing_keys)
+            if load_result.unexpected_keys: print("Warning: Unexpected keys (Rank 0):", load_result.unexpected_keys)
+        except Exception as e:
+            print(f"Error loading state dict on Rank 0: {e}")
+            dist.barrier() # Ensure other ranks wait
+            raise e # Re-raise error to stop execution
+        print("Stage 1 weights loaded into model on Rank 0.")
+
+    if is_ddp:
+        dist.barrier() # Ensure rank 0 has loaded the model before other ranks proceed to DDP wrapping
+
+    model = model.to(device) # Move model to its assigned device
+
+    # --- torch.compile() ---
+    if args.compile_model:
+        if rank == 0: print(f"Compiling model with torch.compile(mode='{args.compile_mode}')...")
+        try:
+            # Compile the model before DDP wrapping
+            # Note: Some backends/modes might have issues with DDP or specific model structures.
+            # Start with "reduce-overhead" or "default". "max-autotune" can be slow initially.
+            model = torch.compile(model, mode=args.compile_mode)
+            if rank == 0: print("Model compiled successfully.")
+        except Exception as e:
+            if rank == 0: print(f"Warning: torch.compile() failed with error: {e}. Proceeding without compilation.")
+            # Optionally, you might want to fall back or raise an error depending on requirements
+    
+    if is_ddp:
+        # find_unused_parameters=True is important if parts of the model are frozen
+        # or if torch.compile changes parameter usage patterns for DDP.
+        model = DDP(model, device_ids=[local_rank], output_device=local_rank, find_unused_parameters=True)
+        if rank == 0: print("Model wrapped with DDP.")
+
 
     # --- Freezing Components --- 
+    # Access .module if DDP is used, otherwise direct access
+    model_to_configure = model.module if is_ddp else model
+
     if args.freeze_encoders:
-        print("Freezing Modality Encoders (Video & Audio)...")
-        for name, param in model.video_encoder.named_parameters():
+        if rank == 0: print("Freezing Modality Encoders (Video & Audio)...")
+        for name, param in model_to_configure.video_encoder.named_parameters():
             param.requires_grad = False
-        for name, param in model.audio_encoder.named_parameters():
+        for name, param in model_to_configure.audio_encoder.named_parameters():
             param.requires_grad = False
             
     if args.freeze_backbone:
-        print("Freezing Shared Transformer Backbone...")
-        for name, param in model.shared_backbone.named_parameters():
+        if rank == 0: print("Freezing Shared Transformer Backbone...")
+        for name, param in model_to_configure.shared_backbone.named_parameters():
             param.requires_grad = False
             
-    # Verify which parameters are trainable
-    num_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    num_total_params = sum(p.numel() for p in model.parameters())
-    print(f"Model parameters: {num_trainable_params:,} trainable / {num_total_params:,} total")
-    if num_trainable_params == 0:
-        print("Warning: No parameters are set to trainable. Check freezing flags.")
-        # return # Exit if nothing to train
+    # Verify which parameters are trainable (on rank 0 for logging)
+    if rank == 0:
+        num_trainable_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        num_total_params = sum(p.numel() for p in model.parameters())
+        print(f"Model parameters: {num_trainable_params:,} trainable / {num_total_params:,} total")
+        if num_trainable_params == 0 and args.epochs > 0 : # Only warn if actually trying to train
+            print("Warning: No parameters are set to trainable. Check freezing flags.")
+            # Potentially signal other ranks to exit if no training is possible.
+
+    if is_ddp: dist.barrier()
+
 
     # --- Initialize Dataset & DataLoader --- 
-    print("Initializing Dataset and DataLoader for Stage 2...")
+    if rank == 0: print("Initializing Dataset and DataLoader for Stage 2...")
     train_dataset = VGGSoundDataset(csv_file_path=args.csv_path, video_dir=args.video_dir, split='train')
+    
     if len(train_dataset) == 0:
-        print("Error: Training dataset is empty.")
+        if rank == 0: print("Error: Training dataset is empty.")
+        if is_ddp: dist.barrier()
         return
+    
+    train_sampler = None
+    shuffle_dataloader = True
+    if is_ddp:
+        train_sampler = DistributedSampler(train_dataset, num_replicas=world_size, rank=rank, shuffle=True, seed=args.seed)
+        shuffle_dataloader = False # Sampler handles shuffling
         
     train_loader = DataLoader(
         train_dataset, 
         batch_size=args.batch_size, 
-        shuffle=True, 
+        shuffle=shuffle_dataloader, 
         collate_fn=vggsound_collate_fn, 
         num_workers=args.num_workers,
-        pin_memory=True if args.device == 'cuda' else False
+        pin_memory=(device.type == 'cuda'),
+        sampler=train_sampler,
+        drop_last=True if is_ddp else False
     )
-    print("Dataset and DataLoader initialized.")
+    if rank == 0: print("Dataset and DataLoader initialized.")
 
     # --- Initialize Optimizer & Scheduler --- 
     # Filter parameters to only optimize those that require gradients
-    trainable_params = [p for p in model.parameters() if p.requires_grad]
-    if not trainable_params:
-        print("Error: No trainable parameters found for the optimizer.")
-        return
+    # model.parameters() will correctly yield parameters from model.module if DDP wrapped
+    trainable_params = [p for p in model.parameters() if p.requires_grad] 
+    if not trainable_params and args.epochs > 0: # Check if actually training
+        if rank == 0: print("Error: No trainable parameters found for the optimizer.")
+        if is_ddp: dist.barrier()
+        return # Exit if no parameters to train and epochs > 0
         
     optimizer = optim.AdamW(trainable_params, lr=args.learning_rate, weight_decay=args.weight_decay)
     
@@ -218,82 +314,141 @@ def main(args):
         num_warmup_steps=num_warmup_steps,
         num_training_steps=num_training_steps
     )
-    print("Optimizer and Scheduler initialized for trainable parameters.")
+    if rank == 0: print("Optimizer and Scheduler initialized for trainable parameters.")
     
     # --- Save Stage 2 Configuration --- 
-    config_path = os.path.join(args.output_dir, 'stage2_config.json')
-    with open(config_path, 'w') as f:
-        # Include loaded checkpoint path in saved config
-        args_dict = vars(args)
-        args_dict['loaded_stage1_checkpoint'] = args.stage1_checkpoint
-        json.dump(args_dict, f, indent=4)
-    print(f"Saved Stage 2 configuration to {config_path}")
+    if rank == 0:
+        config_path = os.path.join(args.output_dir, 'stage2_config.json')
+        with open(config_path, 'w') as f:
+            args_dict = vars(args)
+            args_dict['loaded_stage1_checkpoint'] = args.stage1_checkpoint
+            json.dump(args_dict, f, indent=4)
+        print(f"Saved Stage 2 configuration to {config_path}")
+
+    if is_ddp: dist.barrier()
 
     # --- Training Loop --- 
-    print("Starting Stage 2 Contrastive Training...")
+    if rank == 0: print(f"Starting Stage 2 Contrastive Training on {world_size} GPU(s)...")
     for epoch in range(args.epochs):
-        model.train() # Set model to training mode
+        if is_ddp:
+            train_sampler.set_epoch(epoch)
+
+        model.train() 
         epoch_contrastive_loss = 0.0
         processed_samples_in_epoch = 0
         
-        progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.epochs}", leave=True)
+        progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.epochs} (Rank {rank})", leave=False, disable=(rank != 0))
         
         for step, batch in enumerate(progress_bar):
             video_paths = batch['video_paths_batch']
-            # labels = batch['labels_batch'].to(device) # Labels not used in stage 2 loss
             
             if not video_paths: continue
 
             optimizer.zero_grad()
             
-            try:
-                 # Forward pass for Stage 2
-                 contrastive_loss, batch_size_processed = model.forward_stage2(
-                     video_paths_batch=video_paths, 
-                     device=device
-                 )
-            except Exception as e:
-                 print(f"\nError during forward pass stage 2 at step {step} in epoch {epoch+1}: {e}")
-                 print(f"Video paths in failing batch: {video_paths}")
-                 print("Skipping this batch.")
-                 continue 
-                 
-            if contrastive_loss is None or not torch.isfinite(contrastive_loss) or batch_size_processed == 0:
-                 print(f"\nWarning: Non-finite loss ({contrastive_loss}) or zero processed samples ({batch_size_processed}) at step {step}. Skipping batch.")
-                 continue 
+            # AMP: autocast context
+            with torch.amp.autocast(device_type=device.type, enabled=use_amp):
+                try:
+                     # Forward pass for Stage 2
+                     if is_ddp:
+                         contrastive_loss, batch_size_processed = model.module.forward_stage2(
+                             video_paths_batch=video_paths, 
+                             device=device 
+                         )
+                     else:
+                         contrastive_loss, batch_size_processed = model.forward_stage2(
+                             video_paths_batch=video_paths, 
+                             device=device
+                         )
+                except Exception as e:
+                     print(f"\nError during forward pass stage 2 at step {step} in epoch {epoch+1} on Rank {rank}: {e}")
+                     print(f"Video paths in failing batch: {video_paths}")
+                     print("Skipping this batch.")
+                     # Ensure scaler state is updated even on error if step was skipped within autocast
+                     # No explicit scaler.update() here as it's tied to optimizer.step()
+                     continue 
+                     
+                if contrastive_loss is None or not torch.isfinite(contrastive_loss) or batch_size_processed == 0:
+                     print(f"\nWarning: Non-finite loss ({contrastive_loss}) or zero processed samples ({batch_size_processed}) at step {step} on Rank {rank}. Skipping batch.")
+                     # No explicit scaler.update() here
+                     continue 
                  
             # Backward pass & optimization
-            contrastive_loss.backward()
-            optimizer.step()
+            if use_amp:
+                scaler.scale(contrastive_loss).backward()
+                # Optional: Unscale gradients before clipping if you clip gradients
+                # scaler.unscale_(optimizer)
+                # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                scaler.step(optimizer)
+                scaler.update()
+            else:
+                contrastive_loss.backward()
+                # Optional: Gradient clipping
+                # torch.nn.utils.clip_grad_norm_(model.parameters(), max_norm=1.0)
+                optimizer.step()
+            
             scheduler.step()
             
             # --- Logging --- 
             current_lr = optimizer.param_groups[0]['lr']
-            loss_item = contrastive_loss.item()
-            epoch_contrastive_loss += loss_item * batch_size_processed # Accumulate loss weighted by processed samples
+            loss_item = contrastive_loss.item() # This is already a scalar
+            epoch_contrastive_loss += loss_item * batch_size_processed 
             processed_samples_in_epoch += batch_size_processed
             
-            log_msg = f'Contrastive Loss: {loss_item:.4f}, LR: {current_lr:.6f}'
-            progress_bar.set_postfix_str(log_msg)
+            if rank == 0:
+                log_msg = f'Contrastive Loss: {loss_item:.4f}, LR: {current_lr:.6f}'
+                progress_bar.set_postfix_str(log_msg)
+                if step % args.log_interval == 0 and step > 0:
+                    tqdm.write(f"  Epoch {epoch+1}/{args.epochs}, Step {step}/{len(train_loader)} - {log_msg}")
                 
         # --- End of Epoch --- 
-        avg_epoch_loss = epoch_contrastive_loss / processed_samples_in_epoch if processed_samples_in_epoch > 0 else 0
-        print(f"\nEpoch {epoch+1} Finished. Average Contrastive Loss: {avg_epoch_loss:.4f}")
+        # For DDP, each rank has its own sum. For a global average, you'd need to all_reduce.
+        # Here, we log rank 0's average, which is fine if data distribution is similar.
+        avg_epoch_loss_rank_local = epoch_contrastive_loss / processed_samples_in_epoch if processed_samples_in_epoch > 0 else 0
+        
+        if is_ddp:
+            # Gather total loss and total samples from all ranks for accurate average
+            total_loss_tensor = torch.tensor([epoch_contrastive_loss], dtype=torch.float64, device=device)
+            total_samples_tensor = torch.tensor([processed_samples_in_epoch], dtype=torch.float64, device=device)
+            dist.all_reduce(total_loss_tensor, op=dist.ReduceOp.SUM)
+            dist.all_reduce(total_samples_tensor, op=dist.ReduceOp.SUM)
+            
+            global_avg_epoch_loss = total_loss_tensor.item() / total_samples_tensor.item() if total_samples_tensor.item() > 0 else 0
+            if rank == 0:
+                progress_bar.close()
+                print(f"\nEpoch {epoch+1} Finished.")
+                print(f"  Average Contrastive Loss (Global): {global_avg_epoch_loss:.4f}")
+                # print(f"  Rank 0 Local Avg Loss: {avg_epoch_loss_rank_local:.4f}") # For debugging if needed
+        else: # Non-DDP
+            if rank == 0: # Should always be rank 0 if not DDP
+                progress_bar.close()
+                print(f"\nEpoch {epoch+1} Finished. Average Contrastive Loss: {avg_epoch_loss_rank_local:.4f}")
 
-        # --- Checkpointing --- 
-        if (epoch + 1) % args.checkpoint_interval == 0 or (epoch + 1) == args.epochs:
+
+        # --- Checkpointing (only on master process) --- 
+        if rank == 0 and ((epoch + 1) % args.checkpoint_interval == 0 or (epoch + 1) == args.epochs):
             checkpoint_path = os.path.join(args.output_dir, f't3_av_stage2_epoch_{epoch+1}.pt')
+            # Save model.module.state_dict() when using DDP
+            model_state_to_save = model.module.state_dict() if is_ddp else model.state_dict()
             checkpoint = {
                 'epoch': epoch + 1,
-                'model_state_dict': model.state_dict(),
+                'model_state_dict': model_state_to_save,
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
-                'args': vars(args) # Store args used for this checkpoint
+                'args': vars(args) 
             }
             torch.save(checkpoint, checkpoint_path)
             print(f"Checkpoint saved to {checkpoint_path}")
+        
+        if is_ddp:
+            dist.barrier() # Ensure checkpoint is saved before next epoch or finishing
 
-    print("Stage 2 Contrastive Training finished.")
+    if rank == 0: 
+        print("Stage 2 Contrastive Training finished.")
+        if hasattr(progress_bar, 'close') and rank == 0: progress_bar.close()
+
+    if is_ddp:
+        dist.destroy_process_group()
 
 if __name__ == '__main__':
     import numpy as np 

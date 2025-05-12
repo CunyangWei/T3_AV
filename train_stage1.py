@@ -8,6 +8,11 @@ from tqdm import tqdm
 import json
 from transformers import get_cosine_schedule_with_warmup
 
+# DDP imports
+import torch.distributed as dist
+from torch.nn.parallel import DistributedDataParallel as DDP
+from torch.utils.data.distributed import DistributedSampler
+
 # Import project modules
 from t3_av_model import T3_AV_Model
 from vggsound_dataset import VGGSoundDataset, vggsound_collate_fn
@@ -69,6 +74,10 @@ def parse_args():
     parser.add_argument('--log_interval', type=int, default=50, help='Log training status every N steps.')
     parser.add_argument('--checkpoint_interval', type=int, default=10, help='Save checkpoint every N epochs.')
 
+    # --- DDP Configuration ---
+    parser.add_argument('--ddp', action='store_true', help='Enable Distributed Data Parallel training.')
+    # local_rank is typically provided by the launch utility (e.g., torchrun) via environment variables
+
     args = parser.parse_args()
     
     # Basic validation
@@ -78,17 +87,51 @@ def parse_args():
     return args
 
 def main(args):
-    # --- Setup --- 
-    torch.manual_seed(args.seed)
-    np.random.seed(args.seed) # If using numpy random operations
-    if args.device == 'cuda' and not torch.cuda.is_available():
-        print("Warning: CUDA requested but not available, using CPU.")
-        args.device = 'cpu'
-    device = torch.device(args.device)
+    # --- DDP Setup (if enabled) ---
+    is_ddp = args.ddp
+    rank = 0
+    world_size = 1
+    local_rank = 0 # Default for non-DDP or master process
 
-    os.makedirs(args.output_dir, exist_ok=True)
-    print(f"Output directory: {args.output_dir}")
-    print(f"Using device: {device}")
+    if is_ddp:
+        if "LOCAL_RANK" not in os.environ:
+            # Fallback if not using torchrun but ddp is flagged (less common for multi-gpu)
+            # This setup is basic and might need adjustment for non-torchrun launchers.
+            if torch.cuda.device_count() > 1:
+                print("Warning: LOCAL_RANK not set, attempting basic DDP init. Use torchrun for robust DDP.")
+                # This is a simplified setup; proper distributed launch is preferred.
+                os.environ['MASTER_ADDR'] = 'localhost'
+                os.environ['MASTER_PORT'] = os.environ.get('MASTER_PORT', '12355') # Ensure port is free or unique
+                # Determine rank and world_size if possible, or assume single node multi-GPU
+                # This part is tricky without a proper launcher. For torchrun, LOCAL_RANK is set.
+                # For simplicity, we'll rely on torchrun setting LOCAL_RANK.
+                # If you must run without torchrun and with --ddp, this part needs more robust handling.
+                raise RuntimeError("DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.")
+
+        local_rank = int(os.environ["LOCAL_RANK"])
+        torch.cuda.set_device(local_rank)
+        dist.init_process_group(backend='nccl', init_method='env://')
+        rank = dist.get_rank()
+        world_size = dist.get_world_size()
+        device = torch.device(f"cuda:{local_rank}")
+        if rank == 0: print(f"DDP enabled: {world_size} GPU(s). Rank {rank} on device cuda:{local_rank}")
+    else:
+        if args.device == 'cuda' and not torch.cuda.is_available():
+            print("Warning: CUDA requested but not available, using CPU.")
+            args.device = 'cpu'
+        device = torch.device(args.device)
+        if rank == 0: print(f"DDP not enabled. Using device: {device}")
+
+    # --- Setup --- 
+    torch.manual_seed(args.seed + rank) 
+    np.random.seed(args.seed + rank) 
+    
+    if rank == 0:
+        os.makedirs(args.output_dir, exist_ok=True)
+        print(f"Output directory: {args.output_dir}")
+    # Ensure all processes have `device` set before proceeding
+    if is_ddp: dist.barrier() 
+    if rank == 0 or not is_ddp : print(f"Process Rank {rank}: Using device: {device}")
 
     # --- Model Configuration --- 
     # Prepare config dicts for T3_AV_Model constructor
@@ -141,7 +184,7 @@ def main(args):
     }
 
     # --- Initialize Model --- 
-    print("Initializing T3_AV_Model...")
+    if rank == 0: print("Initializing T3_AV_Model...")
     model = T3_AV_Model(
         video_modality_params=video_modality_params,
         audio_modality_params=audio_modality_params,
@@ -152,59 +195,81 @@ def main(args):
         sound_clf_head_params=sound_clf_head_params,
         contrastive_embed_dim=args.contrastive_embed_dim,
         mae_mask_ratio=args.mask_ratio
-    ).to(device)
-    print("Model initialized.")
-    # Consider printing model parameter count
-    num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
-    print(f"Model has {num_params:,} trainable parameters.")
+    ).to(device) # Move model to device before DDP wrapping
+    
+    if rank == 0:
+        print("Model initialized.")
+        num_params = sum(p.numel() for p in model.parameters() if p.requires_grad)
+        print(f"Model has {num_params:,} trainable parameters (before DDP wrapping).")
+
+    if is_ddp:
+        model = DDP(model, device_ids=[local_rank], output_device=local_rank, find_unused_parameters=True)
+        if rank == 0: print("Model wrapped with DDP.")
 
     # --- Initialize Dataset & DataLoader --- 
-    print("Initializing Dataset and DataLoader...")
+    if rank == 0: print("Initializing Dataset and DataLoader...")
     train_dataset = VGGSoundDataset(csv_file_path=args.csv_path, video_dir=args.video_dir, split='train')
+    
     if len(train_dataset) == 0:
-        print("Error: Training dataset is empty. Please check CSV path, video directory, and split name.")
+        if rank == 0: print("Error: Training dataset is empty. Please check CSV path, video directory, and split name.")
+        if is_ddp: dist.barrier() 
         return
+    
+    train_sampler = None
+    shuffle_dataloader = True
+    if is_ddp:
+        train_sampler = DistributedSampler(train_dataset, num_replicas=world_size, rank=rank, shuffle=True, seed=args.seed)
+        shuffle_dataloader = False # Sampler handles shuffling
         
     train_loader = DataLoader(
         train_dataset, 
         batch_size=args.batch_size, 
-        shuffle=True, 
+        shuffle=shuffle_dataloader, 
         collate_fn=vggsound_collate_fn, 
         num_workers=args.num_workers,
-        pin_memory=True if args.device == 'cuda' else False # Improve GPU transfer speed if using CUDA
+        pin_memory=(device.type == 'cuda'), 
+        sampler=train_sampler,
+        drop_last=True if is_ddp else False 
     )
-    print("Dataset and DataLoader initialized.")
+    if rank == 0: print("Dataset and DataLoader initialized.")
 
     # --- Initialize Optimizer & Scheduler --- 
-    # Adjust weight decay application if needed (e.g., exclude biases/norm layers)
-    optimizer = optim.AdamW(model.parameters(), lr=args.learning_rate, weight_decay=args.weight_decay)
+    optimizer_params = model.module.parameters() if is_ddp else model.parameters()
+    optimizer = optim.AdamW(optimizer_params, lr=args.learning_rate, weight_decay=args.weight_decay)
     
-    num_training_steps = len(train_loader) * args.epochs
+    num_training_steps = len(train_loader) * args.epochs 
     num_warmup_steps = len(train_loader) * args.warmup_epochs
+    
+    if rank == 0: print("Optimizer and Scheduler initialized.")
     
     scheduler = get_cosine_schedule_with_warmup(
         optimizer,
         num_warmup_steps=num_warmup_steps,
         num_training_steps=num_training_steps
     )
-    print("Optimizer and Scheduler initialized.")
     
     # --- Save Configuration --- 
-    config_path = os.path.join(args.output_dir, 'stage1_config.json')
-    with open(config_path, 'w') as f:
-        json.dump(vars(args), f, indent=4)
-    print(f"Saved configuration to {config_path}")
+    if rank == 0:
+        config_path = os.path.join(args.output_dir, 'stage1_config.json')
+        with open(config_path, 'w') as f:
+            json.dump(vars(args), f, indent=4)
+        print(f"Saved configuration to {config_path}")
+
+    if is_ddp: dist.barrier() # Ensure config is saved before training starts
 
     # --- Training Loop --- 
-    print("Starting Stage 1 MAE Training...")
+    if rank == 0: print(f"Starting Stage 1 MAE Training on {world_size} GPU(s)...")
     for epoch in range(args.epochs):
-        model.train() # Set model to training mode
+        if is_ddp:
+            train_sampler.set_epoch(epoch) 
+
+        model.train() 
         epoch_loss = 0.0
         epoch_video_loss = 0.0
         epoch_audio_loss = 0.0
         num_batches = 0
         
-        progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.epochs}", leave=True)
+        progress_bar = tqdm(train_loader, desc=f"Epoch {epoch+1}/{args.epochs} (Rank {rank})", leave=False, disable=(rank != 0))
         
         for step, batch in enumerate(progress_bar):
             video_paths = batch['video_paths_batch']
@@ -217,14 +282,23 @@ def main(args):
             
             try:
                  # Forward pass
-                 total_loss, video_loss_val, audio_loss_val = model.forward_stage1(
-                     video_paths_batch=video_paths, 
-                     device=device,
-                     train_video_mae=args.train_video_mae,
-                     train_audio_mae=args.train_audio_mae
-                 )
+                 # When using DDP, access original model methods via model.module
+                 if is_ddp:
+                     total_loss, video_loss_val, audio_loss_val = model.module.forward_stage1(
+                         video_paths_batch=video_paths, 
+                         device=device, 
+                         train_video_mae=args.train_video_mae,
+                         train_audio_mae=args.train_audio_mae
+                     )
+                 else:
+                     total_loss, video_loss_val, audio_loss_val = model.forward_stage1(
+                         video_paths_batch=video_paths, 
+                         device=device,
+                         train_video_mae=args.train_video_mae,
+                         train_audio_mae=args.train_audio_mae
+                     )
             except Exception as e:
-                 print(f"\nError during forward pass at step {step} in epoch {epoch+1}: {e}")
+                 print(f"\nError during forward pass at step {step} in epoch {epoch+1} on Rank {rank}: {e}")
                  print(f"Video paths in failing batch: {video_paths}")
                  # Decide how to handle: skip batch, raise error, etc.
                  # For robustness, let's skip the batch and continue training.
@@ -232,7 +306,7 @@ def main(args):
                  continue # Skip to the next batch
                  
             if total_loss is None or not torch.isfinite(total_loss):
-                 print(f"\nWarning: Non-finite loss detected at step {step} in epoch {epoch+1}. Skipping batch.")
+                 print(f"\nWarning: Non-finite loss detected at step {step} in epoch {epoch+1} on Rank {rank}. Skipping batch.")
                  print(f"  Total Loss: {total_loss}")
                  print(f"  Video MAE Loss: {video_loss_val}")
                  print(f"  Audio MAE Loss: {audio_loss_val}")
@@ -248,43 +322,66 @@ def main(args):
             # --- Logging --- 
             current_lr = optimizer.param_groups[0]['lr']
             epoch_loss += total_loss.item()
-            if video_loss_val is not None: epoch_video_loss += video_loss_val
-            if audio_loss_val is not None: epoch_audio_loss += audio_loss_val
+            if video_loss_val is not None: epoch_video_loss += (video_loss_val.item() if torch.is_tensor(video_loss_val) else video_loss_val)
+            if audio_loss_val is not None: epoch_audio_loss += (audio_loss_val.item() if torch.is_tensor(audio_loss_val) else audio_loss_val)
             num_batches += 1
             
-            log_msg = f'Loss: {total_loss.item():.4f}'
-            if args.train_video_mae and video_loss_val is not None: log_msg += f', V_MAE: {video_loss_val:.4f}'
-            if args.train_audio_mae and audio_loss_val is not None: log_msg += f', A_MAE: {audio_loss_val:.4f}'
-            log_msg += f', LR: {current_lr:.6f}'
-            progress_bar.set_postfix_str(log_msg)
-            
-            # More detailed logging periodically
-            # if step % args.log_interval == 0 and step > 0:
-            #    print(f"  Epoch {epoch+1}/{args.epochs}, Step {step}/{len(train_loader)} - {log_msg}")
+            if rank == 0: # Update progress bar only on rank 0
+                log_msg_display = f'Loss: {total_loss.item():.4f}'
+                if args.train_video_mae and video_loss_val is not None: log_msg_display += f', V_MAE: {(video_loss_val.item() if torch.is_tensor(video_loss_val) else video_loss_val):.4f}'
+                if args.train_audio_mae and audio_loss_val is not None: log_msg_display += f', A_MAE: {(audio_loss_val.item() if torch.is_tensor(audio_loss_val) else audio_loss_val):.4f}'
+                log_msg_display += f', LR: {current_lr:.6f}'
+                progress_bar.set_postfix_str(log_msg_display)
+                if step % args.log_interval == 0 and step > 0 : # More detailed periodic log from rank 0
+                    tqdm.write(f"  Epoch {epoch+1}/{args.epochs}, Step {step}/{len(train_loader)} - {log_msg_display}")
                 
         # --- End of Epoch --- 
+        if num_batches == 0 and rank == 0: # Handle cases where a rank might process no batches if dataset is too small
+            print(f"\nRank {rank} processed 0 batches in epoch {epoch+1}. Check dataset size and batch_size.")
+            # If using DDP and drop_last=True, this should ideally not happen unless dataset is smaller than world_size * batch_size
+
+        # Calculate average losses for the current rank
         avg_epoch_loss = epoch_loss / num_batches if num_batches > 0 else 0
         avg_video_loss = epoch_video_loss / num_batches if num_batches > 0 and args.train_video_mae else 0
         avg_audio_loss = epoch_audio_loss / num_batches if num_batches > 0 and args.train_audio_mae else 0
-        print(f"\nEpoch {epoch+1} Finished.")
-        print(f"  Average Loss: {avg_epoch_loss:.4f}")
-        if args.train_video_mae: print(f"  Average Video MAE Loss: {avg_video_loss:.4f}")
-        if args.train_audio_mae: print(f"  Average Audio MAE Loss: {avg_audio_loss:.4f}")
+        
+        if is_ddp:
+            # Optional: Gather losses from all ranks for a global average
+            # This requires converting scalar losses to tensors and using all_reduce
+            # For simplicity, we'll log rank 0's average.
+            dist.barrier() # Ensure all ranks finish epoch computation
 
-        # --- Checkpointing --- 
-        if (epoch + 1) % args.checkpoint_interval == 0 or (epoch + 1) == args.epochs:
+        if rank == 0: 
+            progress_bar.close() # Close rank 0's progress bar
+            print(f"\nEpoch {epoch+1} Finished.")
+            print(f"  Average Loss (Rank 0): {avg_epoch_loss:.4f}")
+            if args.train_video_mae: print(f"  Average Video MAE Loss (Rank 0): {avg_video_loss:.4f}")
+            if args.train_audio_mae: print(f"  Average Audio MAE Loss (Rank 0): {avg_audio_loss:.4f}")
+
+        # --- Checkpointing (only on master process) --- 
+        if rank == 0 and ((epoch + 1) % args.checkpoint_interval == 0 or (epoch + 1) == args.epochs):
             checkpoint_path = os.path.join(args.output_dir, f't3_av_stage1_epoch_{epoch+1}.pt')
+            # Save model.module.state_dict() when using DDP
+            model_state_to_save = model.module.state_dict() if is_ddp else model.state_dict()
             checkpoint = {
                 'epoch': epoch + 1,
-                'model_state_dict': model.state_dict(),
+                'model_state_dict': model_state_to_save,
                 'optimizer_state_dict': optimizer.state_dict(),
                 'scheduler_state_dict': scheduler.state_dict(),
                 'args': vars(args) # Store args used for this checkpoint
             }
             torch.save(checkpoint, checkpoint_path)
             print(f"Checkpoint saved to {checkpoint_path}")
+        
+        if is_ddp:
+            dist.barrier() 
 
-    print("Stage 1 MAE Training finished.")
+    if rank == 0: 
+        print("Stage 1 MAE Training finished.")
+        if hasattr(progress_bar, 'close') and rank == 0 : progress_bar.close() # Ensure it's closed if loop finishes early
+    
+    if is_ddp:
+        dist.destroy_process_group()
 
 if __name__ == '__main__':
     # Need to import numpy for seeding

@@ -1,0 +1,1317 @@
+Loading ffmpeg/gcc/11.3.0/zen2/6.0
+  Loading requirement: gcc/11.3.0
+1
+4
+WARNING:__main__:
+*****************************************
+Setting OMP_NUM_THREADS environment variable for each process to be 1 in default, to avoid your system being overloaded, please further tune the variable for optimal performance in your application as needed. 
+*****************************************
+DDP enabled: 4 GPU(s). Rank 0 on device cuda:0
+Output directory: ./test_40_stage1_output
+[rank3]:[W509 15:14:31.580356245 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 3]  using GPU 3 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank2]:[W509 15:14:31.580724542 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 2]  using GPU 2 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank0]:[W509 15:14:31.599190107 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 0]  using GPU 0 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+[rank1]:[W509 15:14:31.599911819 ProcessGroupNCCL.cpp:4115] [PG ID 0 PG GUID 0 Rank 1]  using GPU 1 to perform barrier as devices used by this process are currently unknown. This can potentially cause a hang if this rank to GPU mapping is incorrect.Specify device_ids in barrier() to force use of a particular device,or call init_process_group() with a device_id.
+Process Rank 0: Using device: cuda:0Initializing VideoModality with google/vit-base-patch16-224-in21k...Initializing VideoModality with google/vit-base-patch16-224-in21k...
+Initializing VideoModality with google/vit-base-patch16-224-in21k...
+
+
+Initializing T3_AV_Model...
+Initializing VideoModality with google/vit-base-patch16-224-in21k...
+VideoModality initialized.VideoModality initialized.
+VideoModality initialized.
+
+VideoModality initialized.
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+Initializing AudioModality with google/vit-base-patch16-224-in21k...
+AudioModality initialized.
+Actual VideoModality and AudioModality instantiated.
+AudioModality initialized.
+AudioModality initialized.Actual VideoModality and AudioModality instantiated.
+
+Actual VideoModality and AudioModality instantiated.
+AudioModality initialized.
+Actual VideoModality and AudioModality instantiated.
+Actual SharedTransformerBackbone instantiated.
+Actual SharedTransformerBackbone instantiated.
+Actual SharedTransformerBackbone instantiated.
+Actual SharedTransformerBackbone instantiated.
+Actual MAEDecoders instantiated.
+Actual MAEDecoders instantiated.
+Actual MAEDecoders instantiated.Actual MAEDecoders instantiated.
+
+ProjectionHeads instantiated.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+ProjectionHeads instantiated.
+ProjectionHeads instantiated.
+SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.SoundClassificationHead instantiated for 1 classes, expecting input_dim=1536.
+
+T3_AV_Model initialized for Stages 1, 2 & Fine-tuning with AV fusion.
+Model initialized.
+Model has 247,956,481 trainable parameters (before DDP wrapping).
+Model wrapped with DDP.
+Initializing Dataset and DataLoader...
+VGGSoundDataset: Loaded 11124 samples for split 'train'. Found 309 classes.
+Dataset and DataLoader initialized.
+VGGSoundDataset: Loaded 11124 samples for split 'train'. Found 309 classes.
+Optimizer and Scheduler initialized.
+VGGSoundDataset: Loaded 11124 samples for split 'train'. Found 309 classes.
+Saved configuration to ./test_40_stage1_output/stage1_config.json
+VGGSoundDataset: Loaded 11124 samples for split 'train'. Found 309 classes.
+Starting Stage 1 MAE Training on 4 GPU(s)...
+
+Epoch 1/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 1/15 (Rank 0):   0%|          | 0/28 [01:00<?, ?it/s, Loss: 1.4493, V_MAE: 0.7105, A_MAE: 0.7389, LR: 0.000003]
+Epoch 1/15 (Rank 0):   4%|▎         | 1/28 [01:00<27:00, 60.04s/it, Loss: 1.4493, V_MAE: 0.7105, A_MAE: 0.7389, LR: 0.000003]
+Epoch 1/15 (Rank 0):   4%|▎         | 1/28 [01:57<27:00, 60.04s/it, Loss: 1.3894, V_MAE: 0.6687, A_MAE: 0.7207, LR: 0.000005]
+Epoch 1/15 (Rank 0):   7%|▋         | 2/28 [01:57<25:14, 58.26s/it, Loss: 1.3894, V_MAE: 0.6687, A_MAE: 0.7207, LR: 0.000005]
+Epoch 1/15 (Rank 0):   7%|▋         | 2/28 [02:50<25:14, 58.26s/it, Loss: 1.4016, V_MAE: 0.6769, A_MAE: 0.7247, LR: 0.000008]
+Epoch 1/15 (Rank 0):  11%|█         | 3/28 [02:50<23:26, 56.26s/it, Loss: 1.4016, V_MAE: 0.6769, A_MAE: 0.7247, LR: 0.000008]
+Epoch 1/15 (Rank 0):  11%|█         | 3/28 [03:38<23:26, 56.26s/it, Loss: 1.3521, V_MAE: 0.6795, A_MAE: 0.6726, LR: 0.000011]
+Epoch 1/15 (Rank 0):  14%|█▍        | 4/28 [03:38<21:03, 52.64s/it, Loss: 1.3521, V_MAE: 0.6795, A_MAE: 0.6726, LR: 0.000011]
+Epoch 1/15 (Rank 0):  14%|█▍        | 4/28 [04:24<21:03, 52.64s/it, Loss: 1.3131, V_MAE: 0.6580, A_MAE: 0.6551, LR: 0.000013]
+Epoch 1/15 (Rank 0):  18%|█▊        | 5/28 [04:24<19:23, 50.57s/it, Loss: 1.3131, V_MAE: 0.6580, A_MAE: 0.6551, LR: 0.000013]
+Epoch 1/15 (Rank 0):  18%|█▊        | 5/28 [05:10<19:23, 50.57s/it, Loss: 1.2178, V_MAE: 0.6454, A_MAE: 0.5724, LR: 0.000016]
+                                                                                                                             
+  Epoch 1/15, Step 5/28 - Loss: 1.2178, V_MAE: 0.6454, A_MAE: 0.5724, LR: 0.000016
+
+Epoch 1/15 (Rank 0):  18%|█▊        | 5/28 [05:10<19:23, 50.57s/it, Loss: 1.2178, V_MAE: 0.6454, A_MAE: 0.5724, LR: 0.000016]
+Epoch 1/15 (Rank 0):  21%|██▏       | 6/28 [05:10<17:57, 48.99s/it, Loss: 1.2178, V_MAE: 0.6454, A_MAE: 0.5724, LR: 0.000016]
+Epoch 1/15 (Rank 0):  21%|██▏       | 6/28 [06:00<17:57, 48.99s/it, Loss: 1.1527, V_MAE: 0.6322, A_MAE: 0.5205, LR: 0.000019]
+Epoch 1/15 (Rank 0):  25%|██▌       | 7/28 [06:00<17:12, 49.17s/it, Loss: 1.1527, V_MAE: 0.6322, A_MAE: 0.5205, LR: 0.000019]
+Epoch 1/15 (Rank 0):  25%|██▌       | 7/28 [06:52<17:12, 49.17s/it, Loss: 1.0167, V_MAE: 0.5750, A_MAE: 0.4417, LR: 0.000021]
+Epoch 1/15 (Rank 0):  29%|██▊       | 8/28 [06:52<16:40, 50.02s/it, Loss: 1.0167, V_MAE: 0.5750, A_MAE: 0.4417, LR: 0.000021]
+Epoch 1/15 (Rank 0):  29%|██▊       | 8/28 [07:43<16:40, 50.02s/it, Loss: 0.9016, V_MAE: 0.5498, A_MAE: 0.3518, LR: 0.000024]
+Epoch 1/15 (Rank 0):  32%|███▏      | 9/28 [07:43<16:00, 50.53s/it, Loss: 0.9016, V_MAE: 0.5498, A_MAE: 0.3518, LR: 0.000024]
+Epoch 1/15 (Rank 0):  32%|███▏      | 9/28 [08:36<16:00, 50.53s/it, Loss: 0.8137, V_MAE: 0.5065, A_MAE: 0.3073, LR: 0.000027]
+Epoch 1/15 (Rank 0):  36%|███▌      | 10/28 [08:36<15:19, 51.09s/it, Loss: 0.8137, V_MAE: 0.5065, A_MAE: 0.3073, LR: 0.000027]
+Epoch 1/15 (Rank 0):  36%|███▌      | 10/28 [09:24<15:19, 51.09s/it, Loss: 0.7694, V_MAE: 0.5109, A_MAE: 0.2585, LR: 0.000029]
+                                                                                                                              
+  Epoch 1/15, Step 10/28 - Loss: 0.7694, V_MAE: 0.5109, A_MAE: 0.2585, LR: 0.000029
+
+Epoch 1/15 (Rank 0):  36%|███▌      | 10/28 [09:24<15:19, 51.09s/it, Loss: 0.7694, V_MAE: 0.5109, A_MAE: 0.2585, LR: 0.000029]
+Epoch 1/15 (Rank 0):  39%|███▉      | 11/28 [09:24<14:11, 50.10s/it, Loss: 0.7694, V_MAE: 0.5109, A_MAE: 0.2585, LR: 0.000029]
+Epoch 1/15 (Rank 0):  39%|███▉      | 11/28 [10:14<14:11, 50.10s/it, Loss: 0.7020, V_MAE: 0.4878, A_MAE: 0.2142, LR: 0.000032]
+Epoch 1/15 (Rank 0):  43%|████▎     | 12/28 [10:14<13:22, 50.15s/it, Loss: 0.7020, V_MAE: 0.4878, A_MAE: 0.2142, LR: 0.000032]
+Epoch 1/15 (Rank 0):  43%|████▎     | 12/28 [11:01<13:22, 50.15s/it, Loss: 0.6811, V_MAE: 0.5031, A_MAE: 0.1779, LR: 0.000035]
+Epoch 1/15 (Rank 0):  46%|████▋     | 13/28 [11:01<12:19, 49.28s/it, Loss: 0.6811, V_MAE: 0.5031, A_MAE: 0.1779, LR: 0.000035]
+Epoch 1/15 (Rank 0):  46%|████▋     | 13/28 [11:52<12:19, 49.28s/it, Loss: 0.5871, V_MAE: 0.4334, A_MAE: 0.1537, LR: 0.000037]
+Epoch 1/15 (Rank 0):  50%|█████     | 14/28 [11:52<11:36, 49.73s/it, Loss: 0.5871, V_MAE: 0.4334, A_MAE: 0.1537, LR: 0.000037]
+Epoch 1/15 (Rank 0):  50%|█████     | 14/28 [12:43<11:36, 49.73s/it, Loss: 0.5478, V_MAE: 0.4180, A_MAE: 0.1297, LR: 0.000040]
+Epoch 1/15 (Rank 0):  54%|█████▎    | 15/28 [12:43<10:53, 50.29s/it, Loss: 0.5478, V_MAE: 0.4180, A_MAE: 0.1297, LR: 0.000040]
+Epoch 1/15 (Rank 0):  54%|█████▎    | 15/28 [13:35<10:53, 50.29s/it, Loss: 0.5462, V_MAE: 0.4341, A_MAE: 0.1120, LR: 0.000043]
+                                                                                                                              
+  Epoch 1/15, Step 15/28 - Loss: 0.5462, V_MAE: 0.4341, A_MAE: 0.1120, LR: 0.000043
+
+Epoch 1/15 (Rank 0):  54%|█████▎    | 15/28 [13:35<10:53, 50.29s/it, Loss: 0.5462, V_MAE: 0.4341, A_MAE: 0.1120, LR: 0.000043]
+Epoch 1/15 (Rank 0):  57%|█████▋    | 16/28 [13:35<10:06, 50.53s/it, Loss: 0.5462, V_MAE: 0.4341, A_MAE: 0.1120, LR: 0.000043]
+Epoch 1/15 (Rank 0):  57%|█████▋    | 16/28 [14:21<10:06, 50.53s/it, Loss: 0.5253, V_MAE: 0.4235, A_MAE: 0.1018, LR: 0.000046]
+Epoch 1/15 (Rank 0):  61%|██████    | 17/28 [14:21<09:02, 49.36s/it, Loss: 0.5253, V_MAE: 0.4235, A_MAE: 0.1018, LR: 0.000046]
+Epoch 1/15 (Rank 0):  61%|██████    | 17/28 [15:16<09:02, 49.36s/it, Loss: 0.5170, V_MAE: 0.4082, A_MAE: 0.1088, LR: 0.000048]
+Epoch 1/15 (Rank 0):  64%|██████▍   | 18/28 [15:16<08:29, 51.00s/it, Loss: 0.5170, V_MAE: 0.4082, A_MAE: 0.1088, LR: 0.000048]
+Epoch 1/15 (Rank 0):  64%|██████▍   | 18/28 [16:07<08:29, 51.00s/it, Loss: 0.4884, V_MAE: 0.3909, A_MAE: 0.0975, LR: 0.000051]
+Epoch 1/15 (Rank 0):  68%|██████▊   | 19/28 [16:07<07:39, 51.11s/it, Loss: 0.4884, V_MAE: 0.3909, A_MAE: 0.0975, LR: 0.000051]
+Epoch 1/15 (Rank 0):  68%|██████▊   | 19/28 [16:51<07:39, 51.11s/it, Loss: 0.4688, V_MAE: 0.3850, A_MAE: 0.0837, LR: 0.000054]
+Epoch 1/15 (Rank 0):  71%|███████▏  | 20/28 [16:51<06:30, 48.83s/it, Loss: 0.4688, V_MAE: 0.3850, A_MAE: 0.0837, LR: 0.000054]
+Epoch 1/15 (Rank 0):  71%|███████▏  | 20/28 [17:43<06:30, 48.83s/it, Loss: 0.4823, V_MAE: 0.3921, A_MAE: 0.0902, LR: 0.000056]
+                                                                                                                              
+  Epoch 1/15, Step 20/28 - Loss: 0.4823, V_MAE: 0.3921, A_MAE: 0.0902, LR: 0.000056
+
+Epoch 1/15 (Rank 0):  71%|███████▏  | 20/28 [17:43<06:30, 48.83s/it, Loss: 0.4823, V_MAE: 0.3921, A_MAE: 0.0902, LR: 0.000056]
+Epoch 1/15 (Rank 0):  75%|███████▌  | 21/28 [17:43<05:48, 49.74s/it, Loss: 0.4823, V_MAE: 0.3921, A_MAE: 0.0902, LR: 0.000056]
+Epoch 1/15 (Rank 0):  75%|███████▌  | 21/28 [18:34<05:48, 49.74s/it, Loss: 0.4729, V_MAE: 0.3929, A_MAE: 0.0800, LR: 0.000059]
+Epoch 1/15 (Rank 0):  79%|███████▊  | 22/28 [18:34<05:00, 50.12s/it, Loss: 0.4729, V_MAE: 0.3929, A_MAE: 0.0800, LR: 0.000059]
+Epoch 1/15 (Rank 0):  79%|███████▊  | 22/28 [19:26<05:00, 50.12s/it, Loss: 0.4291, V_MAE: 0.3499, A_MAE: 0.0792, LR: 0.000062]
+Epoch 1/15 (Rank 0):  82%|████████▏ | 23/28 [19:26<04:14, 50.85s/it, Loss: 0.4291, V_MAE: 0.3499, A_MAE: 0.0792, LR: 0.000062]
+Epoch 1/15 (Rank 0):  82%|████████▏ | 23/28 [20:24<04:14, 50.85s/it, Loss: 0.4161, V_MAE: 0.3342, A_MAE: 0.0819, LR: 0.000064]
+Epoch 1/15 (Rank 0):  86%|████████▌ | 24/28 [20:24<03:31, 52.95s/it, Loss: 0.4161, V_MAE: 0.3342, A_MAE: 0.0819, LR: 0.000064]
+Epoch 1/15 (Rank 0):  86%|████████▌ | 24/28 [21:20<03:31, 52.95s/it, Loss: 0.4430, V_MAE: 0.3638, A_MAE: 0.0792, LR: 0.000067]
+Epoch 1/15 (Rank 0):  89%|████████▉ | 25/28 [21:20<02:41, 53.95s/it, Loss: 0.4430, V_MAE: 0.3638, A_MAE: 0.0792, LR: 0.000067]
+Epoch 1/15 (Rank 0):  89%|████████▉ | 25/28 [22:10<02:41, 53.95s/it, Loss: 0.4255, V_MAE: 0.3557, A_MAE: 0.0698, LR: 0.000070]
+                                                                                                                              
+  Epoch 1/15, Step 25/28 - Loss: 0.4255, V_MAE: 0.3557, A_MAE: 0.0698, LR: 0.000070
+
+Epoch 1/15 (Rank 0):  89%|████████▉ | 25/28 [22:10<02:41, 53.95s/it, Loss: 0.4255, V_MAE: 0.3557, A_MAE: 0.0698, LR: 0.000070]
+Epoch 1/15 (Rank 0):  93%|█████████▎| 26/28 [22:10<01:45, 52.66s/it, Loss: 0.4255, V_MAE: 0.3557, A_MAE: 0.0698, LR: 0.000070]
+Epoch 1/15 (Rank 0):  93%|█████████▎| 26/28 [23:00<01:45, 52.66s/it, Loss: 0.4333, V_MAE: 0.3549, A_MAE: 0.0784, LR: 0.000072]
+Epoch 1/15 (Rank 0):  96%|█████████▋| 27/28 [23:00<00:51, 51.82s/it, Loss: 0.4333, V_MAE: 0.3549, A_MAE: 0.0784, LR: 0.000072]
+Epoch 1/15 (Rank 0):  96%|█████████▋| 27/28 [23:50<00:51, 51.82s/it, Loss: 0.4663, V_MAE: 0.3984, A_MAE: 0.0679, LR: 0.000075]
+Epoch 1/15 (Rank 0): 100%|██████████| 28/28 [23:50<00:00, 51.35s/it, Loss: 0.4663, V_MAE: 0.3984, A_MAE: 0.0679, LR: 0.000075]
+                                                                                                                              
+Epoch 1 Finished.
+  Average Loss (Rank 0): 0.7646
+  Average Video MAE Loss (Rank 0): 0.4871
+  Average Audio MAE Loss (Rank 0): 0.2775
+
+Epoch 2/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 2/15 (Rank 0):   0%|          | 0/28 [00:45<?, ?it/s, Loss: 0.4057, V_MAE: 0.3276, A_MAE: 0.0780, LR: 0.000078]
+Epoch 2/15 (Rank 0):   4%|▎         | 1/28 [00:45<20:26, 45.41s/it, Loss: 0.4057, V_MAE: 0.3276, A_MAE: 0.0780, LR: 0.000078]
+Epoch 2/15 (Rank 0):   4%|▎         | 1/28 [01:30<20:26, 45.41s/it, Loss: 0.4220, V_MAE: 0.3611, A_MAE: 0.0609, LR: 0.000080]
+Epoch 2/15 (Rank 0):   7%|▋         | 2/28 [01:30<19:31, 45.06s/it, Loss: 0.4220, V_MAE: 0.3611, A_MAE: 0.0609, LR: 0.000080]
+Epoch 2/15 (Rank 0):   7%|▋         | 2/28 [02:14<19:31, 45.06s/it, Loss: 0.3802, V_MAE: 0.3192, A_MAE: 0.0609, LR: 0.000083]
+Epoch 2/15 (Rank 0):  11%|█         | 3/28 [02:14<18:37, 44.68s/it, Loss: 0.3802, V_MAE: 0.3192, A_MAE: 0.0609, LR: 0.000083]
+Epoch 2/15 (Rank 0):  11%|█         | 3/28 [02:55<18:37, 44.68s/it, Loss: 0.3956, V_MAE: 0.3248, A_MAE: 0.0709, LR: 0.000086]
+Epoch 2/15 (Rank 0):  14%|█▍        | 4/28 [02:55<17:19, 43.30s/it, Loss: 0.3956, V_MAE: 0.3248, A_MAE: 0.0709, LR: 0.000086]
+Epoch 2/15 (Rank 0):  14%|█▍        | 4/28 [03:47<17:19, 43.30s/it, Loss: 0.3739, V_MAE: 0.3131, A_MAE: 0.0608, LR: 0.000088]
+Epoch 2/15 (Rank 0):  18%|█▊        | 5/28 [03:47<17:45, 46.33s/it, Loss: 0.3739, V_MAE: 0.3131, A_MAE: 0.0608, LR: 0.000088]
+Epoch 2/15 (Rank 0):  18%|█▊        | 5/28 [04:33<17:45, 46.33s/it, Loss: 0.3851, V_MAE: 0.3299, A_MAE: 0.0551, LR: 0.000091]
+                                                                                                                             
+  Epoch 2/15, Step 5/28 - Loss: 0.3851, V_MAE: 0.3299, A_MAE: 0.0551, LR: 0.000091
+
+Epoch 2/15 (Rank 0):  18%|█▊        | 5/28 [04:33<17:45, 46.33s/it, Loss: 0.3851, V_MAE: 0.3299, A_MAE: 0.0551, LR: 0.000091]
+Epoch 2/15 (Rank 0):  21%|██▏       | 6/28 [04:33<16:55, 46.17s/it, Loss: 0.3851, V_MAE: 0.3299, A_MAE: 0.0551, LR: 0.000091]
+Epoch 2/15 (Rank 0):  21%|██▏       | 6/28 [05:20<16:55, 46.17s/it, Loss: 0.4083, V_MAE: 0.3526, A_MAE: 0.0558, LR: 0.000094]
+Epoch 2/15 (Rank 0):  25%|██▌       | 7/28 [05:20<16:17, 46.55s/it, Loss: 0.4083, V_MAE: 0.3526, A_MAE: 0.0558, LR: 0.000094]
+Epoch 2/15 (Rank 0):  25%|██▌       | 7/28 [06:02<16:17, 46.55s/it, Loss: 0.3954, V_MAE: 0.3436, A_MAE: 0.0517, LR: 0.000096]
+Epoch 2/15 (Rank 0):  29%|██▊       | 8/28 [06:02<15:00, 45.05s/it, Loss: 0.3954, V_MAE: 0.3436, A_MAE: 0.0517, LR: 0.000096]
+Epoch 2/15 (Rank 0):  29%|██▊       | 8/28 [06:47<15:00, 45.05s/it, Loss: 0.3745, V_MAE: 0.3253, A_MAE: 0.0491, LR: 0.000099]
+Epoch 2/15 (Rank 0):  32%|███▏      | 9/28 [06:47<14:18, 45.21s/it, Loss: 0.3745, V_MAE: 0.3253, A_MAE: 0.0491, LR: 0.000099]
+Epoch 2/15 (Rank 0):  32%|███▏      | 9/28 [07:31<14:18, 45.21s/it, Loss: 0.3845, V_MAE: 0.3317, A_MAE: 0.0528, LR: 0.000102]
+Epoch 2/15 (Rank 0):  36%|███▌      | 10/28 [07:31<13:21, 44.55s/it, Loss: 0.3845, V_MAE: 0.3317, A_MAE: 0.0528, LR: 0.000102]
+Epoch 2/15 (Rank 0):  36%|███▌      | 10/28 [08:14<13:21, 44.55s/it, Loss: 0.4187, V_MAE: 0.3641, A_MAE: 0.0546, LR: 0.000104]
+                                                                                                                              
+  Epoch 2/15, Step 10/28 - Loss: 0.4187, V_MAE: 0.3641, A_MAE: 0.0546, LR: 0.000104
+
+Epoch 2/15 (Rank 0):  36%|███▌      | 10/28 [08:14<13:21, 44.55s/it, Loss: 0.4187, V_MAE: 0.3641, A_MAE: 0.0546, LR: 0.000104]
+Epoch 2/15 (Rank 0):  39%|███▉      | 11/28 [08:14<12:30, 44.14s/it, Loss: 0.4187, V_MAE: 0.3641, A_MAE: 0.0546, LR: 0.000104]
+Epoch 2/15 (Rank 0):  39%|███▉      | 11/28 [08:55<12:30, 44.14s/it, Loss: 0.3940, V_MAE: 0.3362, A_MAE: 0.0578, LR: 0.000107]
+Epoch 2/15 (Rank 0):  43%|████▎     | 12/28 [08:55<11:33, 43.36s/it, Loss: 0.3940, V_MAE: 0.3362, A_MAE: 0.0578, LR: 0.000107]
+Epoch 2/15 (Rank 0):  43%|████▎     | 12/28 [09:37<11:33, 43.36s/it, Loss: 0.3864, V_MAE: 0.3329, A_MAE: 0.0535, LR: 0.000110]
+Epoch 2/15 (Rank 0):  46%|████▋     | 13/28 [09:37<10:44, 42.95s/it, Loss: 0.3864, V_MAE: 0.3329, A_MAE: 0.0535, LR: 0.000110]
+Epoch 2/15 (Rank 0):  46%|████▋     | 13/28 [10:21<10:44, 42.95s/it, Loss: 0.4036, V_MAE: 0.3480, A_MAE: 0.0556, LR: 0.000112]
+Epoch 2/15 (Rank 0):  50%|█████     | 14/28 [10:21<10:04, 43.21s/it, Loss: 0.4036, V_MAE: 0.3480, A_MAE: 0.0556, LR: 0.000112]
+Epoch 2/15 (Rank 0):  50%|█████     | 14/28 [11:03<10:04, 43.21s/it, Loss: 0.3938, V_MAE: 0.3422, A_MAE: 0.0515, LR: 0.000115]
+Epoch 2/15 (Rank 0):  54%|█████▎    | 15/28 [11:03<09:16, 42.79s/it, Loss: 0.3938, V_MAE: 0.3422, A_MAE: 0.0515, LR: 0.000115]
+Epoch 2/15 (Rank 0):  54%|█████▎    | 15/28 [11:50<09:16, 42.79s/it, Loss: 0.4063, V_MAE: 0.3520, A_MAE: 0.0542, LR: 0.000118]
+                                                                                                                              
+  Epoch 2/15, Step 15/28 - Loss: 0.4063, V_MAE: 0.3520, A_MAE: 0.0542, LR: 0.000118
+
+Epoch 2/15 (Rank 0):  54%|█████▎    | 15/28 [11:50<09:16, 42.79s/it, Loss: 0.4063, V_MAE: 0.3520, A_MAE: 0.0542, LR: 0.000118]
+Epoch 2/15 (Rank 0):  57%|█████▋    | 16/28 [11:50<08:47, 43.98s/it, Loss: 0.4063, V_MAE: 0.3520, A_MAE: 0.0542, LR: 0.000118]
+Epoch 2/15 (Rank 0):  57%|█████▋    | 16/28 [12:36<08:47, 43.98s/it, Loss: 0.3875, V_MAE: 0.3343, A_MAE: 0.0532, LR: 0.000121]
+Epoch 2/15 (Rank 0):  61%|██████    | 17/28 [12:36<08:10, 44.55s/it, Loss: 0.3875, V_MAE: 0.3343, A_MAE: 0.0532, LR: 0.000121]
+Epoch 2/15 (Rank 0):  61%|██████    | 17/28 [13:18<08:10, 44.55s/it, Loss: 0.4037, V_MAE: 0.3526, A_MAE: 0.0510, LR: 0.000123]
+Epoch 2/15 (Rank 0):  64%|██████▍   | 18/28 [13:18<07:19, 43.91s/it, Loss: 0.4037, V_MAE: 0.3526, A_MAE: 0.0510, LR: 0.000123]
+Epoch 2/15 (Rank 0):  64%|██████▍   | 18/28 [14:02<07:19, 43.91s/it, Loss: 0.3946, V_MAE: 0.3376, A_MAE: 0.0571, LR: 0.000126]
+Epoch 2/15 (Rank 0):  68%|██████▊   | 19/28 [14:02<06:35, 43.99s/it, Loss: 0.3946, V_MAE: 0.3376, A_MAE: 0.0571, LR: 0.000126]
+Epoch 2/15 (Rank 0):  68%|██████▊   | 19/28 [14:44<06:35, 43.99s/it, Loss: 0.3688, V_MAE: 0.3199, A_MAE: 0.0490, LR: 0.000129]
+Epoch 2/15 (Rank 0):  71%|███████▏  | 20/28 [14:44<05:47, 43.46s/it, Loss: 0.3688, V_MAE: 0.3199, A_MAE: 0.0490, LR: 0.000129]
+Epoch 2/15 (Rank 0):  71%|███████▏  | 20/28 [15:25<05:47, 43.46s/it, Loss: 0.4127, V_MAE: 0.3564, A_MAE: 0.0562, LR: 0.000131]
+                                                                                                                              
+  Epoch 2/15, Step 20/28 - Loss: 0.4127, V_MAE: 0.3564, A_MAE: 0.0562, LR: 0.000131
+
+Epoch 2/15 (Rank 0):  71%|███████▏  | 20/28 [15:25<05:47, 43.46s/it, Loss: 0.4127, V_MAE: 0.3564, A_MAE: 0.0562, LR: 0.000131]
+Epoch 2/15 (Rank 0):  75%|███████▌  | 21/28 [15:25<04:57, 42.55s/it, Loss: 0.4127, V_MAE: 0.3564, A_MAE: 0.0562, LR: 0.000131]
+Epoch 2/15 (Rank 0):  75%|███████▌  | 21/28 [16:11<04:57, 42.55s/it, Loss: 0.3905, V_MAE: 0.3427, A_MAE: 0.0478, LR: 0.000134]
+Epoch 2/15 (Rank 0):  79%|███████▊  | 22/28 [16:11<04:21, 43.59s/it, Loss: 0.3905, V_MAE: 0.3427, A_MAE: 0.0478, LR: 0.000134]
+Epoch 2/15 (Rank 0):  79%|███████▊  | 22/28 [16:54<04:21, 43.59s/it, Loss: 0.3809, V_MAE: 0.3310, A_MAE: 0.0499, LR: 0.000137]
+Epoch 2/15 (Rank 0):  82%|████████▏ | 23/28 [16:54<03:37, 43.58s/it, Loss: 0.3809, V_MAE: 0.3310, A_MAE: 0.0499, LR: 0.000137]
+Epoch 2/15 (Rank 0):  82%|████████▏ | 23/28 [17:37<03:37, 43.58s/it, Loss: 0.3557, V_MAE: 0.3077, A_MAE: 0.0480, LR: 0.000139]
+Epoch 2/15 (Rank 0):  86%|████████▌ | 24/28 [17:37<02:52, 43.23s/it, Loss: 0.3557, V_MAE: 0.3077, A_MAE: 0.0480, LR: 0.000139]
+Epoch 2/15 (Rank 0):  86%|████████▌ | 24/28 [18:16<02:52, 43.23s/it, Loss: 0.4098, V_MAE: 0.3530, A_MAE: 0.0568, LR: 0.000142]
+Epoch 2/15 (Rank 0):  89%|████████▉ | 25/28 [18:16<02:05, 41.96s/it, Loss: 0.4098, V_MAE: 0.3530, A_MAE: 0.0568, LR: 0.000142]
+Epoch 2/15 (Rank 0):  89%|████████▉ | 25/28 [18:59<02:05, 41.96s/it, Loss: 0.3705, V_MAE: 0.3218, A_MAE: 0.0487, LR: 0.000145]
+                                                                                                                              
+  Epoch 2/15, Step 25/28 - Loss: 0.3705, V_MAE: 0.3218, A_MAE: 0.0487, LR: 0.000145
+
+Epoch 2/15 (Rank 0):  89%|████████▉ | 25/28 [18:59<02:05, 41.96s/it, Loss: 0.3705, V_MAE: 0.3218, A_MAE: 0.0487, LR: 0.000145]
+Epoch 2/15 (Rank 0):  93%|█████████▎| 26/28 [18:59<01:24, 42.30s/it, Loss: 0.3705, V_MAE: 0.3218, A_MAE: 0.0487, LR: 0.000145]
+Epoch 2/15 (Rank 0):  93%|█████████▎| 26/28 [19:40<01:24, 42.30s/it, Loss: 0.3678, V_MAE: 0.3168, A_MAE: 0.0511, LR: 0.000147]
+Epoch 2/15 (Rank 0):  96%|█████████▋| 27/28 [19:40<00:41, 41.92s/it, Loss: 0.3678, V_MAE: 0.3168, A_MAE: 0.0511, LR: 0.000147]
+Epoch 2/15 (Rank 0):  96%|█████████▋| 27/28 [20:25<00:41, 41.92s/it, Loss: 0.3704, V_MAE: 0.3240, A_MAE: 0.0464, LR: 0.000150]
+Epoch 2/15 (Rank 0): 100%|██████████| 28/28 [20:25<00:00, 42.77s/it, Loss: 0.3704, V_MAE: 0.3240, A_MAE: 0.0464, LR: 0.000150]
+                                                                                                                              
+Epoch 2 Finished.
+  Average Loss (Rank 0): 0.3907
+  Average Video MAE Loss (Rank 0): 0.3358
+  Average Audio MAE Loss (Rank 0): 0.0549
+
+Epoch 3/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 3/15 (Rank 0):   0%|          | 0/28 [00:40<?, ?it/s, Loss: 0.4073, V_MAE: 0.3591, A_MAE: 0.0482, LR: 0.000150]
+Epoch 3/15 (Rank 0):   4%|▎         | 1/28 [00:40<18:15, 40.57s/it, Loss: 0.4073, V_MAE: 0.3591, A_MAE: 0.0482, LR: 0.000150]
+Epoch 3/15 (Rank 0):   4%|▎         | 1/28 [01:24<18:15, 40.57s/it, Loss: 0.3808, V_MAE: 0.3302, A_MAE: 0.0506, LR: 0.000150]
+Epoch 3/15 (Rank 0):   7%|▋         | 2/28 [01:24<18:27, 42.60s/it, Loss: 0.3808, V_MAE: 0.3302, A_MAE: 0.0506, LR: 0.000150]
+Epoch 3/15 (Rank 0):   7%|▋         | 2/28 [02:11<18:27, 42.60s/it, Loss: 0.3850, V_MAE: 0.3332, A_MAE: 0.0518, LR: 0.000150]
+Epoch 3/15 (Rank 0):  11%|█         | 3/28 [02:11<18:29, 44.40s/it, Loss: 0.3850, V_MAE: 0.3332, A_MAE: 0.0518, LR: 0.000150]
+Epoch 3/15 (Rank 0):  11%|█         | 3/28 [02:49<18:29, 44.40s/it, Loss: 0.3546, V_MAE: 0.3061, A_MAE: 0.0485, LR: 0.000150]
+Epoch 3/15 (Rank 0):  14%|█▍        | 4/28 [02:49<16:45, 41.88s/it, Loss: 0.3546, V_MAE: 0.3061, A_MAE: 0.0485, LR: 0.000150]
+Epoch 3/15 (Rank 0):  14%|█▍        | 4/28 [03:30<16:45, 41.88s/it, Loss: 0.3935, V_MAE: 0.3462, A_MAE: 0.0474, LR: 0.000150]
+Epoch 3/15 (Rank 0):  18%|█▊        | 5/28 [03:30<15:59, 41.73s/it, Loss: 0.3935, V_MAE: 0.3462, A_MAE: 0.0474, LR: 0.000150]
+Epoch 3/15 (Rank 0):  18%|█▊        | 5/28 [04:16<15:59, 41.73s/it, Loss: 0.3881, V_MAE: 0.3381, A_MAE: 0.0500, LR: 0.000150]
+                                                                                                                             
+  Epoch 3/15, Step 5/28 - Loss: 0.3881, V_MAE: 0.3381, A_MAE: 0.0500, LR: 0.000150
+
+Epoch 3/15 (Rank 0):  18%|█▊        | 5/28 [04:16<15:59, 41.73s/it, Loss: 0.3881, V_MAE: 0.3381, A_MAE: 0.0500, LR: 0.000150]
+Epoch 3/15 (Rank 0):  21%|██▏       | 6/28 [04:16<15:45, 42.98s/it, Loss: 0.3881, V_MAE: 0.3381, A_MAE: 0.0500, LR: 0.000150]
+Epoch 3/15 (Rank 0):  21%|██▏       | 6/28 [05:00<15:45, 42.98s/it, Loss: 0.4048, V_MAE: 0.3583, A_MAE: 0.0465, LR: 0.000150]
+Epoch 3/15 (Rank 0):  25%|██▌       | 7/28 [05:00<15:15, 43.58s/it, Loss: 0.4048, V_MAE: 0.3583, A_MAE: 0.0465, LR: 0.000150]
+Epoch 3/15 (Rank 0):  25%|██▌       | 7/28 [05:43<15:15, 43.58s/it, Loss: 0.3984, V_MAE: 0.3422, A_MAE: 0.0561, LR: 0.000150]
+Epoch 3/15 (Rank 0):  29%|██▊       | 8/28 [05:43<14:26, 43.33s/it, Loss: 0.3984, V_MAE: 0.3422, A_MAE: 0.0561, LR: 0.000150]
+Epoch 3/15 (Rank 0):  29%|██▊       | 8/28 [06:22<14:26, 43.33s/it, Loss: 0.4137, V_MAE: 0.3648, A_MAE: 0.0489, LR: 0.000150]
+Epoch 3/15 (Rank 0):  32%|███▏      | 9/28 [06:22<13:17, 41.98s/it, Loss: 0.4137, V_MAE: 0.3648, A_MAE: 0.0489, LR: 0.000150]
+Epoch 3/15 (Rank 0):  32%|███▏      | 9/28 [07:06<13:17, 41.98s/it, Loss: 0.3658, V_MAE: 0.3197, A_MAE: 0.0461, LR: 0.000150]
+Epoch 3/15 (Rank 0):  36%|███▌      | 10/28 [07:06<12:47, 42.66s/it, Loss: 0.3658, V_MAE: 0.3197, A_MAE: 0.0461, LR: 0.000150]
+Epoch 3/15 (Rank 0):  36%|███▌      | 10/28 [07:51<12:47, 42.66s/it, Loss: 0.4023, V_MAE: 0.3543, A_MAE: 0.0480, LR: 0.000150]
+                                                                                                                              
+  Epoch 3/15, Step 10/28 - Loss: 0.4023, V_MAE: 0.3543, A_MAE: 0.0480, LR: 0.000150
+
+Epoch 3/15 (Rank 0):  36%|███▌      | 10/28 [07:51<12:47, 42.66s/it, Loss: 0.4023, V_MAE: 0.3543, A_MAE: 0.0480, LR: 0.000150]
+Epoch 3/15 (Rank 0):  39%|███▉      | 11/28 [07:51<12:13, 43.13s/it, Loss: 0.4023, V_MAE: 0.3543, A_MAE: 0.0480, LR: 0.000150]
+Epoch 3/15 (Rank 0):  39%|███▉      | 11/28 [08:35<12:13, 43.13s/it, Loss: 0.3522, V_MAE: 0.3061, A_MAE: 0.0461, LR: 0.000150]
+Epoch 3/15 (Rank 0):  43%|████▎     | 12/28 [08:35<11:38, 43.64s/it, Loss: 0.3522, V_MAE: 0.3061, A_MAE: 0.0461, LR: 0.000150]
+Epoch 3/15 (Rank 0):  43%|████▎     | 12/28 [09:18<11:38, 43.64s/it, Loss: 0.3910, V_MAE: 0.3464, A_MAE: 0.0446, LR: 0.000150]
+Epoch 3/15 (Rank 0):  46%|████▋     | 13/28 [09:18<10:47, 43.20s/it, Loss: 0.3910, V_MAE: 0.3464, A_MAE: 0.0446, LR: 0.000150]
+Epoch 3/15 (Rank 0):  46%|████▋     | 13/28 [10:02<10:47, 43.20s/it, Loss: 0.4119, V_MAE: 0.3596, A_MAE: 0.0524, LR: 0.000149]
+Epoch 3/15 (Rank 0):  50%|█████     | 14/28 [10:02<10:08, 43.50s/it, Loss: 0.4119, V_MAE: 0.3596, A_MAE: 0.0524, LR: 0.000149]
+Epoch 3/15 (Rank 0):  50%|█████     | 14/28 [10:48<10:08, 43.50s/it, Loss: 0.3726, V_MAE: 0.3309, A_MAE: 0.0417, LR: 0.000149]
+Epoch 3/15 (Rank 0):  54%|█████▎    | 15/28 [10:48<09:35, 44.23s/it, Loss: 0.3726, V_MAE: 0.3309, A_MAE: 0.0417, LR: 0.000149]
+Epoch 3/15 (Rank 0):  54%|█████▎    | 15/28 [11:30<09:35, 44.23s/it, Loss: 0.3576, V_MAE: 0.3089, A_MAE: 0.0487, LR: 0.000149]
+                                                                                                                              
+  Epoch 3/15, Step 15/28 - Loss: 0.3576, V_MAE: 0.3089, A_MAE: 0.0487, LR: 0.000149
+
+Epoch 3/15 (Rank 0):  54%|█████▎    | 15/28 [11:30<09:35, 44.23s/it, Loss: 0.3576, V_MAE: 0.3089, A_MAE: 0.0487, LR: 0.000149]
+Epoch 3/15 (Rank 0):  57%|█████▋    | 16/28 [11:30<08:44, 43.70s/it, Loss: 0.3576, V_MAE: 0.3089, A_MAE: 0.0487, LR: 0.000149]
+Epoch 3/15 (Rank 0):  57%|█████▋    | 16/28 [12:16<08:44, 43.70s/it, Loss: 0.4050, V_MAE: 0.3599, A_MAE: 0.0451, LR: 0.000149]
+Epoch 3/15 (Rank 0):  61%|██████    | 17/28 [12:16<08:08, 44.39s/it, Loss: 0.4050, V_MAE: 0.3599, A_MAE: 0.0451, LR: 0.000149]
+Epoch 3/15 (Rank 0):  61%|██████    | 17/28 [13:05<08:08, 44.39s/it, Loss: 0.3758, V_MAE: 0.3256, A_MAE: 0.0502, LR: 0.000149]
+Epoch 3/15 (Rank 0):  64%|██████▍   | 18/28 [13:05<07:36, 45.64s/it, Loss: 0.3758, V_MAE: 0.3256, A_MAE: 0.0502, LR: 0.000149]
+Epoch 3/15 (Rank 0):  64%|██████▍   | 18/28 [13:52<07:36, 45.64s/it, Loss: 0.3887, V_MAE: 0.3405, A_MAE: 0.0481, LR: 0.000149]
+Epoch 3/15 (Rank 0):  68%|██████▊   | 19/28 [13:52<06:55, 46.19s/it, Loss: 0.3887, V_MAE: 0.3405, A_MAE: 0.0481, LR: 0.000149]
+Epoch 3/15 (Rank 0):  68%|██████▊   | 19/28 [14:38<06:55, 46.19s/it, Loss: 0.3849, V_MAE: 0.3405, A_MAE: 0.0444, LR: 0.000149]
+Epoch 3/15 (Rank 0):  71%|███████▏  | 20/28 [14:38<06:08, 46.03s/it, Loss: 0.3849, V_MAE: 0.3405, A_MAE: 0.0444, LR: 0.000149]
+Epoch 3/15 (Rank 0):  71%|███████▏  | 20/28 [15:21<06:08, 46.03s/it, Loss: 0.3881, V_MAE: 0.3403, A_MAE: 0.0478, LR: 0.000149]
+                                                                                                                              
+  Epoch 3/15, Step 20/28 - Loss: 0.3881, V_MAE: 0.3403, A_MAE: 0.0478, LR: 0.000149
+
+Epoch 3/15 (Rank 0):  71%|███████▏  | 20/28 [15:21<06:08, 46.03s/it, Loss: 0.3881, V_MAE: 0.3403, A_MAE: 0.0478, LR: 0.000149]
+Epoch 3/15 (Rank 0):  75%|███████▌  | 21/28 [15:21<05:15, 45.11s/it, Loss: 0.3881, V_MAE: 0.3403, A_MAE: 0.0478, LR: 0.000149]
+Epoch 3/15 (Rank 0):  75%|███████▌  | 21/28 [16:06<05:15, 45.11s/it, Loss: 0.3402, V_MAE: 0.2940, A_MAE: 0.0462, LR: 0.000149]
+Epoch 3/15 (Rank 0):  79%|███████▊  | 22/28 [16:06<04:31, 45.21s/it, Loss: 0.3402, V_MAE: 0.2940, A_MAE: 0.0462, LR: 0.000149]
+Epoch 3/15 (Rank 0):  79%|███████▊  | 22/28 [16:53<04:31, 45.21s/it, Loss: 0.3652, V_MAE: 0.3143, A_MAE: 0.0510, LR: 0.000149]
+Epoch 3/15 (Rank 0):  82%|████████▏ | 23/28 [16:53<03:48, 45.67s/it, Loss: 0.3652, V_MAE: 0.3143, A_MAE: 0.0510, LR: 0.000149]
+Epoch 3/15 (Rank 0):  82%|████████▏ | 23/28 [17:32<03:48, 45.67s/it, Loss: 0.3572, V_MAE: 0.3091, A_MAE: 0.0481, LR: 0.000148]
+Epoch 3/15 (Rank 0):  86%|████████▌ | 24/28 [17:32<02:55, 43.83s/it, Loss: 0.3572, V_MAE: 0.3091, A_MAE: 0.0481, LR: 0.000148]
+Epoch 3/15 (Rank 0):  86%|████████▌ | 24/28 [18:15<02:55, 43.83s/it, Loss: 0.3645, V_MAE: 0.3223, A_MAE: 0.0422, LR: 0.000148]
+Epoch 3/15 (Rank 0):  89%|████████▉ | 25/28 [18:15<02:10, 43.57s/it, Loss: 0.3645, V_MAE: 0.3223, A_MAE: 0.0422, LR: 0.000148]
+Epoch 3/15 (Rank 0):  89%|████████▉ | 25/28 [18:59<02:10, 43.57s/it, Loss: 0.3824, V_MAE: 0.3405, A_MAE: 0.0419, LR: 0.000148]
+                                                                                                                              
+  Epoch 3/15, Step 25/28 - Loss: 0.3824, V_MAE: 0.3405, A_MAE: 0.0419, LR: 0.000148
+
+Epoch 3/15 (Rank 0):  89%|████████▉ | 25/28 [18:59<02:10, 43.57s/it, Loss: 0.3824, V_MAE: 0.3405, A_MAE: 0.0419, LR: 0.000148]
+Epoch 3/15 (Rank 0):  93%|█████████▎| 26/28 [18:59<01:27, 43.63s/it, Loss: 0.3824, V_MAE: 0.3405, A_MAE: 0.0419, LR: 0.000148]
+Epoch 3/15 (Rank 0):  93%|█████████▎| 26/28 [19:46<01:27, 43.63s/it, Loss: 0.4138, V_MAE: 0.3706, A_MAE: 0.0432, LR: 0.000148]
+Epoch 3/15 (Rank 0):  96%|█████████▋| 27/28 [19:46<00:44, 44.65s/it, Loss: 0.4138, V_MAE: 0.3706, A_MAE: 0.0432, LR: 0.000148]
+Epoch 3/15 (Rank 0):  96%|█████████▋| 27/28 [20:34<00:44, 44.65s/it, Loss: 0.3783, V_MAE: 0.3348, A_MAE: 0.0435, LR: 0.000148]
+Epoch 3/15 (Rank 0): 100%|██████████| 28/28 [20:34<00:00, 45.54s/it, Loss: 0.3783, V_MAE: 0.3348, A_MAE: 0.0435, LR: 0.000148]
+                                                                                                                              
+Epoch 3 Finished.
+  Average Loss (Rank 0): 0.3830
+  Average Video MAE Loss (Rank 0): 0.3356
+  Average Audio MAE Loss (Rank 0): 0.0474
+
+Epoch 4/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 4/15 (Rank 0):   0%|          | 0/28 [00:43<?, ?it/s, Loss: 0.3991, V_MAE: 0.3527, A_MAE: 0.0464, LR: 0.000148]
+Epoch 4/15 (Rank 0):   4%|▎         | 1/28 [00:43<19:32, 43.43s/it, Loss: 0.3991, V_MAE: 0.3527, A_MAE: 0.0464, LR: 0.000148]
+Epoch 4/15 (Rank 0):   4%|▎         | 1/28 [01:27<19:32, 43.43s/it, Loss: 0.3992, V_MAE: 0.3555, A_MAE: 0.0437, LR: 0.000147]
+Epoch 4/15 (Rank 0):   7%|▋         | 2/28 [01:27<19:00, 43.86s/it, Loss: 0.3992, V_MAE: 0.3555, A_MAE: 0.0437, LR: 0.000147]
+Epoch 4/15 (Rank 0):   7%|▋         | 2/28 [02:10<19:00, 43.86s/it, Loss: 0.3921, V_MAE: 0.3484, A_MAE: 0.0437, LR: 0.000147]
+Epoch 4/15 (Rank 0):  11%|█         | 3/28 [02:10<18:05, 43.43s/it, Loss: 0.3921, V_MAE: 0.3484, A_MAE: 0.0437, LR: 0.000147]
+Epoch 4/15 (Rank 0):  11%|█         | 3/28 [02:55<18:05, 43.43s/it, Loss: 0.3752, V_MAE: 0.3202, A_MAE: 0.0550, LR: 0.000147]
+Epoch 4/15 (Rank 0):  14%|█▍        | 4/28 [02:55<17:32, 43.86s/it, Loss: 0.3752, V_MAE: 0.3202, A_MAE: 0.0550, LR: 0.000147]
+Epoch 4/15 (Rank 0):  14%|█▍        | 4/28 [03:41<17:32, 43.86s/it, Loss: 0.3950, V_MAE: 0.3392, A_MAE: 0.0558, LR: 0.000147]
+Epoch 4/15 (Rank 0):  18%|█▊        | 5/28 [03:41<17:07, 44.66s/it, Loss: 0.3950, V_MAE: 0.3392, A_MAE: 0.0558, LR: 0.000147]
+Epoch 4/15 (Rank 0):  18%|█▊        | 5/28 [04:23<17:07, 44.66s/it, Loss: 0.3925, V_MAE: 0.3436, A_MAE: 0.0489, LR: 0.000147]
+                                                                                                                             
+  Epoch 4/15, Step 5/28 - Loss: 0.3925, V_MAE: 0.3436, A_MAE: 0.0489, LR: 0.000147
+
+Epoch 4/15 (Rank 0):  18%|█▊        | 5/28 [04:23<17:07, 44.66s/it, Loss: 0.3925, V_MAE: 0.3436, A_MAE: 0.0489, LR: 0.000147]
+Epoch 4/15 (Rank 0):  21%|██▏       | 6/28 [04:23<16:06, 43.91s/it, Loss: 0.3925, V_MAE: 0.3436, A_MAE: 0.0489, LR: 0.000147]
+Epoch 4/15 (Rank 0):  21%|██▏       | 6/28 [05:08<16:06, 43.91s/it, Loss: 0.3828, V_MAE: 0.3386, A_MAE: 0.0442, LR: 0.000147]
+Epoch 4/15 (Rank 0):  25%|██▌       | 7/28 [05:08<15:28, 44.23s/it, Loss: 0.3828, V_MAE: 0.3386, A_MAE: 0.0442, LR: 0.000147]
+Epoch 4/15 (Rank 0):  25%|██▌       | 7/28 [05:54<15:28, 44.23s/it, Loss: 0.3776, V_MAE: 0.3300, A_MAE: 0.0476, LR: 0.000146]
+Epoch 4/15 (Rank 0):  29%|██▊       | 8/28 [05:54<14:55, 44.79s/it, Loss: 0.3776, V_MAE: 0.3300, A_MAE: 0.0476, LR: 0.000146]
+Epoch 4/15 (Rank 0):  29%|██▊       | 8/28 [06:39<14:55, 44.79s/it, Loss: 0.3820, V_MAE: 0.3306, A_MAE: 0.0514, LR: 0.000146]
+Epoch 4/15 (Rank 0):  32%|███▏      | 9/28 [06:39<14:15, 45.01s/it, Loss: 0.3820, V_MAE: 0.3306, A_MAE: 0.0514, LR: 0.000146]
+Epoch 4/15 (Rank 0):  32%|███▏      | 9/28 [07:23<14:15, 45.01s/it, Loss: 0.3690, V_MAE: 0.3233, A_MAE: 0.0458, LR: 0.000146]
+Epoch 4/15 (Rank 0):  36%|███▌      | 10/28 [07:23<13:22, 44.56s/it, Loss: 0.3690, V_MAE: 0.3233, A_MAE: 0.0458, LR: 0.000146]
+Epoch 4/15 (Rank 0):  36%|███▌      | 10/28 [08:09<13:22, 44.56s/it, Loss: 0.3564, V_MAE: 0.3156, A_MAE: 0.0408, LR: 0.000146]
+                                                                                                                              
+  Epoch 4/15, Step 10/28 - Loss: 0.3564, V_MAE: 0.3156, A_MAE: 0.0408, LR: 0.000146
+
+Epoch 4/15 (Rank 0):  36%|███▌      | 10/28 [08:09<13:22, 44.56s/it, Loss: 0.3564, V_MAE: 0.3156, A_MAE: 0.0408, LR: 0.000146]
+Epoch 4/15 (Rank 0):  39%|███▉      | 11/28 [08:09<12:43, 44.93s/it, Loss: 0.3564, V_MAE: 0.3156, A_MAE: 0.0408, LR: 0.000146]
+Epoch 4/15 (Rank 0):  39%|███▉      | 11/28 [08:54<12:43, 44.93s/it, Loss: 0.3851, V_MAE: 0.3419, A_MAE: 0.0432, LR: 0.000146]
+Epoch 4/15 (Rank 0):  43%|████▎     | 12/28 [08:54<11:59, 44.99s/it, Loss: 0.3851, V_MAE: 0.3419, A_MAE: 0.0432, LR: 0.000146]
+Epoch 4/15 (Rank 0):  43%|████▎     | 12/28 [09:33<11:59, 44.99s/it, Loss: 0.3794, V_MAE: 0.3382, A_MAE: 0.0413, LR: 0.000145]
+Epoch 4/15 (Rank 0):  46%|████▋     | 13/28 [09:33<10:47, 43.20s/it, Loss: 0.3794, V_MAE: 0.3382, A_MAE: 0.0413, LR: 0.000145]
+Epoch 4/15 (Rank 0):  46%|████▋     | 13/28 [10:13<10:47, 43.20s/it, Loss: 0.3841, V_MAE: 0.3404, A_MAE: 0.0437, LR: 0.000145]
+Epoch 4/15 (Rank 0):  50%|█████     | 14/28 [10:13<09:53, 42.38s/it, Loss: 0.3841, V_MAE: 0.3404, A_MAE: 0.0437, LR: 0.000145]
+Epoch 4/15 (Rank 0):  50%|█████     | 14/28 [10:53<09:53, 42.38s/it, Loss: 0.3927, V_MAE: 0.3459, A_MAE: 0.0468, LR: 0.000145]
+Epoch 4/15 (Rank 0):  54%|█████▎    | 15/28 [10:53<09:00, 41.54s/it, Loss: 0.3927, V_MAE: 0.3459, A_MAE: 0.0468, LR: 0.000145]
+Epoch 4/15 (Rank 0):  54%|█████▎    | 15/28 [11:37<09:00, 41.54s/it, Loss: 0.3905, V_MAE: 0.3422, A_MAE: 0.0483, LR: 0.000145]
+                                                                                                                              
+  Epoch 4/15, Step 15/28 - Loss: 0.3905, V_MAE: 0.3422, A_MAE: 0.0483, LR: 0.000145
+
+Epoch 4/15 (Rank 0):  54%|█████▎    | 15/28 [11:37<09:00, 41.54s/it, Loss: 0.3905, V_MAE: 0.3422, A_MAE: 0.0483, LR: 0.000145]
+Epoch 4/15 (Rank 0):  57%|█████▋    | 16/28 [11:37<08:26, 42.18s/it, Loss: 0.3905, V_MAE: 0.3422, A_MAE: 0.0483, LR: 0.000145]
+Epoch 4/15 (Rank 0):  57%|█████▋    | 16/28 [12:23<08:26, 42.18s/it, Loss: 0.3562, V_MAE: 0.3161, A_MAE: 0.0401, LR: 0.000144]
+Epoch 4/15 (Rank 0):  61%|██████    | 17/28 [12:23<07:58, 43.52s/it, Loss: 0.3562, V_MAE: 0.3161, A_MAE: 0.0401, LR: 0.000144]
+Epoch 4/15 (Rank 0):  61%|██████    | 17/28 [13:06<07:58, 43.52s/it, Loss: 0.3868, V_MAE: 0.3450, A_MAE: 0.0418, LR: 0.000144]
+Epoch 4/15 (Rank 0):  64%|██████▍   | 18/28 [13:06<07:12, 43.27s/it, Loss: 0.3868, V_MAE: 0.3450, A_MAE: 0.0418, LR: 0.000144]
+Epoch 4/15 (Rank 0):  64%|██████▍   | 18/28 [13:51<07:12, 43.27s/it, Loss: 0.3508, V_MAE: 0.3065, A_MAE: 0.0443, LR: 0.000144]
+Epoch 4/15 (Rank 0):  68%|██████▊   | 19/28 [13:51<06:33, 43.73s/it, Loss: 0.3508, V_MAE: 0.3065, A_MAE: 0.0443, LR: 0.000144]
+Epoch 4/15 (Rank 0):  68%|██████▊   | 19/28 [14:36<06:33, 43.73s/it, Loss: 0.3765, V_MAE: 0.3325, A_MAE: 0.0440, LR: 0.000144]
+Epoch 4/15 (Rank 0):  71%|███████▏  | 20/28 [14:36<05:53, 44.16s/it, Loss: 0.3765, V_MAE: 0.3325, A_MAE: 0.0440, LR: 0.000144]
+Epoch 4/15 (Rank 0):  71%|███████▏  | 20/28 [15:21<05:53, 44.16s/it, Loss: 0.3922, V_MAE: 0.3496, A_MAE: 0.0426, LR: 0.000143]
+                                                                                                                              
+  Epoch 4/15, Step 20/28 - Loss: 0.3922, V_MAE: 0.3496, A_MAE: 0.0426, LR: 0.000143
+
+Epoch 4/15 (Rank 0):  71%|███████▏  | 20/28 [15:21<05:53, 44.16s/it, Loss: 0.3922, V_MAE: 0.3496, A_MAE: 0.0426, LR: 0.000143]
+Epoch 4/15 (Rank 0):  75%|███████▌  | 21/28 [15:21<05:10, 44.32s/it, Loss: 0.3922, V_MAE: 0.3496, A_MAE: 0.0426, LR: 0.000143]
+Epoch 4/15 (Rank 0):  75%|███████▌  | 21/28 [16:05<05:10, 44.32s/it, Loss: 0.3739, V_MAE: 0.3239, A_MAE: 0.0500, LR: 0.000143]
+Epoch 4/15 (Rank 0):  79%|███████▊  | 22/28 [16:05<04:26, 44.36s/it, Loss: 0.3739, V_MAE: 0.3239, A_MAE: 0.0500, LR: 0.000143]
+Epoch 4/15 (Rank 0):  79%|███████▊  | 22/28 [16:51<04:26, 44.36s/it, Loss: 0.3671, V_MAE: 0.3212, A_MAE: 0.0459, LR: 0.000143]
+Epoch 4/15 (Rank 0):  82%|████████▏ | 23/28 [16:51<03:44, 44.83s/it, Loss: 0.3671, V_MAE: 0.3212, A_MAE: 0.0459, LR: 0.000143]
+Epoch 4/15 (Rank 0):  82%|████████▏ | 23/28 [17:32<03:44, 44.83s/it, Loss: 0.3986, V_MAE: 0.3508, A_MAE: 0.0477, LR: 0.000143]
+Epoch 4/15 (Rank 0):  86%|████████▌ | 24/28 [17:32<02:55, 43.78s/it, Loss: 0.3986, V_MAE: 0.3508, A_MAE: 0.0477, LR: 0.000143]
+Epoch 4/15 (Rank 0):  86%|████████▌ | 24/28 [18:12<02:55, 43.78s/it, Loss: 0.3420, V_MAE: 0.2981, A_MAE: 0.0439, LR: 0.000142]
+Epoch 4/15 (Rank 0):  89%|████████▉ | 25/28 [18:12<02:07, 42.65s/it, Loss: 0.3420, V_MAE: 0.2981, A_MAE: 0.0439, LR: 0.000142]
+Epoch 4/15 (Rank 0):  89%|████████▉ | 25/28 [18:56<02:07, 42.65s/it, Loss: 0.3891, V_MAE: 0.3455, A_MAE: 0.0436, LR: 0.000142]
+                                                                                                                              
+  Epoch 4/15, Step 25/28 - Loss: 0.3891, V_MAE: 0.3455, A_MAE: 0.0436, LR: 0.000142
+
+Epoch 4/15 (Rank 0):  89%|████████▉ | 25/28 [18:56<02:07, 42.65s/it, Loss: 0.3891, V_MAE: 0.3455, A_MAE: 0.0436, LR: 0.000142]
+Epoch 4/15 (Rank 0):  93%|█████████▎| 26/28 [18:56<01:25, 42.97s/it, Loss: 0.3891, V_MAE: 0.3455, A_MAE: 0.0436, LR: 0.000142]
+Epoch 4/15 (Rank 0):  93%|█████████▎| 26/28 [19:41<01:25, 42.97s/it, Loss: 0.4030, V_MAE: 0.3615, A_MAE: 0.0414, LR: 0.000142]
+Epoch 4/15 (Rank 0):  96%|█████████▋| 27/28 [19:41<00:43, 43.53s/it, Loss: 0.4030, V_MAE: 0.3615, A_MAE: 0.0414, LR: 0.000142]
+Epoch 4/15 (Rank 0):  96%|█████████▋| 27/28 [20:24<00:43, 43.53s/it, Loss: 0.3624, V_MAE: 0.3191, A_MAE: 0.0433, LR: 0.000141]
+Epoch 4/15 (Rank 0): 100%|██████████| 28/28 [20:24<00:00, 43.25s/it, Loss: 0.3624, V_MAE: 0.3191, A_MAE: 0.0433, LR: 0.000141]
+                                                                                                                              
+Epoch 4 Finished.
+  Average Loss (Rank 0): 0.3804
+  Average Video MAE Loss (Rank 0): 0.3349
+  Average Audio MAE Loss (Rank 0): 0.0455
+
+Epoch 5/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 5/15 (Rank 0):   0%|          | 0/28 [00:45<?, ?it/s, Loss: 0.3866, V_MAE: 0.3429, A_MAE: 0.0437, LR: 0.000141]
+Epoch 5/15 (Rank 0):   4%|▎         | 1/28 [00:45<20:17, 45.09s/it, Loss: 0.3866, V_MAE: 0.3429, A_MAE: 0.0437, LR: 0.000141]
+Epoch 5/15 (Rank 0):   4%|▎         | 1/28 [01:29<20:17, 45.09s/it, Loss: 0.3632, V_MAE: 0.3185, A_MAE: 0.0448, LR: 0.000141]
+Epoch 5/15 (Rank 0):   7%|▋         | 2/28 [01:29<19:28, 44.94s/it, Loss: 0.3632, V_MAE: 0.3185, A_MAE: 0.0448, LR: 0.000141]
+Epoch 5/15 (Rank 0):   7%|▋         | 2/28 [02:16<19:28, 44.94s/it, Loss: 0.3705, V_MAE: 0.3283, A_MAE: 0.0422, LR: 0.000140]
+Epoch 5/15 (Rank 0):  11%|█         | 3/28 [02:16<18:57, 45.49s/it, Loss: 0.3705, V_MAE: 0.3283, A_MAE: 0.0422, LR: 0.000140]
+Epoch 5/15 (Rank 0):  11%|█         | 3/28 [02:59<18:57, 45.49s/it, Loss: 0.3780, V_MAE: 0.3375, A_MAE: 0.0405, LR: 0.000140]
+Epoch 5/15 (Rank 0):  14%|█▍        | 4/28 [02:59<17:50, 44.61s/it, Loss: 0.3780, V_MAE: 0.3375, A_MAE: 0.0405, LR: 0.000140]
+Epoch 5/15 (Rank 0):  14%|█▍        | 4/28 [03:40<17:50, 44.61s/it, Loss: 0.3765, V_MAE: 0.3287, A_MAE: 0.0477, LR: 0.000140]
+Epoch 5/15 (Rank 0):  18%|█▊        | 5/28 [03:40<16:41, 43.53s/it, Loss: 0.3765, V_MAE: 0.3287, A_MAE: 0.0477, LR: 0.000140]
+Epoch 5/15 (Rank 0):  18%|█▊        | 5/28 [04:23<16:41, 43.53s/it, Loss: 0.3596, V_MAE: 0.3184, A_MAE: 0.0413, LR: 0.000140]
+                                                                                                                             
+  Epoch 5/15, Step 5/28 - Loss: 0.3596, V_MAE: 0.3184, A_MAE: 0.0413, LR: 0.000140
+
+Epoch 5/15 (Rank 0):  18%|█▊        | 5/28 [04:23<16:41, 43.53s/it, Loss: 0.3596, V_MAE: 0.3184, A_MAE: 0.0413, LR: 0.000140]
+Epoch 5/15 (Rank 0):  21%|██▏       | 6/28 [04:23<15:51, 43.26s/it, Loss: 0.3596, V_MAE: 0.3184, A_MAE: 0.0413, LR: 0.000140]
+Epoch 5/15 (Rank 0):  21%|██▏       | 6/28 [05:06<15:51, 43.26s/it, Loss: 0.3668, V_MAE: 0.3271, A_MAE: 0.0397, LR: 0.000139]
+Epoch 5/15 (Rank 0):  25%|██▌       | 7/28 [05:06<15:03, 43.05s/it, Loss: 0.3668, V_MAE: 0.3271, A_MAE: 0.0397, LR: 0.000139]
+Epoch 5/15 (Rank 0):  25%|██▌       | 7/28 [05:45<15:03, 43.05s/it, Loss: 0.3690, V_MAE: 0.3244, A_MAE: 0.0446, LR: 0.000139]
+Epoch 5/15 (Rank 0):  29%|██▊       | 8/28 [05:45<13:59, 41.98s/it, Loss: 0.3690, V_MAE: 0.3244, A_MAE: 0.0446, LR: 0.000139]
+Epoch 5/15 (Rank 0):  29%|██▊       | 8/28 [06:29<13:59, 41.98s/it, Loss: 0.3857, V_MAE: 0.3388, A_MAE: 0.0469, LR: 0.000139]
+Epoch 5/15 (Rank 0):  32%|███▏      | 9/28 [06:29<13:29, 42.61s/it, Loss: 0.3857, V_MAE: 0.3388, A_MAE: 0.0469, LR: 0.000139]
+Epoch 5/15 (Rank 0):  32%|███▏      | 9/28 [07:11<13:29, 42.61s/it, Loss: 0.3638, V_MAE: 0.3223, A_MAE: 0.0415, LR: 0.000138]
+Epoch 5/15 (Rank 0):  36%|███▌      | 10/28 [07:11<12:42, 42.33s/it, Loss: 0.3638, V_MAE: 0.3223, A_MAE: 0.0415, LR: 0.000138]
+Epoch 5/15 (Rank 0):  36%|███▌      | 10/28 [07:55<12:42, 42.33s/it, Loss: 0.3573, V_MAE: 0.3118, A_MAE: 0.0455, LR: 0.000138]
+                                                                                                                              
+  Epoch 5/15, Step 10/28 - Loss: 0.3573, V_MAE: 0.3118, A_MAE: 0.0455, LR: 0.000138
+
+Epoch 5/15 (Rank 0):  36%|███▌      | 10/28 [07:55<12:42, 42.33s/it, Loss: 0.3573, V_MAE: 0.3118, A_MAE: 0.0455, LR: 0.000138]
+Epoch 5/15 (Rank 0):  39%|███▉      | 11/28 [07:55<12:07, 42.78s/it, Loss: 0.3573, V_MAE: 0.3118, A_MAE: 0.0455, LR: 0.000138]
+Epoch 5/15 (Rank 0):  39%|███▉      | 11/28 [08:41<12:07, 42.78s/it, Loss: 0.3602, V_MAE: 0.3219, A_MAE: 0.0383, LR: 0.000137]
+Epoch 5/15 (Rank 0):  43%|████▎     | 12/28 [08:41<11:38, 43.67s/it, Loss: 0.3602, V_MAE: 0.3219, A_MAE: 0.0383, LR: 0.000137]
+Epoch 5/15 (Rank 0):  43%|████▎     | 12/28 [09:22<11:38, 43.67s/it, Loss: 0.3684, V_MAE: 0.3238, A_MAE: 0.0446, LR: 0.000137]
+Epoch 5/15 (Rank 0):  46%|████▋     | 13/28 [09:22<10:46, 43.09s/it, Loss: 0.3684, V_MAE: 0.3238, A_MAE: 0.0446, LR: 0.000137]
+Epoch 5/15 (Rank 0):  46%|████▋     | 13/28 [10:05<10:46, 43.09s/it, Loss: 0.3694, V_MAE: 0.3282, A_MAE: 0.0412, LR: 0.000137]
+Epoch 5/15 (Rank 0):  50%|█████     | 14/28 [10:05<10:02, 43.02s/it, Loss: 0.3694, V_MAE: 0.3282, A_MAE: 0.0412, LR: 0.000137]
+Epoch 5/15 (Rank 0):  50%|█████     | 14/28 [10:47<10:02, 43.02s/it, Loss: 0.3714, V_MAE: 0.3334, A_MAE: 0.0381, LR: 0.000136]
+Epoch 5/15 (Rank 0):  54%|█████▎    | 15/28 [10:47<09:12, 42.48s/it, Loss: 0.3714, V_MAE: 0.3334, A_MAE: 0.0381, LR: 0.000136]
+Epoch 5/15 (Rank 0):  54%|█████▎    | 15/28 [11:31<09:12, 42.48s/it, Loss: 0.3899, V_MAE: 0.3427, A_MAE: 0.0472, LR: 0.000136]
+                                                                                                                              
+  Epoch 5/15, Step 15/28 - Loss: 0.3899, V_MAE: 0.3427, A_MAE: 0.0472, LR: 0.000136
+
+Epoch 5/15 (Rank 0):  54%|█████▎    | 15/28 [11:31<09:12, 42.48s/it, Loss: 0.3899, V_MAE: 0.3427, A_MAE: 0.0472, LR: 0.000136]
+Epoch 5/15 (Rank 0):  57%|█████▋    | 16/28 [11:31<08:38, 43.21s/it, Loss: 0.3899, V_MAE: 0.3427, A_MAE: 0.0472, LR: 0.000136]
+Epoch 5/15 (Rank 0):  57%|█████▋    | 16/28 [12:13<08:38, 43.21s/it, Loss: 0.3800, V_MAE: 0.3392, A_MAE: 0.0408, LR: 0.000136]
+Epoch 5/15 (Rank 0):  61%|██████    | 17/28 [12:13<07:49, 42.71s/it, Loss: 0.3800, V_MAE: 0.3392, A_MAE: 0.0408, LR: 0.000136]
+Epoch 5/15 (Rank 0):  61%|██████    | 17/28 [12:56<07:49, 42.71s/it, Loss: 0.3994, V_MAE: 0.3560, A_MAE: 0.0434, LR: 0.000135]
+Epoch 5/15 (Rank 0):  64%|██████▍   | 18/28 [12:56<07:07, 42.77s/it, Loss: 0.3994, V_MAE: 0.3560, A_MAE: 0.0434, LR: 0.000135]
+Epoch 5/15 (Rank 0):  64%|██████▍   | 18/28 [13:37<07:07, 42.77s/it, Loss: 0.3718, V_MAE: 0.3271, A_MAE: 0.0447, LR: 0.000135]
+Epoch 5/15 (Rank 0):  68%|██████▊   | 19/28 [13:37<06:20, 42.27s/it, Loss: 0.3718, V_MAE: 0.3271, A_MAE: 0.0447, LR: 0.000135]
+Epoch 5/15 (Rank 0):  68%|██████▊   | 19/28 [14:19<06:20, 42.27s/it, Loss: 0.3618, V_MAE: 0.3082, A_MAE: 0.0536, LR: 0.000134]
+Epoch 5/15 (Rank 0):  71%|███████▏  | 20/28 [14:19<05:38, 42.27s/it, Loss: 0.3618, V_MAE: 0.3082, A_MAE: 0.0536, LR: 0.000134]
+Epoch 5/15 (Rank 0):  71%|███████▏  | 20/28 [15:06<05:38, 42.27s/it, Loss: 0.3813, V_MAE: 0.3321, A_MAE: 0.0492, LR: 0.000134]
+                                                                                                                              
+  Epoch 5/15, Step 20/28 - Loss: 0.3813, V_MAE: 0.3321, A_MAE: 0.0492, LR: 0.000134
+
+Epoch 5/15 (Rank 0):  71%|███████▏  | 20/28 [15:06<05:38, 42.27s/it, Loss: 0.3813, V_MAE: 0.3321, A_MAE: 0.0492, LR: 0.000134]
+Epoch 5/15 (Rank 0):  75%|███████▌  | 21/28 [15:06<05:06, 43.75s/it, Loss: 0.3813, V_MAE: 0.3321, A_MAE: 0.0492, LR: 0.000134]
+Epoch 5/15 (Rank 0):  75%|███████▌  | 21/28 [15:48<05:06, 43.75s/it, Loss: 0.3823, V_MAE: 0.3329, A_MAE: 0.0493, LR: 0.000134]
+Epoch 5/15 (Rank 0):  79%|███████▊  | 22/28 [15:48<04:17, 42.99s/it, Loss: 0.3823, V_MAE: 0.3329, A_MAE: 0.0493, LR: 0.000134]
+Epoch 5/15 (Rank 0):  79%|███████▊  | 22/28 [16:32<04:17, 42.99s/it, Loss: 0.3483, V_MAE: 0.3071, A_MAE: 0.0412, LR: 0.000133]
+Epoch 5/15 (Rank 0):  82%|████████▏ | 23/28 [16:32<03:37, 43.42s/it, Loss: 0.3483, V_MAE: 0.3071, A_MAE: 0.0412, LR: 0.000133]
+Epoch 5/15 (Rank 0):  82%|████████▏ | 23/28 [17:18<03:37, 43.42s/it, Loss: 0.3803, V_MAE: 0.3396, A_MAE: 0.0407, LR: 0.000133]
+Epoch 5/15 (Rank 0):  86%|████████▌ | 24/28 [17:18<02:56, 44.14s/it, Loss: 0.3803, V_MAE: 0.3396, A_MAE: 0.0407, LR: 0.000133]
+Epoch 5/15 (Rank 0):  86%|████████▌ | 24/28 [18:09<02:56, 44.14s/it, Loss: 0.3626, V_MAE: 0.3230, A_MAE: 0.0396, LR: 0.000132]
+Epoch 5/15 (Rank 0):  89%|████████▉ | 25/28 [18:09<02:18, 46.19s/it, Loss: 0.3626, V_MAE: 0.3230, A_MAE: 0.0396, LR: 0.000132]
+Epoch 5/15 (Rank 0):  89%|████████▉ | 25/28 [18:53<02:18, 46.19s/it, Loss: 0.3838, V_MAE: 0.3400, A_MAE: 0.0437, LR: 0.000132]
+                                                                                                                              
+  Epoch 5/15, Step 25/28 - Loss: 0.3838, V_MAE: 0.3400, A_MAE: 0.0437, LR: 0.000132
+
+Epoch 5/15 (Rank 0):  89%|████████▉ | 25/28 [18:53<02:18, 46.19s/it, Loss: 0.3838, V_MAE: 0.3400, A_MAE: 0.0437, LR: 0.000132]
+Epoch 5/15 (Rank 0):  93%|█████████▎| 26/28 [18:53<01:31, 45.71s/it, Loss: 0.3838, V_MAE: 0.3400, A_MAE: 0.0437, LR: 0.000132]
+Epoch 5/15 (Rank 0):  93%|█████████▎| 26/28 [19:38<01:31, 45.71s/it, Loss: 0.3631, V_MAE: 0.3272, A_MAE: 0.0359, LR: 0.000132]
+Epoch 5/15 (Rank 0):  96%|█████████▋| 27/28 [19:38<00:45, 45.38s/it, Loss: 0.3631, V_MAE: 0.3272, A_MAE: 0.0359, LR: 0.000132]
+Epoch 5/15 (Rank 0):  96%|█████████▋| 27/28 [20:21<00:45, 45.38s/it, Loss: 0.3854, V_MAE: 0.3381, A_MAE: 0.0474, LR: 0.000131]
+Epoch 5/15 (Rank 0): 100%|██████████| 28/28 [20:21<00:00, 44.75s/it, Loss: 0.3854, V_MAE: 0.3381, A_MAE: 0.0474, LR: 0.000131]
+                                                                                                                              
+Epoch 5 Finished.
+  Average Loss (Rank 0): 0.3727
+  Average Video MAE Loss (Rank 0): 0.3293
+  Average Audio MAE Loss (Rank 0): 0.0435
+Checkpoint saved to ./test_40_stage1_output/t3_av_stage1_epoch_5.pt
+
+Epoch 6/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 6/15 (Rank 0):   0%|          | 0/28 [00:45<?, ?it/s, Loss: 0.3537, V_MAE: 0.3109, A_MAE: 0.0428, LR: 0.000131]
+Epoch 6/15 (Rank 0):   4%|▎         | 1/28 [00:45<20:16, 45.07s/it, Loss: 0.3537, V_MAE: 0.3109, A_MAE: 0.0428, LR: 0.000131]
+Epoch 6/15 (Rank 0):   4%|▎         | 1/28 [01:32<20:16, 45.07s/it, Loss: 0.3245, V_MAE: 0.2906, A_MAE: 0.0339, LR: 0.000130]
+Epoch 6/15 (Rank 0):   7%|▋         | 2/28 [01:32<20:04, 46.31s/it, Loss: 0.3245, V_MAE: 0.2906, A_MAE: 0.0339, LR: 0.000130]
+Epoch 6/15 (Rank 0):   7%|▋         | 2/28 [02:15<20:04, 46.31s/it, Loss: 0.3618, V_MAE: 0.3213, A_MAE: 0.0405, LR: 0.000130]
+Epoch 6/15 (Rank 0):  11%|█         | 3/28 [02:15<18:38, 44.74s/it, Loss: 0.3618, V_MAE: 0.3213, A_MAE: 0.0405, LR: 0.000130]
+Epoch 6/15 (Rank 0):  11%|█         | 3/28 [02:59<18:38, 44.74s/it, Loss: 0.3596, V_MAE: 0.3200, A_MAE: 0.0395, LR: 0.000129]
+Epoch 6/15 (Rank 0):  14%|█▍        | 4/28 [02:59<17:45, 44.41s/it, Loss: 0.3596, V_MAE: 0.3200, A_MAE: 0.0395, LR: 0.000129]
+Epoch 6/15 (Rank 0):  14%|█▍        | 4/28 [03:42<17:45, 44.41s/it, Loss: 0.3784, V_MAE: 0.3334, A_MAE: 0.0450, LR: 0.000129]
+Epoch 6/15 (Rank 0):  18%|█▊        | 5/28 [03:42<16:52, 44.04s/it, Loss: 0.3784, V_MAE: 0.3334, A_MAE: 0.0450, LR: 0.000129]
+Epoch 6/15 (Rank 0):  18%|█▊        | 5/28 [04:24<16:52, 44.04s/it, Loss: 0.3719, V_MAE: 0.3291, A_MAE: 0.0428, LR: 0.000128]
+                                                                                                                             
+  Epoch 6/15, Step 5/28 - Loss: 0.3719, V_MAE: 0.3291, A_MAE: 0.0428, LR: 0.000128
+
+Epoch 6/15 (Rank 0):  18%|█▊        | 5/28 [04:24<16:52, 44.04s/it, Loss: 0.3719, V_MAE: 0.3291, A_MAE: 0.0428, LR: 0.000128]
+Epoch 6/15 (Rank 0):  21%|██▏       | 6/28 [04:24<15:53, 43.34s/it, Loss: 0.3719, V_MAE: 0.3291, A_MAE: 0.0428, LR: 0.000128]
+Epoch 6/15 (Rank 0):  21%|██▏       | 6/28 [05:07<15:53, 43.34s/it, Loss: 0.4059, V_MAE: 0.3593, A_MAE: 0.0466, LR: 0.000128]
+Epoch 6/15 (Rank 0):  25%|██▌       | 7/28 [05:07<15:08, 43.24s/it, Loss: 0.4059, V_MAE: 0.3593, A_MAE: 0.0466, LR: 0.000128]
+Epoch 6/15 (Rank 0):  25%|██▌       | 7/28 [05:47<15:08, 43.24s/it, Loss: 0.3987, V_MAE: 0.3436, A_MAE: 0.0551, LR: 0.000128]
+Epoch 6/15 (Rank 0):  29%|██▊       | 8/28 [05:47<14:06, 42.33s/it, Loss: 0.3987, V_MAE: 0.3436, A_MAE: 0.0551, LR: 0.000128]
+Epoch 6/15 (Rank 0):  29%|██▊       | 8/28 [06:27<14:06, 42.33s/it, Loss: 0.3800, V_MAE: 0.3380, A_MAE: 0.0420, LR: 0.000127]
+Epoch 6/15 (Rank 0):  32%|███▏      | 9/28 [06:27<13:10, 41.62s/it, Loss: 0.3800, V_MAE: 0.3380, A_MAE: 0.0420, LR: 0.000127]
+Epoch 6/15 (Rank 0):  32%|███▏      | 9/28 [07:12<13:10, 41.62s/it, Loss: 0.3706, V_MAE: 0.3283, A_MAE: 0.0423, LR: 0.000127]
+Epoch 6/15 (Rank 0):  36%|███▌      | 10/28 [07:12<12:45, 42.51s/it, Loss: 0.3706, V_MAE: 0.3283, A_MAE: 0.0423, LR: 0.000127]
+Epoch 6/15 (Rank 0):  36%|███▌      | 10/28 [07:56<12:45, 42.51s/it, Loss: 0.3963, V_MAE: 0.3518, A_MAE: 0.0445, LR: 0.000126]
+                                                                                                                              
+  Epoch 6/15, Step 10/28 - Loss: 0.3963, V_MAE: 0.3518, A_MAE: 0.0445, LR: 0.000126
+
+Epoch 6/15 (Rank 0):  36%|███▌      | 10/28 [07:56<12:45, 42.51s/it, Loss: 0.3963, V_MAE: 0.3518, A_MAE: 0.0445, LR: 0.000126]
+Epoch 6/15 (Rank 0):  39%|███▉      | 11/28 [07:56<12:13, 43.15s/it, Loss: 0.3963, V_MAE: 0.3518, A_MAE: 0.0445, LR: 0.000126]
+Epoch 6/15 (Rank 0):  39%|███▉      | 11/28 [08:41<12:13, 43.15s/it, Loss: 0.3513, V_MAE: 0.3094, A_MAE: 0.0419, LR: 0.000126]
+Epoch 6/15 (Rank 0):  43%|████▎     | 12/28 [08:41<11:36, 43.52s/it, Loss: 0.3513, V_MAE: 0.3094, A_MAE: 0.0419, LR: 0.000126]
+Epoch 6/15 (Rank 0):  43%|████▎     | 12/28 [09:25<11:36, 43.52s/it, Loss: 0.3876, V_MAE: 0.3392, A_MAE: 0.0484, LR: 0.000125]
+Epoch 6/15 (Rank 0):  46%|████▋     | 13/28 [09:25<10:53, 43.57s/it, Loss: 0.3876, V_MAE: 0.3392, A_MAE: 0.0484, LR: 0.000125]
+Epoch 6/15 (Rank 0):  46%|████▋     | 13/28 [10:16<10:53, 43.57s/it, Loss: 0.3742, V_MAE: 0.3260, A_MAE: 0.0482, LR: 0.000125]
+Epoch 6/15 (Rank 0):  50%|█████     | 14/28 [10:16<10:44, 46.01s/it, Loss: 0.3742, V_MAE: 0.3260, A_MAE: 0.0482, LR: 0.000125]
+Epoch 6/15 (Rank 0):  50%|█████     | 14/28 [11:05<10:44, 46.01s/it, Loss: 0.3511, V_MAE: 0.3172, A_MAE: 0.0339, LR: 0.000124]
+Epoch 6/15 (Rank 0):  54%|█████▎    | 15/28 [11:05<10:08, 46.78s/it, Loss: 0.3511, V_MAE: 0.3172, A_MAE: 0.0339, LR: 0.000124]
+Epoch 6/15 (Rank 0):  54%|█████▎    | 15/28 [11:43<10:08, 46.78s/it, Loss: 0.3649, V_MAE: 0.3261, A_MAE: 0.0389, LR: 0.000124]
+                                                                                                                              
+  Epoch 6/15, Step 15/28 - Loss: 0.3649, V_MAE: 0.3261, A_MAE: 0.0389, LR: 0.000124
+
+Epoch 6/15 (Rank 0):  54%|█████▎    | 15/28 [11:43<10:08, 46.78s/it, Loss: 0.3649, V_MAE: 0.3261, A_MAE: 0.0389, LR: 0.000124]
+Epoch 6/15 (Rank 0):  57%|█████▋    | 16/28 [11:43<08:51, 44.30s/it, Loss: 0.3649, V_MAE: 0.3261, A_MAE: 0.0389, LR: 0.000124]
+Epoch 6/15 (Rank 0):  57%|█████▋    | 16/28 [12:32<08:51, 44.30s/it, Loss: 0.3683, V_MAE: 0.3288, A_MAE: 0.0395, LR: 0.000123]
+Epoch 6/15 (Rank 0):  61%|██████    | 17/28 [12:32<08:21, 45.55s/it, Loss: 0.3683, V_MAE: 0.3288, A_MAE: 0.0395, LR: 0.000123]
+Epoch 6/15 (Rank 0):  61%|██████    | 17/28 [13:21<08:21, 45.55s/it, Loss: 0.3324, V_MAE: 0.2897, A_MAE: 0.0427, LR: 0.000123]
+Epoch 6/15 (Rank 0):  64%|██████▍   | 18/28 [13:21<07:46, 46.61s/it, Loss: 0.3324, V_MAE: 0.2897, A_MAE: 0.0427, LR: 0.000123]
+Epoch 6/15 (Rank 0):  64%|██████▍   | 18/28 [14:07<07:46, 46.61s/it, Loss: 0.3779, V_MAE: 0.3354, A_MAE: 0.0425, LR: 0.000122]
+Epoch 6/15 (Rank 0):  68%|██████▊   | 19/28 [14:07<06:59, 46.58s/it, Loss: 0.3779, V_MAE: 0.3354, A_MAE: 0.0425, LR: 0.000122]
+Epoch 6/15 (Rank 0):  68%|██████▊   | 19/28 [14:58<06:59, 46.58s/it, Loss: 0.3837, V_MAE: 0.3423, A_MAE: 0.0413, LR: 0.000122]
+Epoch 6/15 (Rank 0):  71%|███████▏  | 20/28 [14:58<06:22, 47.80s/it, Loss: 0.3837, V_MAE: 0.3423, A_MAE: 0.0413, LR: 0.000122]
+Epoch 6/15 (Rank 0):  71%|███████▏  | 20/28 [15:47<06:22, 47.80s/it, Loss: 0.3788, V_MAE: 0.3287, A_MAE: 0.0501, LR: 0.000121]
+                                                                                                                              
+  Epoch 6/15, Step 20/28 - Loss: 0.3788, V_MAE: 0.3287, A_MAE: 0.0501, LR: 0.000121
+
+Epoch 6/15 (Rank 0):  71%|███████▏  | 20/28 [15:47<06:22, 47.80s/it, Loss: 0.3788, V_MAE: 0.3287, A_MAE: 0.0501, LR: 0.000121]
+Epoch 6/15 (Rank 0):  75%|███████▌  | 21/28 [15:47<05:37, 48.27s/it, Loss: 0.3788, V_MAE: 0.3287, A_MAE: 0.0501, LR: 0.000121]
+Epoch 6/15 (Rank 0):  75%|███████▌  | 21/28 [16:31<05:37, 48.27s/it, Loss: 0.3571, V_MAE: 0.3195, A_MAE: 0.0376, LR: 0.000121]
+Epoch 6/15 (Rank 0):  79%|███████▊  | 22/28 [16:31<04:41, 46.94s/it, Loss: 0.3571, V_MAE: 0.3195, A_MAE: 0.0376, LR: 0.000121]
+Epoch 6/15 (Rank 0):  79%|███████▊  | 22/28 [17:19<04:41, 46.94s/it, Loss: 0.3381, V_MAE: 0.2974, A_MAE: 0.0407, LR: 0.000120]
+Epoch 6/15 (Rank 0):  82%|████████▏ | 23/28 [17:19<03:56, 47.24s/it, Loss: 0.3381, V_MAE: 0.2974, A_MAE: 0.0407, LR: 0.000120]
+Epoch 6/15 (Rank 0):  82%|████████▏ | 23/28 [18:02<03:56, 47.24s/it, Loss: 0.3773, V_MAE: 0.3392, A_MAE: 0.0381, LR: 0.000120]
+Epoch 6/15 (Rank 0):  86%|████████▌ | 24/28 [18:02<03:03, 45.83s/it, Loss: 0.3773, V_MAE: 0.3392, A_MAE: 0.0381, LR: 0.000120]
+Epoch 6/15 (Rank 0):  86%|████████▌ | 24/28 [18:51<03:03, 45.83s/it, Loss: 0.3488, V_MAE: 0.3035, A_MAE: 0.0453, LR: 0.000119]
+Epoch 6/15 (Rank 0):  89%|████████▉ | 25/28 [18:51<02:20, 46.97s/it, Loss: 0.3488, V_MAE: 0.3035, A_MAE: 0.0453, LR: 0.000119]
+Epoch 6/15 (Rank 0):  89%|████████▉ | 25/28 [19:36<02:20, 46.97s/it, Loss: 0.3792, V_MAE: 0.3350, A_MAE: 0.0442, LR: 0.000119]
+                                                                                                                              
+  Epoch 6/15, Step 25/28 - Loss: 0.3792, V_MAE: 0.3350, A_MAE: 0.0442, LR: 0.000119
+
+Epoch 6/15 (Rank 0):  89%|████████▉ | 25/28 [19:36<02:20, 46.97s/it, Loss: 0.3792, V_MAE: 0.3350, A_MAE: 0.0442, LR: 0.000119]
+Epoch 6/15 (Rank 0):  93%|█████████▎| 26/28 [19:36<01:32, 46.24s/it, Loss: 0.3792, V_MAE: 0.3350, A_MAE: 0.0442, LR: 0.000119]
+Epoch 6/15 (Rank 0):  93%|█████████▎| 26/28 [20:21<01:32, 46.24s/it, Loss: 0.3292, V_MAE: 0.2944, A_MAE: 0.0348, LR: 0.000118]
+Epoch 6/15 (Rank 0):  96%|█████████▋| 27/28 [20:21<00:45, 45.97s/it, Loss: 0.3292, V_MAE: 0.2944, A_MAE: 0.0348, LR: 0.000118]
+Epoch 6/15 (Rank 0):  96%|█████████▋| 27/28 [21:05<00:45, 45.97s/it, Loss: 0.4028, V_MAE: 0.3615, A_MAE: 0.0413, LR: 0.000118]
+Epoch 6/15 (Rank 0): 100%|██████████| 28/28 [21:05<00:00, 45.24s/it, Loss: 0.4028, V_MAE: 0.3615, A_MAE: 0.0413, LR: 0.000118]
+                                                                                                                              
+Epoch 6 Finished.
+  Average Loss (Rank 0): 0.3680
+  Average Video MAE Loss (Rank 0): 0.3257
+  Average Audio MAE Loss (Rank 0): 0.0423
+
+Epoch 7/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 7/15 (Rank 0):   0%|          | 0/28 [00:44<?, ?it/s, Loss: 0.3590, V_MAE: 0.3137, A_MAE: 0.0453, LR: 0.000117]
+Epoch 7/15 (Rank 0):   4%|▎         | 1/28 [00:44<20:14, 45.00s/it, Loss: 0.3590, V_MAE: 0.3137, A_MAE: 0.0453, LR: 0.000117]
+Epoch 7/15 (Rank 0):   4%|▎         | 1/28 [01:29<20:14, 45.00s/it, Loss: 0.3795, V_MAE: 0.3328, A_MAE: 0.0468, LR: 0.000117]
+Epoch 7/15 (Rank 0):   7%|▋         | 2/28 [01:29<19:27, 44.90s/it, Loss: 0.3795, V_MAE: 0.3328, A_MAE: 0.0468, LR: 0.000117]
+Epoch 7/15 (Rank 0):   7%|▋         | 2/28 [02:14<19:27, 44.90s/it, Loss: 0.3618, V_MAE: 0.3191, A_MAE: 0.0427, LR: 0.000116]
+Epoch 7/15 (Rank 0):  11%|█         | 3/28 [02:14<18:38, 44.75s/it, Loss: 0.3618, V_MAE: 0.3191, A_MAE: 0.0427, LR: 0.000116]
+Epoch 7/15 (Rank 0):  11%|█         | 3/28 [02:55<18:38, 44.75s/it, Loss: 0.3609, V_MAE: 0.3214, A_MAE: 0.0395, LR: 0.000115]
+Epoch 7/15 (Rank 0):  14%|█▍        | 4/28 [02:55<17:15, 43.14s/it, Loss: 0.3609, V_MAE: 0.3214, A_MAE: 0.0395, LR: 0.000115]
+Epoch 7/15 (Rank 0):  14%|█▍        | 4/28 [03:39<17:15, 43.14s/it, Loss: 0.3781, V_MAE: 0.3411, A_MAE: 0.0370, LR: 0.000115]
+Epoch 7/15 (Rank 0):  18%|█▊        | 5/28 [03:39<16:44, 43.66s/it, Loss: 0.3781, V_MAE: 0.3411, A_MAE: 0.0370, LR: 0.000115]
+Epoch 7/15 (Rank 0):  18%|█▊        | 5/28 [04:19<16:44, 43.66s/it, Loss: 0.3741, V_MAE: 0.3338, A_MAE: 0.0403, LR: 0.000114]
+                                                                                                                             
+  Epoch 7/15, Step 5/28 - Loss: 0.3741, V_MAE: 0.3338, A_MAE: 0.0403, LR: 0.000114
+
+Epoch 7/15 (Rank 0):  18%|█▊        | 5/28 [04:19<16:44, 43.66s/it, Loss: 0.3741, V_MAE: 0.3338, A_MAE: 0.0403, LR: 0.000114]
+Epoch 7/15 (Rank 0):  21%|██▏       | 6/28 [04:19<15:30, 42.32s/it, Loss: 0.3741, V_MAE: 0.3338, A_MAE: 0.0403, LR: 0.000114]
+Epoch 7/15 (Rank 0):  21%|██▏       | 6/28 [05:03<15:30, 42.32s/it, Loss: 0.3921, V_MAE: 0.3496, A_MAE: 0.0425, LR: 0.000114]
+Epoch 7/15 (Rank 0):  25%|██▌       | 7/28 [05:03<15:00, 42.87s/it, Loss: 0.3921, V_MAE: 0.3496, A_MAE: 0.0425, LR: 0.000114]
+Epoch 7/15 (Rank 0):  25%|██▌       | 7/28 [05:46<15:00, 42.87s/it, Loss: 0.3789, V_MAE: 0.3369, A_MAE: 0.0420, LR: 0.000113]
+Epoch 7/15 (Rank 0):  29%|██▊       | 8/28 [05:46<14:21, 43.09s/it, Loss: 0.3789, V_MAE: 0.3369, A_MAE: 0.0420, LR: 0.000113]
+Epoch 7/15 (Rank 0):  29%|██▊       | 8/28 [06:30<14:21, 43.09s/it, Loss: 0.3707, V_MAE: 0.3346, A_MAE: 0.0361, LR: 0.000113]
+Epoch 7/15 (Rank 0):  32%|███▏      | 9/28 [06:30<13:38, 43.09s/it, Loss: 0.3707, V_MAE: 0.3346, A_MAE: 0.0361, LR: 0.000113]
+Epoch 7/15 (Rank 0):  32%|███▏      | 9/28 [07:13<13:38, 43.09s/it, Loss: 0.3866, V_MAE: 0.3368, A_MAE: 0.0498, LR: 0.000112]
+Epoch 7/15 (Rank 0):  36%|███▌      | 10/28 [07:13<12:56, 43.14s/it, Loss: 0.3866, V_MAE: 0.3368, A_MAE: 0.0498, LR: 0.000112]
+Epoch 7/15 (Rank 0):  36%|███▌      | 10/28 [07:57<12:56, 43.14s/it, Loss: 0.3850, V_MAE: 0.3440, A_MAE: 0.0410, LR: 0.000112]
+                                                                                                                              
+  Epoch 7/15, Step 10/28 - Loss: 0.3850, V_MAE: 0.3440, A_MAE: 0.0410, LR: 0.000112
+
+Epoch 7/15 (Rank 0):  36%|███▌      | 10/28 [07:57<12:56, 43.14s/it, Loss: 0.3850, V_MAE: 0.3440, A_MAE: 0.0410, LR: 0.000112]
+Epoch 7/15 (Rank 0):  39%|███▉      | 11/28 [07:57<12:19, 43.51s/it, Loss: 0.3850, V_MAE: 0.3440, A_MAE: 0.0410, LR: 0.000112]
+Epoch 7/15 (Rank 0):  39%|███▉      | 11/28 [08:43<12:19, 43.51s/it, Loss: 0.3478, V_MAE: 0.3037, A_MAE: 0.0440, LR: 0.000111]
+Epoch 7/15 (Rank 0):  43%|████▎     | 12/28 [08:43<11:46, 44.15s/it, Loss: 0.3478, V_MAE: 0.3037, A_MAE: 0.0440, LR: 0.000111]
+Epoch 7/15 (Rank 0):  43%|████▎     | 12/28 [09:26<11:46, 44.15s/it, Loss: 0.3731, V_MAE: 0.3312, A_MAE: 0.0419, LR: 0.000110]
+Epoch 7/15 (Rank 0):  46%|████▋     | 13/28 [09:26<10:56, 43.79s/it, Loss: 0.3731, V_MAE: 0.3312, A_MAE: 0.0419, LR: 0.000110]
+Epoch 7/15 (Rank 0):  46%|████▋     | 13/28 [10:12<10:56, 43.79s/it, Loss: 0.3687, V_MAE: 0.3265, A_MAE: 0.0422, LR: 0.000110]
+Epoch 7/15 (Rank 0):  50%|█████     | 14/28 [10:12<10:25, 44.69s/it, Loss: 0.3687, V_MAE: 0.3265, A_MAE: 0.0422, LR: 0.000110]
+Epoch 7/15 (Rank 0):  50%|█████     | 14/28 [10:55<10:25, 44.69s/it, Loss: 0.3819, V_MAE: 0.3346, A_MAE: 0.0473, LR: 0.000109]
+Epoch 7/15 (Rank 0):  54%|█████▎    | 15/28 [10:55<09:31, 43.95s/it, Loss: 0.3819, V_MAE: 0.3346, A_MAE: 0.0473, LR: 0.000109]
+Epoch 7/15 (Rank 0):  54%|█████▎    | 15/28 [11:38<09:31, 43.95s/it, Loss: 0.3923, V_MAE: 0.3495, A_MAE: 0.0428, LR: 0.000109]
+                                                                                                                              
+  Epoch 7/15, Step 15/28 - Loss: 0.3923, V_MAE: 0.3495, A_MAE: 0.0428, LR: 0.000109
+
+Epoch 7/15 (Rank 0):  54%|█████▎    | 15/28 [11:38<09:31, 43.95s/it, Loss: 0.3923, V_MAE: 0.3495, A_MAE: 0.0428, LR: 0.000109]
+Epoch 7/15 (Rank 0):  57%|█████▋    | 16/28 [11:38<08:44, 43.68s/it, Loss: 0.3923, V_MAE: 0.3495, A_MAE: 0.0428, LR: 0.000109]
+Epoch 7/15 (Rank 0):  57%|█████▋    | 16/28 [12:19<08:44, 43.68s/it, Loss: 0.3863, V_MAE: 0.3377, A_MAE: 0.0486, LR: 0.000108]
+Epoch 7/15 (Rank 0):  61%|██████    | 17/28 [12:19<07:52, 43.00s/it, Loss: 0.3863, V_MAE: 0.3377, A_MAE: 0.0486, LR: 0.000108]
+Epoch 7/15 (Rank 0):  61%|██████    | 17/28 [13:05<07:52, 43.00s/it, Loss: 0.3857, V_MAE: 0.3428, A_MAE: 0.0428, LR: 0.000108]
+Epoch 7/15 (Rank 0):  64%|██████▍   | 18/28 [13:05<07:17, 43.72s/it, Loss: 0.3857, V_MAE: 0.3428, A_MAE: 0.0428, LR: 0.000108]
+Epoch 7/15 (Rank 0):  64%|██████▍   | 18/28 [13:48<07:17, 43.72s/it, Loss: 0.3633, V_MAE: 0.3227, A_MAE: 0.0407, LR: 0.000107]
+Epoch 7/15 (Rank 0):  68%|██████▊   | 19/28 [13:48<06:31, 43.53s/it, Loss: 0.3633, V_MAE: 0.3227, A_MAE: 0.0407, LR: 0.000107]
+Epoch 7/15 (Rank 0):  68%|██████▊   | 19/28 [14:27<06:31, 43.53s/it, Loss: 0.3646, V_MAE: 0.3186, A_MAE: 0.0460, LR: 0.000106]
+Epoch 7/15 (Rank 0):  71%|███████▏  | 20/28 [14:27<05:38, 42.25s/it, Loss: 0.3646, V_MAE: 0.3186, A_MAE: 0.0460, LR: 0.000106]
+Epoch 7/15 (Rank 0):  71%|███████▏  | 20/28 [15:12<05:38, 42.25s/it, Loss: 0.3430, V_MAE: 0.2941, A_MAE: 0.0489, LR: 0.000106]
+                                                                                                                              
+  Epoch 7/15, Step 20/28 - Loss: 0.3430, V_MAE: 0.2941, A_MAE: 0.0489, LR: 0.000106
+
+Epoch 7/15 (Rank 0):  71%|███████▏  | 20/28 [15:12<05:38, 42.25s/it, Loss: 0.3430, V_MAE: 0.2941, A_MAE: 0.0489, LR: 0.000106]
+Epoch 7/15 (Rank 0):  75%|███████▌  | 21/28 [15:12<05:02, 43.23s/it, Loss: 0.3430, V_MAE: 0.2941, A_MAE: 0.0489, LR: 0.000106]
+Epoch 7/15 (Rank 0):  75%|███████▌  | 21/28 [15:56<05:02, 43.23s/it, Loss: 0.3485, V_MAE: 0.3081, A_MAE: 0.0404, LR: 0.000105]
+Epoch 7/15 (Rank 0):  79%|███████▊  | 22/28 [15:56<04:20, 43.46s/it, Loss: 0.3485, V_MAE: 0.3081, A_MAE: 0.0404, LR: 0.000105]
+Epoch 7/15 (Rank 0):  79%|███████▊  | 22/28 [16:40<04:20, 43.46s/it, Loss: 0.3592, V_MAE: 0.3204, A_MAE: 0.0388, LR: 0.000105]
+Epoch 7/15 (Rank 0):  82%|████████▏ | 23/28 [16:40<03:37, 43.44s/it, Loss: 0.3592, V_MAE: 0.3204, A_MAE: 0.0388, LR: 0.000105]
+Epoch 7/15 (Rank 0):  82%|████████▏ | 23/28 [17:25<03:37, 43.44s/it, Loss: 0.3720, V_MAE: 0.3303, A_MAE: 0.0417, LR: 0.000104]
+Epoch 7/15 (Rank 0):  86%|████████▌ | 24/28 [17:25<02:56, 44.05s/it, Loss: 0.3720, V_MAE: 0.3303, A_MAE: 0.0417, LR: 0.000104]
+Epoch 7/15 (Rank 0):  86%|████████▌ | 24/28 [18:10<02:56, 44.05s/it, Loss: 0.3731, V_MAE: 0.3341, A_MAE: 0.0390, LR: 0.000103]
+Epoch 7/15 (Rank 0):  89%|████████▉ | 25/28 [18:10<02:13, 44.34s/it, Loss: 0.3731, V_MAE: 0.3341, A_MAE: 0.0390, LR: 0.000103]
+Epoch 7/15 (Rank 0):  89%|████████▉ | 25/28 [19:00<02:13, 44.34s/it, Loss: 0.3607, V_MAE: 0.3232, A_MAE: 0.0375, LR: 0.000103]
+                                                                                                                              
+  Epoch 7/15, Step 25/28 - Loss: 0.3607, V_MAE: 0.3232, A_MAE: 0.0375, LR: 0.000103
+
+Epoch 7/15 (Rank 0):  89%|████████▉ | 25/28 [19:00<02:13, 44.34s/it, Loss: 0.3607, V_MAE: 0.3232, A_MAE: 0.0375, LR: 0.000103]
+Epoch 7/15 (Rank 0):  93%|█████████▎| 26/28 [19:00<01:32, 46.01s/it, Loss: 0.3607, V_MAE: 0.3232, A_MAE: 0.0375, LR: 0.000103]
+Epoch 7/15 (Rank 0):  93%|█████████▎| 26/28 [19:47<01:32, 46.01s/it, Loss: 0.3841, V_MAE: 0.3449, A_MAE: 0.0391, LR: 0.000102]
+Epoch 7/15 (Rank 0):  96%|█████████▋| 27/28 [19:47<00:46, 46.28s/it, Loss: 0.3841, V_MAE: 0.3449, A_MAE: 0.0391, LR: 0.000102]
+Epoch 7/15 (Rank 0):  96%|█████████▋| 27/28 [20:31<00:46, 46.28s/it, Loss: 0.3528, V_MAE: 0.3160, A_MAE: 0.0367, LR: 0.000102]
+Epoch 7/15 (Rank 0): 100%|██████████| 28/28 [20:31<00:00, 45.61s/it, Loss: 0.3528, V_MAE: 0.3160, A_MAE: 0.0367, LR: 0.000102]
+                                                                                                                              
+Epoch 7 Finished.
+  Average Loss (Rank 0): 0.3708
+  Average Video MAE Loss (Rank 0): 0.3287
+  Average Audio MAE Loss (Rank 0): 0.0422
+
+Epoch 8/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 8/15 (Rank 0):   0%|          | 0/28 [00:43<?, ?it/s, Loss: 0.3602, V_MAE: 0.3190, A_MAE: 0.0413, LR: 0.000101]
+Epoch 8/15 (Rank 0):   4%|▎         | 1/28 [00:43<19:42, 43.79s/it, Loss: 0.3602, V_MAE: 0.3190, A_MAE: 0.0413, LR: 0.000101]
+Epoch 8/15 (Rank 0):   4%|▎         | 1/28 [01:27<19:42, 43.79s/it, Loss: 0.3571, V_MAE: 0.3202, A_MAE: 0.0369, LR: 0.000100]
+Epoch 8/15 (Rank 0):   7%|▋         | 2/28 [01:27<19:00, 43.85s/it, Loss: 0.3571, V_MAE: 0.3202, A_MAE: 0.0369, LR: 0.000100]
+Epoch 8/15 (Rank 0):   7%|▋         | 2/28 [02:11<19:00, 43.85s/it, Loss: 0.3536, V_MAE: 0.3106, A_MAE: 0.0430, LR: 0.000100]
+Epoch 8/15 (Rank 0):  11%|█         | 3/28 [02:11<18:10, 43.63s/it, Loss: 0.3536, V_MAE: 0.3106, A_MAE: 0.0430, LR: 0.000100]
+Epoch 8/15 (Rank 0):  11%|█         | 3/28 [02:53<18:10, 43.63s/it, Loss: 0.3636, V_MAE: 0.3214, A_MAE: 0.0422, LR: 0.000099]
+Epoch 8/15 (Rank 0):  14%|█▍        | 4/28 [02:53<17:13, 43.07s/it, Loss: 0.3636, V_MAE: 0.3214, A_MAE: 0.0422, LR: 0.000099]
+Epoch 8/15 (Rank 0):  14%|█▍        | 4/28 [03:39<17:13, 43.07s/it, Loss: 0.3886, V_MAE: 0.3527, A_MAE: 0.0359, LR: 0.000099]
+Epoch 8/15 (Rank 0):  18%|█▊        | 5/28 [03:39<16:54, 44.12s/it, Loss: 0.3886, V_MAE: 0.3527, A_MAE: 0.0359, LR: 0.000099]
+Epoch 8/15 (Rank 0):  18%|█▊        | 5/28 [04:23<16:54, 44.12s/it, Loss: 0.3741, V_MAE: 0.3406, A_MAE: 0.0335, LR: 0.000098]
+                                                                                                                             
+  Epoch 8/15, Step 5/28 - Loss: 0.3741, V_MAE: 0.3406, A_MAE: 0.0335, LR: 0.000098
+
+Epoch 8/15 (Rank 0):  18%|█▊        | 5/28 [04:23<16:54, 44.12s/it, Loss: 0.3741, V_MAE: 0.3406, A_MAE: 0.0335, LR: 0.000098]
+Epoch 8/15 (Rank 0):  21%|██▏       | 6/28 [04:23<16:14, 44.31s/it, Loss: 0.3741, V_MAE: 0.3406, A_MAE: 0.0335, LR: 0.000098]
+Epoch 8/15 (Rank 0):  21%|██▏       | 6/28 [05:09<16:14, 44.31s/it, Loss: 0.4227, V_MAE: 0.3831, A_MAE: 0.0396, LR: 0.000097]
+Epoch 8/15 (Rank 0):  25%|██▌       | 7/28 [05:09<15:38, 44.68s/it, Loss: 0.4227, V_MAE: 0.3831, A_MAE: 0.0396, LR: 0.000097]
+Epoch 8/15 (Rank 0):  25%|██▌       | 7/28 [05:54<15:38, 44.68s/it, Loss: 0.3488, V_MAE: 0.3054, A_MAE: 0.0434, LR: 0.000097]
+Epoch 8/15 (Rank 0):  29%|██▊       | 8/28 [05:54<14:59, 44.96s/it, Loss: 0.3488, V_MAE: 0.3054, A_MAE: 0.0434, LR: 0.000097]
+Epoch 8/15 (Rank 0):  29%|██▊       | 8/28 [06:40<14:59, 44.96s/it, Loss: 0.3593, V_MAE: 0.3157, A_MAE: 0.0436, LR: 0.000096]
+Epoch 8/15 (Rank 0):  32%|███▏      | 9/28 [06:40<14:18, 45.19s/it, Loss: 0.3593, V_MAE: 0.3157, A_MAE: 0.0436, LR: 0.000096]
+Epoch 8/15 (Rank 0):  32%|███▏      | 9/28 [07:22<14:18, 45.19s/it, Loss: 0.3509, V_MAE: 0.3047, A_MAE: 0.0462, LR: 0.000095]
+Epoch 8/15 (Rank 0):  36%|███▌      | 10/28 [07:22<13:16, 44.24s/it, Loss: 0.3509, V_MAE: 0.3047, A_MAE: 0.0462, LR: 0.000095]
+Epoch 8/15 (Rank 0):  36%|███▌      | 10/28 [08:10<13:16, 44.24s/it, Loss: 0.3384, V_MAE: 0.3006, A_MAE: 0.0379, LR: 0.000095]
+                                                                                                                              
+  Epoch 8/15, Step 10/28 - Loss: 0.3384, V_MAE: 0.3006, A_MAE: 0.0379, LR: 0.000095
+
+Epoch 8/15 (Rank 0):  36%|███▌      | 10/28 [08:10<13:16, 44.24s/it, Loss: 0.3384, V_MAE: 0.3006, A_MAE: 0.0379, LR: 0.000095]
+Epoch 8/15 (Rank 0):  39%|███▉      | 11/28 [08:10<12:50, 45.34s/it, Loss: 0.3384, V_MAE: 0.3006, A_MAE: 0.0379, LR: 0.000095]
+Epoch 8/15 (Rank 0):  39%|███▉      | 11/28 [08:51<12:50, 45.34s/it, Loss: 0.3470, V_MAE: 0.3054, A_MAE: 0.0416, LR: 0.000094]
+Epoch 8/15 (Rank 0):  43%|████▎     | 12/28 [08:51<11:42, 43.90s/it, Loss: 0.3470, V_MAE: 0.3054, A_MAE: 0.0416, LR: 0.000094]
+Epoch 8/15 (Rank 0):  43%|████▎     | 12/28 [09:35<11:42, 43.90s/it, Loss: 0.3602, V_MAE: 0.3154, A_MAE: 0.0448, LR: 0.000094]
+Epoch 8/15 (Rank 0):  46%|████▋     | 13/28 [09:35<10:58, 43.90s/it, Loss: 0.3602, V_MAE: 0.3154, A_MAE: 0.0448, LR: 0.000094]
+Epoch 8/15 (Rank 0):  46%|████▋     | 13/28 [10:18<10:58, 43.90s/it, Loss: 0.3703, V_MAE: 0.3282, A_MAE: 0.0421, LR: 0.000093]
+Epoch 8/15 (Rank 0):  50%|█████     | 14/28 [10:18<10:12, 43.74s/it, Loss: 0.3703, V_MAE: 0.3282, A_MAE: 0.0421, LR: 0.000093]
+Epoch 8/15 (Rank 0):  50%|█████     | 14/28 [11:03<10:12, 43.74s/it, Loss: 0.3771, V_MAE: 0.3352, A_MAE: 0.0419, LR: 0.000092]
+Epoch 8/15 (Rank 0):  54%|█████▎    | 15/28 [11:03<09:33, 44.13s/it, Loss: 0.3771, V_MAE: 0.3352, A_MAE: 0.0419, LR: 0.000092]
+Epoch 8/15 (Rank 0):  54%|█████▎    | 15/28 [11:42<09:33, 44.13s/it, Loss: 0.3748, V_MAE: 0.3304, A_MAE: 0.0444, LR: 0.000092]
+                                                                                                                              
+  Epoch 8/15, Step 15/28 - Loss: 0.3748, V_MAE: 0.3304, A_MAE: 0.0444, LR: 0.000092
+
+Epoch 8/15 (Rank 0):  54%|█████▎    | 15/28 [11:42<09:33, 44.13s/it, Loss: 0.3748, V_MAE: 0.3304, A_MAE: 0.0444, LR: 0.000092]
+Epoch 8/15 (Rank 0):  57%|█████▋    | 16/28 [11:42<08:32, 42.67s/it, Loss: 0.3748, V_MAE: 0.3304, A_MAE: 0.0444, LR: 0.000092]
+Epoch 8/15 (Rank 0):  57%|█████▋    | 16/28 [12:29<08:32, 42.67s/it, Loss: 0.3859, V_MAE: 0.3429, A_MAE: 0.0430, LR: 0.000091]
+Epoch 8/15 (Rank 0):  61%|██████    | 17/28 [12:29<08:02, 43.85s/it, Loss: 0.3859, V_MAE: 0.3429, A_MAE: 0.0430, LR: 0.000091]
+Epoch 8/15 (Rank 0):  61%|██████    | 17/28 [13:13<08:02, 43.85s/it, Loss: 0.3807, V_MAE: 0.3370, A_MAE: 0.0438, LR: 0.000090]
+Epoch 8/15 (Rank 0):  64%|██████▍   | 18/28 [13:13<07:20, 44.08s/it, Loss: 0.3807, V_MAE: 0.3370, A_MAE: 0.0438, LR: 0.000090]
+Epoch 8/15 (Rank 0):  64%|██████▍   | 18/28 [14:00<07:20, 44.08s/it, Loss: 0.3563, V_MAE: 0.3180, A_MAE: 0.0383, LR: 0.000090]
+Epoch 8/15 (Rank 0):  68%|██████▊   | 19/28 [14:00<06:43, 44.79s/it, Loss: 0.3563, V_MAE: 0.3180, A_MAE: 0.0383, LR: 0.000090]
+Epoch 8/15 (Rank 0):  68%|██████▊   | 19/28 [14:42<06:43, 44.79s/it, Loss: 0.3906, V_MAE: 0.3441, A_MAE: 0.0465, LR: 0.000089]
+Epoch 8/15 (Rank 0):  71%|███████▏  | 20/28 [14:42<05:51, 43.89s/it, Loss: 0.3906, V_MAE: 0.3441, A_MAE: 0.0465, LR: 0.000089]
+Epoch 8/15 (Rank 0):  71%|███████▏  | 20/28 [15:23<05:51, 43.89s/it, Loss: 0.3706, V_MAE: 0.3297, A_MAE: 0.0409, LR: 0.000089]
+                                                                                                                              
+  Epoch 8/15, Step 20/28 - Loss: 0.3706, V_MAE: 0.3297, A_MAE: 0.0409, LR: 0.000089
+
+Epoch 8/15 (Rank 0):  71%|███████▏  | 20/28 [15:23<05:51, 43.89s/it, Loss: 0.3706, V_MAE: 0.3297, A_MAE: 0.0409, LR: 0.000089]
+Epoch 8/15 (Rank 0):  75%|███████▌  | 21/28 [15:23<05:02, 43.26s/it, Loss: 0.3706, V_MAE: 0.3297, A_MAE: 0.0409, LR: 0.000089]
+Epoch 8/15 (Rank 0):  75%|███████▌  | 21/28 [16:13<05:02, 43.26s/it, Loss: 0.3314, V_MAE: 0.2911, A_MAE: 0.0403, LR: 0.000088]
+Epoch 8/15 (Rank 0):  79%|███████▊  | 22/28 [16:13<04:30, 45.04s/it, Loss: 0.3314, V_MAE: 0.2911, A_MAE: 0.0403, LR: 0.000088]
+Epoch 8/15 (Rank 0):  79%|███████▊  | 22/28 [16:57<04:30, 45.04s/it, Loss: 0.3452, V_MAE: 0.3092, A_MAE: 0.0360, LR: 0.000087]
+Epoch 8/15 (Rank 0):  82%|████████▏ | 23/28 [16:57<03:43, 44.78s/it, Loss: 0.3452, V_MAE: 0.3092, A_MAE: 0.0360, LR: 0.000087]
+Epoch 8/15 (Rank 0):  82%|████████▏ | 23/28 [17:41<03:43, 44.78s/it, Loss: 0.3786, V_MAE: 0.3353, A_MAE: 0.0433, LR: 0.000087]
+Epoch 8/15 (Rank 0):  86%|████████▌ | 24/28 [17:41<02:58, 44.62s/it, Loss: 0.3786, V_MAE: 0.3353, A_MAE: 0.0433, LR: 0.000087]
+Epoch 8/15 (Rank 0):  86%|████████▌ | 24/28 [18:26<02:58, 44.62s/it, Loss: 0.3563, V_MAE: 0.3169, A_MAE: 0.0394, LR: 0.000086]
+Epoch 8/15 (Rank 0):  89%|████████▉ | 25/28 [18:26<02:13, 44.62s/it, Loss: 0.3563, V_MAE: 0.3169, A_MAE: 0.0394, LR: 0.000086]
+Epoch 8/15 (Rank 0):  89%|████████▉ | 25/28 [19:06<02:13, 44.62s/it, Loss: 0.3542, V_MAE: 0.3182, A_MAE: 0.0361, LR: 0.000085]
+                                                                                                                              
+  Epoch 8/15, Step 25/28 - Loss: 0.3542, V_MAE: 0.3182, A_MAE: 0.0361, LR: 0.000085
+
+Epoch 8/15 (Rank 0):  89%|████████▉ | 25/28 [19:06<02:13, 44.62s/it, Loss: 0.3542, V_MAE: 0.3182, A_MAE: 0.0361, LR: 0.000085]
+Epoch 8/15 (Rank 0):  93%|█████████▎| 26/28 [19:06<01:26, 43.34s/it, Loss: 0.3542, V_MAE: 0.3182, A_MAE: 0.0361, LR: 0.000085]
+Epoch 8/15 (Rank 0):  93%|█████████▎| 26/28 [19:48<01:26, 43.34s/it, Loss: 0.3625, V_MAE: 0.3182, A_MAE: 0.0443, LR: 0.000085]
+Epoch 8/15 (Rank 0):  96%|█████████▋| 27/28 [19:48<00:42, 42.79s/it, Loss: 0.3625, V_MAE: 0.3182, A_MAE: 0.0443, LR: 0.000085]
+Epoch 8/15 (Rank 0):  96%|█████████▋| 27/28 [20:30<00:42, 42.79s/it, Loss: 0.3771, V_MAE: 0.3402, A_MAE: 0.0369, LR: 0.000084]
+Epoch 8/15 (Rank 0): 100%|██████████| 28/28 [20:30<00:00, 42.54s/it, Loss: 0.3771, V_MAE: 0.3402, A_MAE: 0.0369, LR: 0.000084]
+                                                                                                                              
+Epoch 8 Finished.
+  Average Loss (Rank 0): 0.3656
+  Average Video MAE Loss (Rank 0): 0.3246
+  Average Audio MAE Loss (Rank 0): 0.0410
+
+Epoch 9/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 9/15 (Rank 0):   0%|          | 0/28 [00:41<?, ?it/s, Loss: 0.4237, V_MAE: 0.3765, A_MAE: 0.0472, LR: 0.000083]
+Epoch 9/15 (Rank 0):   4%|▎         | 1/28 [00:41<18:46, 41.70s/it, Loss: 0.4237, V_MAE: 0.3765, A_MAE: 0.0472, LR: 0.000083]
+Epoch 9/15 (Rank 0):   4%|▎         | 1/28 [01:21<18:46, 41.70s/it, Loss: 0.3626, V_MAE: 0.3200, A_MAE: 0.0426, LR: 0.000083]
+Epoch 9/15 (Rank 0):   7%|▋         | 2/28 [01:21<17:33, 40.53s/it, Loss: 0.3626, V_MAE: 0.3200, A_MAE: 0.0426, LR: 0.000083]
+Epoch 9/15 (Rank 0):   7%|▋         | 2/28 [02:04<17:33, 40.53s/it, Loss: 0.3808, V_MAE: 0.3407, A_MAE: 0.0401, LR: 0.000082]
+Epoch 9/15 (Rank 0):  11%|█         | 3/28 [02:04<17:20, 41.61s/it, Loss: 0.3808, V_MAE: 0.3407, A_MAE: 0.0401, LR: 0.000082]
+Epoch 9/15 (Rank 0):  11%|█         | 3/28 [02:47<17:20, 41.61s/it, Loss: 0.3941, V_MAE: 0.3533, A_MAE: 0.0408, LR: 0.000081]
+Epoch 9/15 (Rank 0):  14%|█▍        | 4/28 [02:47<16:57, 42.39s/it, Loss: 0.3941, V_MAE: 0.3533, A_MAE: 0.0408, LR: 0.000081]
+Epoch 9/15 (Rank 0):  14%|█▍        | 4/28 [03:32<16:57, 42.39s/it, Loss: 0.3533, V_MAE: 0.3087, A_MAE: 0.0446, LR: 0.000081]
+Epoch 9/15 (Rank 0):  18%|█▊        | 5/28 [03:32<16:36, 43.34s/it, Loss: 0.3533, V_MAE: 0.3087, A_MAE: 0.0446, LR: 0.000081]
+Epoch 9/15 (Rank 0):  18%|█▊        | 5/28 [04:16<16:36, 43.34s/it, Loss: 0.3738, V_MAE: 0.3304, A_MAE: 0.0434, LR: 0.000080]
+                                                                                                                             
+  Epoch 9/15, Step 5/28 - Loss: 0.3738, V_MAE: 0.3304, A_MAE: 0.0434, LR: 0.000080
+
+Epoch 9/15 (Rank 0):  18%|█▊        | 5/28 [04:16<16:36, 43.34s/it, Loss: 0.3738, V_MAE: 0.3304, A_MAE: 0.0434, LR: 0.000080]
+Epoch 9/15 (Rank 0):  21%|██▏       | 6/28 [04:16<15:52, 43.28s/it, Loss: 0.3738, V_MAE: 0.3304, A_MAE: 0.0434, LR: 0.000080]
+Epoch 9/15 (Rank 0):  21%|██▏       | 6/28 [04:58<15:52, 43.28s/it, Loss: 0.3753, V_MAE: 0.3294, A_MAE: 0.0458, LR: 0.000080]
+Epoch 9/15 (Rank 0):  25%|██▌       | 7/28 [04:58<14:59, 42.85s/it, Loss: 0.3753, V_MAE: 0.3294, A_MAE: 0.0458, LR: 0.000080]
+Epoch 9/15 (Rank 0):  25%|██▌       | 7/28 [05:43<14:59, 42.85s/it, Loss: 0.3745, V_MAE: 0.3370, A_MAE: 0.0375, LR: 0.000079]
+Epoch 9/15 (Rank 0):  29%|██▊       | 8/28 [05:43<14:35, 43.76s/it, Loss: 0.3745, V_MAE: 0.3370, A_MAE: 0.0375, LR: 0.000079]
+Epoch 9/15 (Rank 0):  29%|██▊       | 8/28 [06:27<14:35, 43.76s/it, Loss: 0.3771, V_MAE: 0.3321, A_MAE: 0.0450, LR: 0.000078]
+Epoch 9/15 (Rank 0):  32%|███▏      | 9/28 [06:27<13:51, 43.77s/it, Loss: 0.3771, V_MAE: 0.3321, A_MAE: 0.0450, LR: 0.000078]
+Epoch 9/15 (Rank 0):  32%|███▏      | 9/28 [07:11<13:51, 43.77s/it, Loss: 0.3765, V_MAE: 0.3353, A_MAE: 0.0413, LR: 0.000078]
+Epoch 9/15 (Rank 0):  36%|███▌      | 10/28 [07:11<13:08, 43.83s/it, Loss: 0.3765, V_MAE: 0.3353, A_MAE: 0.0413, LR: 0.000078]
+Epoch 9/15 (Rank 0):  36%|███▌      | 10/28 [07:51<13:08, 43.83s/it, Loss: 0.3711, V_MAE: 0.3294, A_MAE: 0.0417, LR: 0.000077]
+                                                                                                                              
+  Epoch 9/15, Step 10/28 - Loss: 0.3711, V_MAE: 0.3294, A_MAE: 0.0417, LR: 0.000077
+
+Epoch 9/15 (Rank 0):  36%|███▌      | 10/28 [07:51<13:08, 43.83s/it, Loss: 0.3711, V_MAE: 0.3294, A_MAE: 0.0417, LR: 0.000077]
+Epoch 9/15 (Rank 0):  39%|███▉      | 11/28 [07:51<12:07, 42.80s/it, Loss: 0.3711, V_MAE: 0.3294, A_MAE: 0.0417, LR: 0.000077]
+Epoch 9/15 (Rank 0):  39%|███▉      | 11/28 [08:34<12:07, 42.80s/it, Loss: 0.3655, V_MAE: 0.3289, A_MAE: 0.0366, LR: 0.000076]
+Epoch 9/15 (Rank 0):  43%|████▎     | 12/28 [08:34<11:24, 42.77s/it, Loss: 0.3655, V_MAE: 0.3289, A_MAE: 0.0366, LR: 0.000076]
+Epoch 9/15 (Rank 0):  43%|████▎     | 12/28 [09:17<11:24, 42.77s/it, Loss: 0.3563, V_MAE: 0.3133, A_MAE: 0.0430, LR: 0.000076]
+Epoch 9/15 (Rank 0):  46%|████▋     | 13/28 [09:17<10:42, 42.82s/it, Loss: 0.3563, V_MAE: 0.3133, A_MAE: 0.0430, LR: 0.000076]
+Epoch 9/15 (Rank 0):  46%|████▋     | 13/28 [09:57<10:42, 42.82s/it, Loss: 0.4005, V_MAE: 0.3590, A_MAE: 0.0416, LR: 0.000075]
+Epoch 9/15 (Rank 0):  50%|█████     | 14/28 [09:57<09:45, 41.82s/it, Loss: 0.4005, V_MAE: 0.3590, A_MAE: 0.0416, LR: 0.000075]
+Epoch 9/15 (Rank 0):  50%|█████     | 14/28 [10:43<09:45, 41.82s/it, Loss: 0.3686, V_MAE: 0.3327, A_MAE: 0.0360, LR: 0.000074]
+Epoch 9/15 (Rank 0):  54%|█████▎    | 15/28 [10:43<09:22, 43.26s/it, Loss: 0.3686, V_MAE: 0.3327, A_MAE: 0.0360, LR: 0.000074]
+Epoch 9/15 (Rank 0):  54%|█████▎    | 15/28 [11:21<09:22, 43.26s/it, Loss: 0.3830, V_MAE: 0.3430, A_MAE: 0.0400, LR: 0.000074]
+                                                                                                                              
+  Epoch 9/15, Step 15/28 - Loss: 0.3830, V_MAE: 0.3430, A_MAE: 0.0400, LR: 0.000074
+
+Epoch 9/15 (Rank 0):  54%|█████▎    | 15/28 [11:21<09:22, 43.26s/it, Loss: 0.3830, V_MAE: 0.3430, A_MAE: 0.0400, LR: 0.000074]
+Epoch 9/15 (Rank 0):  57%|█████▋    | 16/28 [11:21<08:18, 41.57s/it, Loss: 0.3830, V_MAE: 0.3430, A_MAE: 0.0400, LR: 0.000074]
+Epoch 9/15 (Rank 0):  57%|█████▋    | 16/28 [12:05<08:18, 41.57s/it, Loss: 0.3556, V_MAE: 0.3136, A_MAE: 0.0420, LR: 0.000073]
+Epoch 9/15 (Rank 0):  61%|██████    | 17/28 [12:05<07:44, 42.27s/it, Loss: 0.3556, V_MAE: 0.3136, A_MAE: 0.0420, LR: 0.000073]
+Epoch 9/15 (Rank 0):  61%|██████    | 17/28 [12:45<07:44, 42.27s/it, Loss: 0.3810, V_MAE: 0.3354, A_MAE: 0.0456, LR: 0.000072]
+Epoch 9/15 (Rank 0):  64%|██████▍   | 18/28 [12:45<06:56, 41.66s/it, Loss: 0.3810, V_MAE: 0.3354, A_MAE: 0.0456, LR: 0.000072]
+Epoch 9/15 (Rank 0):  64%|██████▍   | 18/28 [13:30<06:56, 41.66s/it, Loss: 0.3762, V_MAE: 0.3382, A_MAE: 0.0381, LR: 0.000072]
+Epoch 9/15 (Rank 0):  68%|██████▊   | 19/28 [13:30<06:23, 42.59s/it, Loss: 0.3762, V_MAE: 0.3382, A_MAE: 0.0381, LR: 0.000072]
+Epoch 9/15 (Rank 0):  68%|██████▊   | 19/28 [14:14<06:23, 42.59s/it, Loss: 0.3530, V_MAE: 0.3135, A_MAE: 0.0395, LR: 0.000071]
+Epoch 9/15 (Rank 0):  71%|███████▏  | 20/28 [14:14<05:45, 43.19s/it, Loss: 0.3530, V_MAE: 0.3135, A_MAE: 0.0395, LR: 0.000071]
+Epoch 9/15 (Rank 0):  71%|███████▏  | 20/28 [14:56<05:45, 43.19s/it, Loss: 0.3600, V_MAE: 0.3194, A_MAE: 0.0406, LR: 0.000070]
+                                                                                                                              
+  Epoch 9/15, Step 20/28 - Loss: 0.3600, V_MAE: 0.3194, A_MAE: 0.0406, LR: 0.000070
+
+Epoch 9/15 (Rank 0):  71%|███████▏  | 20/28 [14:56<05:45, 43.19s/it, Loss: 0.3600, V_MAE: 0.3194, A_MAE: 0.0406, LR: 0.000070]
+Epoch 9/15 (Rank 0):  75%|███████▌  | 21/28 [14:56<04:59, 42.73s/it, Loss: 0.3600, V_MAE: 0.3194, A_MAE: 0.0406, LR: 0.000070]
+Epoch 9/15 (Rank 0):  75%|███████▌  | 21/28 [15:40<04:59, 42.73s/it, Loss: 0.3589, V_MAE: 0.3168, A_MAE: 0.0421, LR: 0.000070]
+Epoch 9/15 (Rank 0):  79%|███████▊  | 22/28 [15:40<04:18, 43.13s/it, Loss: 0.3589, V_MAE: 0.3168, A_MAE: 0.0421, LR: 0.000070]
+Epoch 9/15 (Rank 0):  79%|███████▊  | 22/28 [16:24<04:18, 43.13s/it, Loss: 0.3923, V_MAE: 0.3537, A_MAE: 0.0385, LR: 0.000069]
+Epoch 9/15 (Rank 0):  82%|████████▏ | 23/28 [16:24<03:36, 43.32s/it, Loss: 0.3923, V_MAE: 0.3537, A_MAE: 0.0385, LR: 0.000069]
+Epoch 9/15 (Rank 0):  82%|████████▏ | 23/28 [17:09<03:36, 43.32s/it, Loss: 0.3796, V_MAE: 0.3376, A_MAE: 0.0420, LR: 0.000069]
+Epoch 9/15 (Rank 0):  86%|████████▌ | 24/28 [17:09<02:55, 43.93s/it, Loss: 0.3796, V_MAE: 0.3376, A_MAE: 0.0420, LR: 0.000069]
+Epoch 9/15 (Rank 0):  86%|████████▌ | 24/28 [17:50<02:55, 43.93s/it, Loss: 0.3636, V_MAE: 0.3257, A_MAE: 0.0379, LR: 0.000068]
+Epoch 9/15 (Rank 0):  89%|████████▉ | 25/28 [17:50<02:08, 42.95s/it, Loss: 0.3636, V_MAE: 0.3257, A_MAE: 0.0379, LR: 0.000068]
+Epoch 9/15 (Rank 0):  89%|████████▉ | 25/28 [18:29<02:08, 42.95s/it, Loss: 0.3823, V_MAE: 0.3350, A_MAE: 0.0473, LR: 0.000067]
+                                                                                                                              
+  Epoch 9/15, Step 25/28 - Loss: 0.3823, V_MAE: 0.3350, A_MAE: 0.0473, LR: 0.000067
+
+Epoch 9/15 (Rank 0):  89%|████████▉ | 25/28 [18:29<02:08, 42.95s/it, Loss: 0.3823, V_MAE: 0.3350, A_MAE: 0.0473, LR: 0.000067]
+Epoch 9/15 (Rank 0):  93%|█████████▎| 26/28 [18:29<01:23, 41.75s/it, Loss: 0.3823, V_MAE: 0.3350, A_MAE: 0.0473, LR: 0.000067]
+Epoch 9/15 (Rank 0):  93%|█████████▎| 26/28 [19:12<01:23, 41.75s/it, Loss: 0.3849, V_MAE: 0.3392, A_MAE: 0.0457, LR: 0.000067]
+Epoch 9/15 (Rank 0):  96%|█████████▋| 27/28 [19:12<00:42, 42.09s/it, Loss: 0.3849, V_MAE: 0.3392, A_MAE: 0.0457, LR: 0.000067]
+Epoch 9/15 (Rank 0):  96%|█████████▋| 27/28 [19:57<00:42, 42.09s/it, Loss: 0.3596, V_MAE: 0.3142, A_MAE: 0.0454, LR: 0.000066]
+Epoch 9/15 (Rank 0): 100%|██████████| 28/28 [19:57<00:00, 43.12s/it, Loss: 0.3596, V_MAE: 0.3142, A_MAE: 0.0454, LR: 0.000066]
+                                                                                                                              
+Epoch 9 Finished.
+  Average Loss (Rank 0): 0.3744
+  Average Video MAE Loss (Rank 0): 0.3326
+  Average Audio MAE Loss (Rank 0): 0.0419
+
+Epoch 10/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 10/15 (Rank 0):   0%|          | 0/28 [00:49<?, ?it/s, Loss: 0.3377, V_MAE: 0.3002, A_MAE: 0.0376, LR: 0.000065]
+Epoch 10/15 (Rank 0):   4%|▎         | 1/28 [00:49<22:12, 49.36s/it, Loss: 0.3377, V_MAE: 0.3002, A_MAE: 0.0376, LR: 0.000065]
+Epoch 10/15 (Rank 0):   4%|▎         | 1/28 [01:31<22:12, 49.36s/it, Loss: 0.3939, V_MAE: 0.3472, A_MAE: 0.0466, LR: 0.000065]
+Epoch 10/15 (Rank 0):   7%|▋         | 2/28 [01:31<19:37, 45.30s/it, Loss: 0.3939, V_MAE: 0.3472, A_MAE: 0.0466, LR: 0.000065]
+Epoch 10/15 (Rank 0):   7%|▋         | 2/28 [02:16<19:37, 45.30s/it, Loss: 0.3780, V_MAE: 0.3335, A_MAE: 0.0445, LR: 0.000064]
+Epoch 10/15 (Rank 0):  11%|█         | 3/28 [02:16<18:41, 44.85s/it, Loss: 0.3780, V_MAE: 0.3335, A_MAE: 0.0445, LR: 0.000064]
+Epoch 10/15 (Rank 0):  11%|█         | 3/28 [02:57<18:41, 44.85s/it, Loss: 0.3570, V_MAE: 0.3167, A_MAE: 0.0404, LR: 0.000063]
+Epoch 10/15 (Rank 0):  14%|█▍        | 4/28 [02:57<17:22, 43.44s/it, Loss: 0.3570, V_MAE: 0.3167, A_MAE: 0.0404, LR: 0.000063]
+Epoch 10/15 (Rank 0):  14%|█▍        | 4/28 [03:39<17:22, 43.44s/it, Loss: 0.4014, V_MAE: 0.3534, A_MAE: 0.0480, LR: 0.000063]
+Epoch 10/15 (Rank 0):  18%|█▊        | 5/28 [03:39<16:23, 42.78s/it, Loss: 0.4014, V_MAE: 0.3534, A_MAE: 0.0480, LR: 0.000063]
+Epoch 10/15 (Rank 0):  18%|█▊        | 5/28 [04:22<16:23, 42.78s/it, Loss: 0.3903, V_MAE: 0.3462, A_MAE: 0.0441, LR: 0.000062]
+                                                                                                                              
+  Epoch 10/15, Step 5/28 - Loss: 0.3903, V_MAE: 0.3462, A_MAE: 0.0441, LR: 0.000062
+
+Epoch 10/15 (Rank 0):  18%|█▊        | 5/28 [04:22<16:23, 42.78s/it, Loss: 0.3903, V_MAE: 0.3462, A_MAE: 0.0441, LR: 0.000062]
+Epoch 10/15 (Rank 0):  21%|██▏       | 6/28 [04:22<15:45, 42.99s/it, Loss: 0.3903, V_MAE: 0.3462, A_MAE: 0.0441, LR: 0.000062]
+Epoch 10/15 (Rank 0):  21%|██▏       | 6/28 [05:06<15:45, 42.99s/it, Loss: 0.3617, V_MAE: 0.3204, A_MAE: 0.0413, LR: 0.000061]
+Epoch 10/15 (Rank 0):  25%|██▌       | 7/28 [05:06<15:08, 43.28s/it, Loss: 0.3617, V_MAE: 0.3204, A_MAE: 0.0413, LR: 0.000061]
+Epoch 10/15 (Rank 0):  25%|██▌       | 7/28 [05:48<15:08, 43.28s/it, Loss: 0.3763, V_MAE: 0.3389, A_MAE: 0.0374, LR: 0.000061]
+Epoch 10/15 (Rank 0):  29%|██▊       | 8/28 [05:48<14:20, 43.03s/it, Loss: 0.3763, V_MAE: 0.3389, A_MAE: 0.0374, LR: 0.000061]
+Epoch 10/15 (Rank 0):  29%|██▊       | 8/28 [06:33<14:20, 43.03s/it, Loss: 0.3910, V_MAE: 0.3395, A_MAE: 0.0515, LR: 0.000060]
+Epoch 10/15 (Rank 0):  32%|███▏      | 9/28 [06:33<13:47, 43.54s/it, Loss: 0.3910, V_MAE: 0.3395, A_MAE: 0.0515, LR: 0.000060]
+Epoch 10/15 (Rank 0):  32%|███▏      | 9/28 [07:15<13:47, 43.54s/it, Loss: 0.3688, V_MAE: 0.3302, A_MAE: 0.0386, LR: 0.000060]
+Epoch 10/15 (Rank 0):  36%|███▌      | 10/28 [07:15<12:58, 43.23s/it, Loss: 0.3688, V_MAE: 0.3302, A_MAE: 0.0386, LR: 0.000060]
+Epoch 10/15 (Rank 0):  36%|███▌      | 10/28 [07:56<12:58, 43.23s/it, Loss: 0.3792, V_MAE: 0.3370, A_MAE: 0.0423, LR: 0.000059]
+                                                                                                                               
+  Epoch 10/15, Step 10/28 - Loss: 0.3792, V_MAE: 0.3370, A_MAE: 0.0423, LR: 0.000059
+
+Epoch 10/15 (Rank 0):  36%|███▌      | 10/28 [07:56<12:58, 43.23s/it, Loss: 0.3792, V_MAE: 0.3370, A_MAE: 0.0423, LR: 0.000059]
+Epoch 10/15 (Rank 0):  39%|███▉      | 11/28 [07:56<12:00, 42.40s/it, Loss: 0.3792, V_MAE: 0.3370, A_MAE: 0.0423, LR: 0.000059]
+Epoch 10/15 (Rank 0):  39%|███▉      | 11/28 [08:41<12:00, 42.40s/it, Loss: 0.3787, V_MAE: 0.3360, A_MAE: 0.0427, LR: 0.000058]
+Epoch 10/15 (Rank 0):  43%|████▎     | 12/28 [08:41<11:31, 43.24s/it, Loss: 0.3787, V_MAE: 0.3360, A_MAE: 0.0427, LR: 0.000058]
+Epoch 10/15 (Rank 0):  43%|████▎     | 12/28 [09:27<11:31, 43.24s/it, Loss: 0.3811, V_MAE: 0.3466, A_MAE: 0.0344, LR: 0.000058]
+Epoch 10/15 (Rank 0):  46%|████▋     | 13/28 [09:27<11:00, 44.05s/it, Loss: 0.3811, V_MAE: 0.3466, A_MAE: 0.0344, LR: 0.000058]
+Epoch 10/15 (Rank 0):  46%|████▋     | 13/28 [10:15<11:00, 44.05s/it, Loss: 0.3781, V_MAE: 0.3356, A_MAE: 0.0425, LR: 0.000057]
+Epoch 10/15 (Rank 0):  50%|█████     | 14/28 [10:15<10:34, 45.33s/it, Loss: 0.3781, V_MAE: 0.3356, A_MAE: 0.0425, LR: 0.000057]
+Epoch 10/15 (Rank 0):  50%|█████     | 14/28 [10:56<10:34, 45.33s/it, Loss: 0.4161, V_MAE: 0.3661, A_MAE: 0.0500, LR: 0.000056]
+Epoch 10/15 (Rank 0):  54%|█████▎    | 15/28 [10:56<09:32, 44.00s/it, Loss: 0.4161, V_MAE: 0.3661, A_MAE: 0.0500, LR: 0.000056]
+Epoch 10/15 (Rank 0):  54%|█████▎    | 15/28 [11:37<09:32, 44.00s/it, Loss: 0.3655, V_MAE: 0.3180, A_MAE: 0.0474, LR: 0.000056]
+                                                                                                                               
+  Epoch 10/15, Step 15/28 - Loss: 0.3655, V_MAE: 0.3180, A_MAE: 0.0474, LR: 0.000056
+
+Epoch 10/15 (Rank 0):  54%|█████▎    | 15/28 [11:37<09:32, 44.00s/it, Loss: 0.3655, V_MAE: 0.3180, A_MAE: 0.0474, LR: 0.000056]
+Epoch 10/15 (Rank 0):  57%|█████▋    | 16/28 [11:37<08:37, 43.15s/it, Loss: 0.3655, V_MAE: 0.3180, A_MAE: 0.0474, LR: 0.000056]
+Epoch 10/15 (Rank 0):  57%|█████▋    | 16/28 [12:23<08:37, 43.15s/it, Loss: 0.3570, V_MAE: 0.3178, A_MAE: 0.0392, LR: 0.000055]
+Epoch 10/15 (Rank 0):  61%|██████    | 17/28 [12:23<08:03, 43.96s/it, Loss: 0.3570, V_MAE: 0.3178, A_MAE: 0.0392, LR: 0.000055]
+Epoch 10/15 (Rank 0):  61%|██████    | 17/28 [13:05<08:03, 43.96s/it, Loss: 0.3695, V_MAE: 0.3311, A_MAE: 0.0384, LR: 0.000055]
+Epoch 10/15 (Rank 0):  64%|██████▍   | 18/28 [13:05<07:12, 43.25s/it, Loss: 0.3695, V_MAE: 0.3311, A_MAE: 0.0384, LR: 0.000055]
+Epoch 10/15 (Rank 0):  64%|██████▍   | 18/28 [13:47<07:12, 43.25s/it, Loss: 0.3645, V_MAE: 0.3200, A_MAE: 0.0445, LR: 0.000054]
+Epoch 10/15 (Rank 0):  68%|██████▊   | 19/28 [13:47<06:25, 42.84s/it, Loss: 0.3645, V_MAE: 0.3200, A_MAE: 0.0445, LR: 0.000054]
+Epoch 10/15 (Rank 0):  68%|██████▊   | 19/28 [14:30<06:25, 42.84s/it, Loss: 0.4017, V_MAE: 0.3655, A_MAE: 0.0362, LR: 0.000053]
+Epoch 10/15 (Rank 0):  71%|███████▏  | 20/28 [14:30<05:44, 43.09s/it, Loss: 0.4017, V_MAE: 0.3655, A_MAE: 0.0362, LR: 0.000053]
+Epoch 10/15 (Rank 0):  71%|███████▏  | 20/28 [15:17<05:44, 43.09s/it, Loss: 0.3526, V_MAE: 0.3135, A_MAE: 0.0391, LR: 0.000053]
+                                                                                                                               
+  Epoch 10/15, Step 20/28 - Loss: 0.3526, V_MAE: 0.3135, A_MAE: 0.0391, LR: 0.000053
+
+Epoch 10/15 (Rank 0):  71%|███████▏  | 20/28 [15:17<05:44, 43.09s/it, Loss: 0.3526, V_MAE: 0.3135, A_MAE: 0.0391, LR: 0.000053]
+Epoch 10/15 (Rank 0):  75%|███████▌  | 21/28 [15:17<05:08, 44.14s/it, Loss: 0.3526, V_MAE: 0.3135, A_MAE: 0.0391, LR: 0.000053]
+Epoch 10/15 (Rank 0):  75%|███████▌  | 21/28 [16:03<05:08, 44.14s/it, Loss: 0.3486, V_MAE: 0.3104, A_MAE: 0.0381, LR: 0.000052]
+Epoch 10/15 (Rank 0):  79%|███████▊  | 22/28 [16:03<04:27, 44.63s/it, Loss: 0.3486, V_MAE: 0.3104, A_MAE: 0.0381, LR: 0.000052]
+Epoch 10/15 (Rank 0):  79%|███████▊  | 22/28 [16:46<04:27, 44.63s/it, Loss: 0.3417, V_MAE: 0.3028, A_MAE: 0.0389, LR: 0.000051]
+Epoch 10/15 (Rank 0):  82%|████████▏ | 23/28 [16:46<03:41, 44.21s/it, Loss: 0.3417, V_MAE: 0.3028, A_MAE: 0.0389, LR: 0.000051]
+Epoch 10/15 (Rank 0):  82%|████████▏ | 23/28 [17:29<03:41, 44.21s/it, Loss: 0.3272, V_MAE: 0.2925, A_MAE: 0.0347, LR: 0.000051]
+Epoch 10/15 (Rank 0):  86%|████████▌ | 24/28 [17:29<02:55, 43.96s/it, Loss: 0.3272, V_MAE: 0.2925, A_MAE: 0.0347, LR: 0.000051]
+Epoch 10/15 (Rank 0):  86%|████████▌ | 24/28 [18:13<02:55, 43.96s/it, Loss: 0.3470, V_MAE: 0.3133, A_MAE: 0.0337, LR: 0.000050]
+Epoch 10/15 (Rank 0):  89%|████████▉ | 25/28 [18:13<02:11, 43.80s/it, Loss: 0.3470, V_MAE: 0.3133, A_MAE: 0.0337, LR: 0.000050]
+Epoch 10/15 (Rank 0):  89%|████████▉ | 25/28 [18:55<02:11, 43.80s/it, Loss: 0.3765, V_MAE: 0.3315, A_MAE: 0.0451, LR: 0.000050]
+                                                                                                                               
+  Epoch 10/15, Step 25/28 - Loss: 0.3765, V_MAE: 0.3315, A_MAE: 0.0451, LR: 0.000050
+
+Epoch 10/15 (Rank 0):  89%|████████▉ | 25/28 [18:55<02:11, 43.80s/it, Loss: 0.3765, V_MAE: 0.3315, A_MAE: 0.0451, LR: 0.000050]
+Epoch 10/15 (Rank 0):  93%|█████████▎| 26/28 [18:55<01:26, 43.17s/it, Loss: 0.3765, V_MAE: 0.3315, A_MAE: 0.0451, LR: 0.000050]
+Epoch 10/15 (Rank 0):  93%|█████████▎| 26/28 [19:38<01:26, 43.17s/it, Loss: 0.3902, V_MAE: 0.3480, A_MAE: 0.0422, LR: 0.000049]
+Epoch 10/15 (Rank 0):  96%|█████████▋| 27/28 [19:38<00:43, 43.24s/it, Loss: 0.3902, V_MAE: 0.3480, A_MAE: 0.0422, LR: 0.000049]
+Epoch 10/15 (Rank 0):  96%|█████████▋| 27/28 [20:19<00:43, 43.24s/it, Loss: 0.3719, V_MAE: 0.3362, A_MAE: 0.0357, LR: 0.000048]
+Epoch 10/15 (Rank 0): 100%|██████████| 28/28 [20:19<00:00, 42.65s/it, Loss: 0.3719, V_MAE: 0.3362, A_MAE: 0.0357, LR: 0.000048]
+                                                                                                                               
+Epoch 10 Finished.
+  Average Loss (Rank 0): 0.3715
+  Average Video MAE Loss (Rank 0): 0.3303
+  Average Audio MAE Loss (Rank 0): 0.0413
+Checkpoint saved to ./test_40_stage1_output/t3_av_stage1_epoch_10.pt
+
+Epoch 11/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 11/15 (Rank 0):   0%|          | 0/28 [00:41<?, ?it/s, Loss: 0.3462, V_MAE: 0.3090, A_MAE: 0.0371, LR: 0.000048]
+Epoch 11/15 (Rank 0):   4%|▎         | 1/28 [00:41<18:50, 41.87s/it, Loss: 0.3462, V_MAE: 0.3090, A_MAE: 0.0371, LR: 0.000048]
+Epoch 11/15 (Rank 0):   4%|▎         | 1/28 [01:17<18:50, 41.87s/it, Loss: 0.3453, V_MAE: 0.3100, A_MAE: 0.0353, LR: 0.000047]
+Epoch 11/15 (Rank 0):   7%|▋         | 2/28 [01:17<16:39, 38.46s/it, Loss: 0.3453, V_MAE: 0.3100, A_MAE: 0.0353, LR: 0.000047]
+Epoch 11/15 (Rank 0):   7%|▋         | 2/28 [02:03<16:39, 38.46s/it, Loss: 0.3732, V_MAE: 0.3366, A_MAE: 0.0366, LR: 0.000047]
+Epoch 11/15 (Rank 0):  11%|█         | 3/28 [02:03<17:22, 41.68s/it, Loss: 0.3732, V_MAE: 0.3366, A_MAE: 0.0366, LR: 0.000047]
+Epoch 11/15 (Rank 0):  11%|█         | 3/28 [02:44<17:22, 41.68s/it, Loss: 0.3401, V_MAE: 0.2983, A_MAE: 0.0418, LR: 0.000046]
+Epoch 11/15 (Rank 0):  14%|█▍        | 4/28 [02:44<16:35, 41.48s/it, Loss: 0.3401, V_MAE: 0.2983, A_MAE: 0.0418, LR: 0.000046]
+Epoch 11/15 (Rank 0):  14%|█▍        | 4/28 [03:24<16:35, 41.48s/it, Loss: 0.3646, V_MAE: 0.3251, A_MAE: 0.0396, LR: 0.000045]
+Epoch 11/15 (Rank 0):  18%|█▊        | 5/28 [03:24<15:43, 41.01s/it, Loss: 0.3646, V_MAE: 0.3251, A_MAE: 0.0396, LR: 0.000045]
+Epoch 11/15 (Rank 0):  18%|█▊        | 5/28 [04:15<15:43, 41.01s/it, Loss: 0.3690, V_MAE: 0.3275, A_MAE: 0.0415, LR: 0.000045]
+                                                                                                                              
+  Epoch 11/15, Step 5/28 - Loss: 0.3690, V_MAE: 0.3275, A_MAE: 0.0415, LR: 0.000045
+
+Epoch 11/15 (Rank 0):  18%|█▊        | 5/28 [04:15<15:43, 41.01s/it, Loss: 0.3690, V_MAE: 0.3275, A_MAE: 0.0415, LR: 0.000045]
+Epoch 11/15 (Rank 0):  21%|██▏       | 6/28 [04:15<16:13, 44.25s/it, Loss: 0.3690, V_MAE: 0.3275, A_MAE: 0.0415, LR: 0.000045]
+Epoch 11/15 (Rank 0):  21%|██▏       | 6/28 [04:57<16:13, 44.25s/it, Loss: 0.3399, V_MAE: 0.2968, A_MAE: 0.0431, LR: 0.000044]
+Epoch 11/15 (Rank 0):  25%|██▌       | 7/28 [04:57<15:17, 43.70s/it, Loss: 0.3399, V_MAE: 0.2968, A_MAE: 0.0431, LR: 0.000044]
+Epoch 11/15 (Rank 0):  25%|██▌       | 7/28 [05:41<15:17, 43.70s/it, Loss: 0.3540, V_MAE: 0.3168, A_MAE: 0.0371, LR: 0.000044]
+Epoch 11/15 (Rank 0):  29%|██▊       | 8/28 [05:41<14:31, 43.57s/it, Loss: 0.3540, V_MAE: 0.3168, A_MAE: 0.0371, LR: 0.000044]
+Epoch 11/15 (Rank 0):  29%|██▊       | 8/28 [06:23<14:31, 43.57s/it, Loss: 0.3609, V_MAE: 0.3193, A_MAE: 0.0416, LR: 0.000043]
+Epoch 11/15 (Rank 0):  32%|███▏      | 9/28 [06:23<13:39, 43.14s/it, Loss: 0.3609, V_MAE: 0.3193, A_MAE: 0.0416, LR: 0.000043]
+Epoch 11/15 (Rank 0):  32%|███▏      | 9/28 [07:10<13:39, 43.14s/it, Loss: 0.3885, V_MAE: 0.3522, A_MAE: 0.0363, LR: 0.000042]
+Epoch 11/15 (Rank 0):  36%|███▌      | 10/28 [07:10<13:16, 44.23s/it, Loss: 0.3885, V_MAE: 0.3522, A_MAE: 0.0363, LR: 0.000042]
+Epoch 11/15 (Rank 0):  36%|███▌      | 10/28 [07:50<13:16, 44.23s/it, Loss: 0.3570, V_MAE: 0.3208, A_MAE: 0.0362, LR: 0.000042]
+                                                                                                                               
+  Epoch 11/15, Step 10/28 - Loss: 0.3570, V_MAE: 0.3208, A_MAE: 0.0362, LR: 0.000042
+
+Epoch 11/15 (Rank 0):  36%|███▌      | 10/28 [07:50<13:16, 44.23s/it, Loss: 0.3570, V_MAE: 0.3208, A_MAE: 0.0362, LR: 0.000042]
+Epoch 11/15 (Rank 0):  39%|███▉      | 11/28 [07:50<12:13, 43.16s/it, Loss: 0.3570, V_MAE: 0.3208, A_MAE: 0.0362, LR: 0.000042]
+Epoch 11/15 (Rank 0):  39%|███▉      | 11/28 [08:39<12:13, 43.16s/it, Loss: 0.3522, V_MAE: 0.3107, A_MAE: 0.0415, LR: 0.000041]
+Epoch 11/15 (Rank 0):  43%|████▎     | 12/28 [08:39<11:58, 44.90s/it, Loss: 0.3522, V_MAE: 0.3107, A_MAE: 0.0415, LR: 0.000041]
+Epoch 11/15 (Rank 0):  43%|████▎     | 12/28 [09:21<11:58, 44.90s/it, Loss: 0.3864, V_MAE: 0.3509, A_MAE: 0.0355, LR: 0.000041]
+Epoch 11/15 (Rank 0):  46%|████▋     | 13/28 [09:21<10:59, 43.95s/it, Loss: 0.3864, V_MAE: 0.3509, A_MAE: 0.0355, LR: 0.000041]
+Epoch 11/15 (Rank 0):  46%|████▋     | 13/28 [10:04<10:59, 43.95s/it, Loss: 0.3747, V_MAE: 0.3415, A_MAE: 0.0332, LR: 0.000040]
+Epoch 11/15 (Rank 0):  50%|█████     | 14/28 [10:04<10:12, 43.78s/it, Loss: 0.3747, V_MAE: 0.3415, A_MAE: 0.0332, LR: 0.000040]
+Epoch 11/15 (Rank 0):  50%|█████     | 14/28 [10:45<10:12, 43.78s/it, Loss: 0.3531, V_MAE: 0.3158, A_MAE: 0.0373, LR: 0.000040]
+Epoch 11/15 (Rank 0):  54%|█████▎    | 15/28 [10:45<09:17, 42.88s/it, Loss: 0.3531, V_MAE: 0.3158, A_MAE: 0.0373, LR: 0.000040]
+Epoch 11/15 (Rank 0):  54%|█████▎    | 15/28 [11:35<09:17, 42.88s/it, Loss: 0.3733, V_MAE: 0.3331, A_MAE: 0.0403, LR: 0.000039]
+                                                                                                                               
+  Epoch 11/15, Step 15/28 - Loss: 0.3733, V_MAE: 0.3331, A_MAE: 0.0403, LR: 0.000039
+
+Epoch 11/15 (Rank 0):  54%|█████▎    | 15/28 [11:35<09:17, 42.88s/it, Loss: 0.3733, V_MAE: 0.3331, A_MAE: 0.0403, LR: 0.000039]
+Epoch 11/15 (Rank 0):  57%|█████▋    | 16/28 [11:35<08:58, 44.87s/it, Loss: 0.3733, V_MAE: 0.3331, A_MAE: 0.0403, LR: 0.000039]
+Epoch 11/15 (Rank 0):  57%|█████▋    | 16/28 [12:12<08:58, 44.87s/it, Loss: 0.3778, V_MAE: 0.3391, A_MAE: 0.0387, LR: 0.000038]
+Epoch 11/15 (Rank 0):  61%|██████    | 17/28 [12:12<07:49, 42.68s/it, Loss: 0.3778, V_MAE: 0.3391, A_MAE: 0.0387, LR: 0.000038]
+Epoch 11/15 (Rank 0):  61%|██████    | 17/28 [12:54<07:49, 42.68s/it, Loss: 0.3728, V_MAE: 0.3364, A_MAE: 0.0364, LR: 0.000038]
+Epoch 11/15 (Rank 0):  64%|██████▍   | 18/28 [12:54<07:04, 42.42s/it, Loss: 0.3728, V_MAE: 0.3364, A_MAE: 0.0364, LR: 0.000038]
+Epoch 11/15 (Rank 0):  64%|██████▍   | 18/28 [13:36<07:04, 42.42s/it, Loss: 0.3644, V_MAE: 0.3269, A_MAE: 0.0374, LR: 0.000037]
+Epoch 11/15 (Rank 0):  68%|██████▊   | 19/28 [13:36<06:21, 42.44s/it, Loss: 0.3644, V_MAE: 0.3269, A_MAE: 0.0374, LR: 0.000037]
+Epoch 11/15 (Rank 0):  68%|██████▊   | 19/28 [14:21<06:21, 42.44s/it, Loss: 0.3350, V_MAE: 0.2943, A_MAE: 0.0407, LR: 0.000037]
+Epoch 11/15 (Rank 0):  71%|███████▏  | 20/28 [14:21<05:43, 42.97s/it, Loss: 0.3350, V_MAE: 0.2943, A_MAE: 0.0407, LR: 0.000037]
+Epoch 11/15 (Rank 0):  71%|███████▏  | 20/28 [15:05<05:43, 42.97s/it, Loss: 0.3425, V_MAE: 0.3112, A_MAE: 0.0313, LR: 0.000036]
+                                                                                                                               
+  Epoch 11/15, Step 20/28 - Loss: 0.3425, V_MAE: 0.3112, A_MAE: 0.0313, LR: 0.000036
+
+Epoch 11/15 (Rank 0):  71%|███████▏  | 20/28 [15:05<05:43, 42.97s/it, Loss: 0.3425, V_MAE: 0.3112, A_MAE: 0.0313, LR: 0.000036]
+Epoch 11/15 (Rank 0):  75%|███████▌  | 21/28 [15:05<05:03, 43.34s/it, Loss: 0.3425, V_MAE: 0.3112, A_MAE: 0.0313, LR: 0.000036]
+Epoch 11/15 (Rank 0):  75%|███████▌  | 21/28 [15:49<05:03, 43.34s/it, Loss: 0.3698, V_MAE: 0.3351, A_MAE: 0.0347, LR: 0.000036]
+Epoch 11/15 (Rank 0):  79%|███████▊  | 22/28 [15:49<04:21, 43.64s/it, Loss: 0.3698, V_MAE: 0.3351, A_MAE: 0.0347, LR: 0.000036]
+Epoch 11/15 (Rank 0):  79%|███████▊  | 22/28 [16:35<04:21, 43.64s/it, Loss: 0.3541, V_MAE: 0.3187, A_MAE: 0.0354, LR: 0.000035]
+Epoch 11/15 (Rank 0):  82%|████████▏ | 23/28 [16:35<03:41, 44.22s/it, Loss: 0.3541, V_MAE: 0.3187, A_MAE: 0.0354, LR: 0.000035]
+Epoch 11/15 (Rank 0):  82%|████████▏ | 23/28 [17:16<03:41, 44.22s/it, Loss: 0.3931, V_MAE: 0.3489, A_MAE: 0.0442, LR: 0.000035]
+Epoch 11/15 (Rank 0):  86%|████████▌ | 24/28 [17:16<02:53, 43.39s/it, Loss: 0.3931, V_MAE: 0.3489, A_MAE: 0.0442, LR: 0.000035]
+Epoch 11/15 (Rank 0):  86%|████████▌ | 24/28 [17:59<02:53, 43.39s/it, Loss: 0.3664, V_MAE: 0.3327, A_MAE: 0.0337, LR: 0.000034]
+Epoch 11/15 (Rank 0):  89%|████████▉ | 25/28 [17:59<02:09, 43.10s/it, Loss: 0.3664, V_MAE: 0.3327, A_MAE: 0.0337, LR: 0.000034]
+Epoch 11/15 (Rank 0):  89%|████████▉ | 25/28 [18:47<02:09, 43.10s/it, Loss: 0.3791, V_MAE: 0.3423, A_MAE: 0.0368, LR: 0.000033]
+                                                                                                                               
+  Epoch 11/15, Step 25/28 - Loss: 0.3791, V_MAE: 0.3423, A_MAE: 0.0368, LR: 0.000033
+
+Epoch 11/15 (Rank 0):  89%|████████▉ | 25/28 [18:47<02:09, 43.10s/it, Loss: 0.3791, V_MAE: 0.3423, A_MAE: 0.0368, LR: 0.000033]
+Epoch 11/15 (Rank 0):  93%|█████████▎| 26/28 [18:47<01:29, 44.64s/it, Loss: 0.3791, V_MAE: 0.3423, A_MAE: 0.0368, LR: 0.000033]
+Epoch 11/15 (Rank 0):  93%|█████████▎| 26/28 [19:33<01:29, 44.64s/it, Loss: 0.3493, V_MAE: 0.3094, A_MAE: 0.0399, LR: 0.000033]
+Epoch 11/15 (Rank 0):  96%|█████████▋| 27/28 [19:33<00:45, 45.03s/it, Loss: 0.3493, V_MAE: 0.3094, A_MAE: 0.0399, LR: 0.000033]
+Epoch 11/15 (Rank 0):  96%|█████████▋| 27/28 [20:15<00:45, 45.03s/it, Loss: 0.3543, V_MAE: 0.3200, A_MAE: 0.0343, LR: 0.000032]
+Epoch 11/15 (Rank 0): 100%|██████████| 28/28 [20:15<00:00, 44.17s/it, Loss: 0.3543, V_MAE: 0.3200, A_MAE: 0.0343, LR: 0.000032]
+                                                                                                                               
+Epoch 11 Finished.
+  Average Loss (Rank 0): 0.3620
+  Average Video MAE Loss (Rank 0): 0.3243
+  Average Audio MAE Loss (Rank 0): 0.0378
+
+Epoch 12/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 12/15 (Rank 0):   0%|          | 0/28 [00:44<?, ?it/s, Loss: 0.3594, V_MAE: 0.3188, A_MAE: 0.0406, LR: 0.000032]
+Epoch 12/15 (Rank 0):   4%|▎         | 1/28 [00:44<19:50, 44.10s/it, Loss: 0.3594, V_MAE: 0.3188, A_MAE: 0.0406, LR: 0.000032]
+Epoch 12/15 (Rank 0):   4%|▎         | 1/28 [01:29<19:50, 44.10s/it, Loss: 0.3445, V_MAE: 0.3122, A_MAE: 0.0322, LR: 0.000031]
+Epoch 12/15 (Rank 0):   7%|▋         | 2/28 [01:29<19:29, 44.98s/it, Loss: 0.3445, V_MAE: 0.3122, A_MAE: 0.0322, LR: 0.000031]
+Epoch 12/15 (Rank 0):   7%|▋         | 2/28 [02:15<19:29, 44.98s/it, Loss: 0.3454, V_MAE: 0.3098, A_MAE: 0.0357, LR: 0.000031]
+Epoch 12/15 (Rank 0):  11%|█         | 3/28 [02:15<18:55, 45.43s/it, Loss: 0.3454, V_MAE: 0.3098, A_MAE: 0.0357, LR: 0.000031]
+Epoch 12/15 (Rank 0):  11%|█         | 3/28 [02:59<18:55, 45.43s/it, Loss: 0.3350, V_MAE: 0.2986, A_MAE: 0.0364, LR: 0.000030]
+Epoch 12/15 (Rank 0):  14%|█▍        | 4/28 [02:59<17:56, 44.84s/it, Loss: 0.3350, V_MAE: 0.2986, A_MAE: 0.0364, LR: 0.000030]
+Epoch 12/15 (Rank 0):  14%|█▍        | 4/28 [03:42<17:56, 44.84s/it, Loss: 0.3504, V_MAE: 0.3163, A_MAE: 0.0341, LR: 0.000030]
+Epoch 12/15 (Rank 0):  18%|█▊        | 5/28 [03:42<16:57, 44.25s/it, Loss: 0.3504, V_MAE: 0.3163, A_MAE: 0.0341, LR: 0.000030]
+Epoch 12/15 (Rank 0):  18%|█▊        | 5/28 [04:25<16:57, 44.25s/it, Loss: 0.3857, V_MAE: 0.3505, A_MAE: 0.0352, LR: 0.000029]
+                                                                                                                              
+  Epoch 12/15, Step 5/28 - Loss: 0.3857, V_MAE: 0.3505, A_MAE: 0.0352, LR: 0.000029
+
+Epoch 12/15 (Rank 0):  18%|█▊        | 5/28 [04:25<16:57, 44.25s/it, Loss: 0.3857, V_MAE: 0.3505, A_MAE: 0.0352, LR: 0.000029]
+Epoch 12/15 (Rank 0):  21%|██▏       | 6/28 [04:25<16:00, 43.66s/it, Loss: 0.3857, V_MAE: 0.3505, A_MAE: 0.0352, LR: 0.000029]
+Epoch 12/15 (Rank 0):  21%|██▏       | 6/28 [05:07<16:00, 43.66s/it, Loss: 0.3604, V_MAE: 0.3234, A_MAE: 0.0370, LR: 0.000029]
+Epoch 12/15 (Rank 0):  25%|██▌       | 7/28 [05:07<15:04, 43.06s/it, Loss: 0.3604, V_MAE: 0.3234, A_MAE: 0.0370, LR: 0.000029]
+Epoch 12/15 (Rank 0):  25%|██▌       | 7/28 [05:48<15:04, 43.06s/it, Loss: 0.3708, V_MAE: 0.3340, A_MAE: 0.0369, LR: 0.000028]
+Epoch 12/15 (Rank 0):  29%|██▊       | 8/28 [05:48<14:10, 42.51s/it, Loss: 0.3708, V_MAE: 0.3340, A_MAE: 0.0369, LR: 0.000028]
+Epoch 12/15 (Rank 0):  29%|██▊       | 8/28 [06:35<14:10, 42.51s/it, Loss: 0.3470, V_MAE: 0.3134, A_MAE: 0.0336, LR: 0.000028]
+Epoch 12/15 (Rank 0):  32%|███▏      | 9/28 [06:35<13:55, 43.95s/it, Loss: 0.3470, V_MAE: 0.3134, A_MAE: 0.0336, LR: 0.000028]
+Epoch 12/15 (Rank 0):  32%|███▏      | 9/28 [07:20<13:55, 43.95s/it, Loss: 0.3693, V_MAE: 0.3349, A_MAE: 0.0344, LR: 0.000027]
+Epoch 12/15 (Rank 0):  36%|███▌      | 10/28 [07:20<13:19, 44.40s/it, Loss: 0.3693, V_MAE: 0.3349, A_MAE: 0.0344, LR: 0.000027]
+Epoch 12/15 (Rank 0):  36%|███▌      | 10/28 [08:06<13:19, 44.40s/it, Loss: 0.3957, V_MAE: 0.3586, A_MAE: 0.0371, LR: 0.000027]
+                                                                                                                               
+  Epoch 12/15, Step 10/28 - Loss: 0.3957, V_MAE: 0.3586, A_MAE: 0.0371, LR: 0.000027
+
+Epoch 12/15 (Rank 0):  36%|███▌      | 10/28 [08:06<13:19, 44.40s/it, Loss: 0.3957, V_MAE: 0.3586, A_MAE: 0.0371, LR: 0.000027]
+Epoch 12/15 (Rank 0):  39%|███▉      | 11/28 [08:06<12:38, 44.61s/it, Loss: 0.3957, V_MAE: 0.3586, A_MAE: 0.0371, LR: 0.000027]
+Epoch 12/15 (Rank 0):  39%|███▉      | 11/28 [08:50<12:38, 44.61s/it, Loss: 0.3711, V_MAE: 0.3369, A_MAE: 0.0342, LR: 0.000026]
+Epoch 12/15 (Rank 0):  43%|████▎     | 12/28 [08:50<11:51, 44.49s/it, Loss: 0.3711, V_MAE: 0.3369, A_MAE: 0.0342, LR: 0.000026]
+Epoch 12/15 (Rank 0):  43%|████▎     | 12/28 [09:33<11:51, 44.49s/it, Loss: 0.3805, V_MAE: 0.3443, A_MAE: 0.0363, LR: 0.000026]
+Epoch 12/15 (Rank 0):  46%|████▋     | 13/28 [09:33<11:00, 44.01s/it, Loss: 0.3805, V_MAE: 0.3443, A_MAE: 0.0363, LR: 0.000026]
+Epoch 12/15 (Rank 0):  46%|████▋     | 13/28 [10:10<11:00, 44.01s/it, Loss: 0.3797, V_MAE: 0.3466, A_MAE: 0.0332, LR: 0.000025]
+Epoch 12/15 (Rank 0):  50%|█████     | 14/28 [10:10<09:46, 41.87s/it, Loss: 0.3797, V_MAE: 0.3466, A_MAE: 0.0332, LR: 0.000025]
+Epoch 12/15 (Rank 0):  50%|█████     | 14/28 [10:54<09:46, 41.87s/it, Loss: 0.3668, V_MAE: 0.3248, A_MAE: 0.0420, LR: 0.000025]
+Epoch 12/15 (Rank 0):  54%|█████▎    | 15/28 [10:54<09:15, 42.77s/it, Loss: 0.3668, V_MAE: 0.3248, A_MAE: 0.0420, LR: 0.000025]
+Epoch 12/15 (Rank 0):  54%|█████▎    | 15/28 [11:38<09:15, 42.77s/it, Loss: 0.4091, V_MAE: 0.3743, A_MAE: 0.0348, LR: 0.000024]
+                                                                                                                               
+  Epoch 12/15, Step 15/28 - Loss: 0.4091, V_MAE: 0.3743, A_MAE: 0.0348, LR: 0.000024
+
+Epoch 12/15 (Rank 0):  54%|█████▎    | 15/28 [11:38<09:15, 42.77s/it, Loss: 0.4091, V_MAE: 0.3743, A_MAE: 0.0348, LR: 0.000024]
+Epoch 12/15 (Rank 0):  57%|█████▋    | 16/28 [11:38<08:37, 43.11s/it, Loss: 0.4091, V_MAE: 0.3743, A_MAE: 0.0348, LR: 0.000024]
+Epoch 12/15 (Rank 0):  57%|█████▋    | 16/28 [12:24<08:37, 43.11s/it, Loss: 0.3656, V_MAE: 0.3306, A_MAE: 0.0350, LR: 0.000024]
+Epoch 12/15 (Rank 0):  61%|██████    | 17/28 [12:24<08:01, 43.82s/it, Loss: 0.3656, V_MAE: 0.3306, A_MAE: 0.0350, LR: 0.000024]
+Epoch 12/15 (Rank 0):  61%|██████    | 17/28 [13:03<08:01, 43.82s/it, Loss: 0.3570, V_MAE: 0.3252, A_MAE: 0.0318, LR: 0.000023]
+Epoch 12/15 (Rank 0):  64%|██████▍   | 18/28 [13:03<07:03, 42.40s/it, Loss: 0.3570, V_MAE: 0.3252, A_MAE: 0.0318, LR: 0.000023]
+Epoch 12/15 (Rank 0):  64%|██████▍   | 18/28 [13:44<07:03, 42.40s/it, Loss: 0.3434, V_MAE: 0.3084, A_MAE: 0.0350, LR: 0.000023]
+Epoch 12/15 (Rank 0):  68%|██████▊   | 19/28 [13:44<06:16, 41.88s/it, Loss: 0.3434, V_MAE: 0.3084, A_MAE: 0.0350, LR: 0.000023]
+Epoch 12/15 (Rank 0):  68%|██████▊   | 19/28 [14:20<06:16, 41.88s/it, Loss: 0.4119, V_MAE: 0.3767, A_MAE: 0.0352, LR: 0.000022]
+Epoch 12/15 (Rank 0):  71%|███████▏  | 20/28 [14:20<05:21, 40.19s/it, Loss: 0.4119, V_MAE: 0.3767, A_MAE: 0.0352, LR: 0.000022]
+Epoch 12/15 (Rank 0):  71%|███████▏  | 20/28 [15:03<05:21, 40.19s/it, Loss: 0.3586, V_MAE: 0.3274, A_MAE: 0.0312, LR: 0.000022]
+                                                                                                                               
+  Epoch 12/15, Step 20/28 - Loss: 0.3586, V_MAE: 0.3274, A_MAE: 0.0312, LR: 0.000022
+
+Epoch 12/15 (Rank 0):  71%|███████▏  | 20/28 [15:03<05:21, 40.19s/it, Loss: 0.3586, V_MAE: 0.3274, A_MAE: 0.0312, LR: 0.000022]
+Epoch 12/15 (Rank 0):  75%|███████▌  | 21/28 [15:03<04:47, 41.09s/it, Loss: 0.3586, V_MAE: 0.3274, A_MAE: 0.0312, LR: 0.000022]
+Epoch 12/15 (Rank 0):  75%|███████▌  | 21/28 [15:42<04:47, 41.09s/it, Loss: 0.3526, V_MAE: 0.3145, A_MAE: 0.0381, LR: 0.000022]
+Epoch 12/15 (Rank 0):  79%|███████▊  | 22/28 [15:42<04:01, 40.33s/it, Loss: 0.3526, V_MAE: 0.3145, A_MAE: 0.0381, LR: 0.000022]
+Epoch 12/15 (Rank 0):  79%|███████▊  | 22/28 [16:25<04:01, 40.33s/it, Loss: 0.3737, V_MAE: 0.3388, A_MAE: 0.0350, LR: 0.000021]
+Epoch 12/15 (Rank 0):  82%|████████▏ | 23/28 [16:25<03:26, 41.20s/it, Loss: 0.3737, V_MAE: 0.3388, A_MAE: 0.0350, LR: 0.000021]
+Epoch 12/15 (Rank 0):  82%|████████▏ | 23/28 [17:05<03:26, 41.20s/it, Loss: 0.3591, V_MAE: 0.3250, A_MAE: 0.0340, LR: 0.000021]
+Epoch 12/15 (Rank 0):  86%|████████▌ | 24/28 [17:05<02:43, 40.90s/it, Loss: 0.3591, V_MAE: 0.3250, A_MAE: 0.0340, LR: 0.000021]
+Epoch 12/15 (Rank 0):  86%|████████▌ | 24/28 [17:52<02:43, 40.90s/it, Loss: 0.3701, V_MAE: 0.3374, A_MAE: 0.0328, LR: 0.000020]
+Epoch 12/15 (Rank 0):  89%|████████▉ | 25/28 [17:52<02:08, 42.67s/it, Loss: 0.3701, V_MAE: 0.3374, A_MAE: 0.0328, LR: 0.000020]
+Epoch 12/15 (Rank 0):  89%|████████▉ | 25/28 [18:36<02:08, 42.67s/it, Loss: 0.3672, V_MAE: 0.3363, A_MAE: 0.0308, LR: 0.000020]
+                                                                                                                               
+  Epoch 12/15, Step 25/28 - Loss: 0.3672, V_MAE: 0.3363, A_MAE: 0.0308, LR: 0.000020
+
+Epoch 12/15 (Rank 0):  89%|████████▉ | 25/28 [18:36<02:08, 42.67s/it, Loss: 0.3672, V_MAE: 0.3363, A_MAE: 0.0308, LR: 0.000020]
+Epoch 12/15 (Rank 0):  93%|█████████▎| 26/28 [18:36<01:26, 43.07s/it, Loss: 0.3672, V_MAE: 0.3363, A_MAE: 0.0308, LR: 0.000020]
+Epoch 12/15 (Rank 0):  93%|█████████▎| 26/28 [19:27<01:26, 43.07s/it, Loss: 0.3414, V_MAE: 0.3089, A_MAE: 0.0325, LR: 0.000019]
+Epoch 12/15 (Rank 0):  96%|█████████▋| 27/28 [19:27<00:45, 45.63s/it, Loss: 0.3414, V_MAE: 0.3089, A_MAE: 0.0325, LR: 0.000019]
+Epoch 12/15 (Rank 0):  96%|█████████▋| 27/28 [20:14<00:45, 45.63s/it, Loss: 0.3574, V_MAE: 0.3271, A_MAE: 0.0302, LR: 0.000019]
+Epoch 12/15 (Rank 0): 100%|██████████| 28/28 [20:14<00:00, 46.03s/it, Loss: 0.3574, V_MAE: 0.3271, A_MAE: 0.0302, LR: 0.000019]
+                                                                                                                               
+Epoch 12 Finished.
+  Average Loss (Rank 0): 0.3653
+  Average Video MAE Loss (Rank 0): 0.3305
+  Average Audio MAE Loss (Rank 0): 0.0348
+
+Epoch 13/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 13/15 (Rank 0):   0%|          | 0/28 [00:43<?, ?it/s, Loss: 0.3832, V_MAE: 0.3465, A_MAE: 0.0367, LR: 0.000018]
+Epoch 13/15 (Rank 0):   4%|▎         | 1/28 [00:43<19:26, 43.20s/it, Loss: 0.3832, V_MAE: 0.3465, A_MAE: 0.0367, LR: 0.000018]
+Epoch 13/15 (Rank 0):   4%|▎         | 1/28 [01:23<19:26, 43.20s/it, Loss: 0.3517, V_MAE: 0.3178, A_MAE: 0.0339, LR: 0.000018]
+Epoch 13/15 (Rank 0):   7%|▋         | 2/28 [01:23<18:01, 41.59s/it, Loss: 0.3517, V_MAE: 0.3178, A_MAE: 0.0339, LR: 0.000018]
+Epoch 13/15 (Rank 0):   7%|▋         | 2/28 [02:03<18:01, 41.59s/it, Loss: 0.3877, V_MAE: 0.3542, A_MAE: 0.0335, LR: 0.000018]
+Epoch 13/15 (Rank 0):  11%|█         | 3/28 [02:03<16:57, 40.69s/it, Loss: 0.3877, V_MAE: 0.3542, A_MAE: 0.0335, LR: 0.000018]
+Epoch 13/15 (Rank 0):  11%|█         | 3/28 [02:45<16:57, 40.69s/it, Loss: 0.3538, V_MAE: 0.3165, A_MAE: 0.0373, LR: 0.000017]
+Epoch 13/15 (Rank 0):  14%|█▍        | 4/28 [02:45<16:29, 41.22s/it, Loss: 0.3538, V_MAE: 0.3165, A_MAE: 0.0373, LR: 0.000017]
+Epoch 13/15 (Rank 0):  14%|█▍        | 4/28 [03:30<16:29, 41.22s/it, Loss: 0.3555, V_MAE: 0.3212, A_MAE: 0.0343, LR: 0.000017]
+Epoch 13/15 (Rank 0):  18%|█▊        | 5/28 [03:30<16:19, 42.59s/it, Loss: 0.3555, V_MAE: 0.3212, A_MAE: 0.0343, LR: 0.000017]
+Epoch 13/15 (Rank 0):  18%|█▊        | 5/28 [04:12<16:19, 42.59s/it, Loss: 0.3637, V_MAE: 0.3328, A_MAE: 0.0309, LR: 0.000016]
+                                                                                                                              
+  Epoch 13/15, Step 5/28 - Loss: 0.3637, V_MAE: 0.3328, A_MAE: 0.0309, LR: 0.000016
+
+Epoch 13/15 (Rank 0):  18%|█▊        | 5/28 [04:12<16:19, 42.59s/it, Loss: 0.3637, V_MAE: 0.3328, A_MAE: 0.0309, LR: 0.000016]
+Epoch 13/15 (Rank 0):  21%|██▏       | 6/28 [04:12<15:33, 42.43s/it, Loss: 0.3637, V_MAE: 0.3328, A_MAE: 0.0309, LR: 0.000016]
+Epoch 13/15 (Rank 0):  21%|██▏       | 6/28 [04:53<15:33, 42.43s/it, Loss: 0.3315, V_MAE: 0.3008, A_MAE: 0.0307, LR: 0.000016]
+Epoch 13/15 (Rank 0):  25%|██▌       | 7/28 [04:53<14:39, 41.88s/it, Loss: 0.3315, V_MAE: 0.3008, A_MAE: 0.0307, LR: 0.000016]
+Epoch 13/15 (Rank 0):  25%|██▌       | 7/28 [05:34<14:39, 41.88s/it, Loss: 0.3455, V_MAE: 0.3106, A_MAE: 0.0350, LR: 0.000016]
+Epoch 13/15 (Rank 0):  29%|██▊       | 8/28 [05:34<13:55, 41.80s/it, Loss: 0.3455, V_MAE: 0.3106, A_MAE: 0.0350, LR: 0.000016]
+Epoch 13/15 (Rank 0):  29%|██▊       | 8/28 [06:18<13:55, 41.80s/it, Loss: 0.3555, V_MAE: 0.3243, A_MAE: 0.0313, LR: 0.000015]
+Epoch 13/15 (Rank 0):  32%|███▏      | 9/28 [06:18<13:24, 42.35s/it, Loss: 0.3555, V_MAE: 0.3243, A_MAE: 0.0313, LR: 0.000015]
+Epoch 13/15 (Rank 0):  32%|███▏      | 9/28 [07:00<13:24, 42.35s/it, Loss: 0.4001, V_MAE: 0.3675, A_MAE: 0.0327, LR: 0.000015]
+Epoch 13/15 (Rank 0):  36%|███▌      | 10/28 [07:00<12:42, 42.37s/it, Loss: 0.4001, V_MAE: 0.3675, A_MAE: 0.0327, LR: 0.000015]
+Epoch 13/15 (Rank 0):  36%|███▌      | 10/28 [07:42<12:42, 42.37s/it, Loss: 0.3946, V_MAE: 0.3580, A_MAE: 0.0365, LR: 0.000014]
+                                                                                                                               
+  Epoch 13/15, Step 10/28 - Loss: 0.3946, V_MAE: 0.3580, A_MAE: 0.0365, LR: 0.000014
+
+Epoch 13/15 (Rank 0):  36%|███▌      | 10/28 [07:42<12:42, 42.37s/it, Loss: 0.3946, V_MAE: 0.3580, A_MAE: 0.0365, LR: 0.000014]
+Epoch 13/15 (Rank 0):  39%|███▉      | 11/28 [07:42<11:54, 42.05s/it, Loss: 0.3946, V_MAE: 0.3580, A_MAE: 0.0365, LR: 0.000014]
+Epoch 13/15 (Rank 0):  39%|███▉      | 11/28 [08:24<11:54, 42.05s/it, Loss: 0.3717, V_MAE: 0.3393, A_MAE: 0.0325, LR: 0.000014]
+Epoch 13/15 (Rank 0):  43%|████▎     | 12/28 [08:24<11:16, 42.26s/it, Loss: 0.3717, V_MAE: 0.3393, A_MAE: 0.0325, LR: 0.000014]
+Epoch 13/15 (Rank 0):  43%|████▎     | 12/28 [09:04<11:16, 42.26s/it, Loss: 0.3507, V_MAE: 0.3212, A_MAE: 0.0295, LR: 0.000014]
+Epoch 13/15 (Rank 0):  46%|████▋     | 13/28 [09:04<10:23, 41.54s/it, Loss: 0.3507, V_MAE: 0.3212, A_MAE: 0.0295, LR: 0.000014]
+Epoch 13/15 (Rank 0):  46%|████▋     | 13/28 [09:49<10:23, 41.54s/it, Loss: 0.3394, V_MAE: 0.3069, A_MAE: 0.0325, LR: 0.000013]
+Epoch 13/15 (Rank 0):  50%|█████     | 14/28 [09:49<09:54, 42.47s/it, Loss: 0.3394, V_MAE: 0.3069, A_MAE: 0.0325, LR: 0.000013]
+Epoch 13/15 (Rank 0):  50%|█████     | 14/28 [10:37<09:54, 42.47s/it, Loss: 0.3568, V_MAE: 0.3239, A_MAE: 0.0329, LR: 0.000013]
+Epoch 13/15 (Rank 0):  54%|█████▎    | 15/28 [10:37<09:32, 44.04s/it, Loss: 0.3568, V_MAE: 0.3239, A_MAE: 0.0329, LR: 0.000013]
+Epoch 13/15 (Rank 0):  54%|█████▎    | 15/28 [11:18<09:32, 44.04s/it, Loss: 0.3710, V_MAE: 0.3416, A_MAE: 0.0294, LR: 0.000013]
+                                                                                                                               
+  Epoch 13/15, Step 15/28 - Loss: 0.3710, V_MAE: 0.3416, A_MAE: 0.0294, LR: 0.000013
+
+Epoch 13/15 (Rank 0):  54%|█████▎    | 15/28 [11:18<09:32, 44.04s/it, Loss: 0.3710, V_MAE: 0.3416, A_MAE: 0.0294, LR: 0.000013]
+Epoch 13/15 (Rank 0):  57%|█████▋    | 16/28 [11:18<08:38, 43.21s/it, Loss: 0.3710, V_MAE: 0.3416, A_MAE: 0.0294, LR: 0.000013]
+Epoch 13/15 (Rank 0):  57%|█████▋    | 16/28 [12:02<08:38, 43.21s/it, Loss: 0.3358, V_MAE: 0.3014, A_MAE: 0.0344, LR: 0.000012]
+Epoch 13/15 (Rank 0):  61%|██████    | 17/28 [12:02<07:59, 43.60s/it, Loss: 0.3358, V_MAE: 0.3014, A_MAE: 0.0344, LR: 0.000012]
+Epoch 13/15 (Rank 0):  61%|██████    | 17/28 [12:46<07:59, 43.60s/it, Loss: 0.3422, V_MAE: 0.3099, A_MAE: 0.0323, LR: 0.000012]
+Epoch 13/15 (Rank 0):  64%|██████▍   | 18/28 [12:46<07:16, 43.62s/it, Loss: 0.3422, V_MAE: 0.3099, A_MAE: 0.0323, LR: 0.000012]
+Epoch 13/15 (Rank 0):  64%|██████▍   | 18/28 [13:30<07:16, 43.62s/it, Loss: 0.3726, V_MAE: 0.3337, A_MAE: 0.0389, LR: 0.000011]
+Epoch 13/15 (Rank 0):  68%|██████▊   | 19/28 [13:30<06:33, 43.67s/it, Loss: 0.3726, V_MAE: 0.3337, A_MAE: 0.0389, LR: 0.000011]
+Epoch 13/15 (Rank 0):  68%|██████▊   | 19/28 [14:14<06:33, 43.67s/it, Loss: 0.3677, V_MAE: 0.3351, A_MAE: 0.0326, LR: 0.000011]
+Epoch 13/15 (Rank 0):  71%|███████▏  | 20/28 [14:14<05:50, 43.84s/it, Loss: 0.3677, V_MAE: 0.3351, A_MAE: 0.0326, LR: 0.000011]
+Epoch 13/15 (Rank 0):  71%|███████▏  | 20/28 [14:56<05:50, 43.84s/it, Loss: 0.3456, V_MAE: 0.3139, A_MAE: 0.0317, LR: 0.000011]
+                                                                                                                               
+  Epoch 13/15, Step 20/28 - Loss: 0.3456, V_MAE: 0.3139, A_MAE: 0.0317, LR: 0.000011
+
+Epoch 13/15 (Rank 0):  71%|███████▏  | 20/28 [14:56<05:50, 43.84s/it, Loss: 0.3456, V_MAE: 0.3139, A_MAE: 0.0317, LR: 0.000011]
+Epoch 13/15 (Rank 0):  75%|███████▌  | 21/28 [14:56<05:02, 43.27s/it, Loss: 0.3456, V_MAE: 0.3139, A_MAE: 0.0317, LR: 0.000011]
+Epoch 13/15 (Rank 0):  75%|███████▌  | 21/28 [15:38<05:02, 43.27s/it, Loss: 0.3919, V_MAE: 0.3573, A_MAE: 0.0346, LR: 0.000010]
+Epoch 13/15 (Rank 0):  79%|███████▊  | 22/28 [15:38<04:16, 42.83s/it, Loss: 0.3919, V_MAE: 0.3573, A_MAE: 0.0346, LR: 0.000010]
+Epoch 13/15 (Rank 0):  79%|███████▊  | 22/28 [16:19<04:16, 42.83s/it, Loss: 0.3648, V_MAE: 0.3368, A_MAE: 0.0280, LR: 0.000010]
+Epoch 13/15 (Rank 0):  82%|████████▏ | 23/28 [16:19<03:32, 42.49s/it, Loss: 0.3648, V_MAE: 0.3368, A_MAE: 0.0280, LR: 0.000010]
+Epoch 13/15 (Rank 0):  82%|████████▏ | 23/28 [17:06<03:32, 42.49s/it, Loss: 0.3738, V_MAE: 0.3428, A_MAE: 0.0311, LR: 0.000010]
+Epoch 13/15 (Rank 0):  86%|████████▌ | 24/28 [17:06<02:54, 43.66s/it, Loss: 0.3738, V_MAE: 0.3428, A_MAE: 0.0311, LR: 0.000010]
+Epoch 13/15 (Rank 0):  86%|████████▌ | 24/28 [17:50<02:54, 43.66s/it, Loss: 0.3749, V_MAE: 0.3406, A_MAE: 0.0343, LR: 0.000010]
+Epoch 13/15 (Rank 0):  89%|████████▉ | 25/28 [17:50<02:11, 43.83s/it, Loss: 0.3749, V_MAE: 0.3406, A_MAE: 0.0343, LR: 0.000010]
+Epoch 13/15 (Rank 0):  89%|████████▉ | 25/28 [18:31<02:11, 43.83s/it, Loss: 0.3605, V_MAE: 0.3272, A_MAE: 0.0332, LR: 0.000009]
+                                                                                                                               
+  Epoch 13/15, Step 25/28 - Loss: 0.3605, V_MAE: 0.3272, A_MAE: 0.0332, LR: 0.000009
+
+Epoch 13/15 (Rank 0):  89%|████████▉ | 25/28 [18:31<02:11, 43.83s/it, Loss: 0.3605, V_MAE: 0.3272, A_MAE: 0.0332, LR: 0.000009]
+Epoch 13/15 (Rank 0):  93%|█████████▎| 26/28 [18:31<01:25, 42.88s/it, Loss: 0.3605, V_MAE: 0.3272, A_MAE: 0.0332, LR: 0.000009]
+Epoch 13/15 (Rank 0):  93%|█████████▎| 26/28 [19:11<01:25, 42.88s/it, Loss: 0.3712, V_MAE: 0.3349, A_MAE: 0.0362, LR: 0.000009]
+Epoch 13/15 (Rank 0):  96%|█████████▋| 27/28 [19:11<00:41, 41.98s/it, Loss: 0.3712, V_MAE: 0.3349, A_MAE: 0.0362, LR: 0.000009]
+Epoch 13/15 (Rank 0):  96%|█████████▋| 27/28 [19:51<00:41, 41.98s/it, Loss: 0.3593, V_MAE: 0.3254, A_MAE: 0.0339, LR: 0.000009]
+Epoch 13/15 (Rank 0): 100%|██████████| 28/28 [19:51<00:00, 41.57s/it, Loss: 0.3593, V_MAE: 0.3254, A_MAE: 0.0339, LR: 0.000009]
+                                                                                                                               
+Epoch 13 Finished.
+  Average Loss (Rank 0): 0.3633
+  Average Video MAE Loss (Rank 0): 0.3301
+  Average Audio MAE Loss (Rank 0): 0.0332
+
+Epoch 14/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 14/15 (Rank 0):   0%|          | 0/28 [00:43<?, ?it/s, Loss: 0.3747, V_MAE: 0.3410, A_MAE: 0.0337, LR: 0.000008]
+Epoch 14/15 (Rank 0):   4%|▎         | 1/28 [00:43<19:39, 43.67s/it, Loss: 0.3747, V_MAE: 0.3410, A_MAE: 0.0337, LR: 0.000008]
+Epoch 14/15 (Rank 0):   4%|▎         | 1/28 [01:28<19:39, 43.67s/it, Loss: 0.3678, V_MAE: 0.3388, A_MAE: 0.0289, LR: 0.000008]
+Epoch 14/15 (Rank 0):   7%|▋         | 2/28 [01:28<19:16, 44.47s/it, Loss: 0.3678, V_MAE: 0.3388, A_MAE: 0.0289, LR: 0.000008]
+Epoch 14/15 (Rank 0):   7%|▋         | 2/28 [02:13<19:16, 44.47s/it, Loss: 0.3639, V_MAE: 0.3295, A_MAE: 0.0345, LR: 0.000008]
+Epoch 14/15 (Rank 0):  11%|█         | 3/28 [02:13<18:30, 44.43s/it, Loss: 0.3639, V_MAE: 0.3295, A_MAE: 0.0345, LR: 0.000008]
+Epoch 14/15 (Rank 0):  11%|█         | 3/28 [02:55<18:30, 44.43s/it, Loss: 0.3736, V_MAE: 0.3363, A_MAE: 0.0373, LR: 0.000007]
+Epoch 14/15 (Rank 0):  14%|█▍        | 4/28 [02:55<17:29, 43.72s/it, Loss: 0.3736, V_MAE: 0.3363, A_MAE: 0.0373, LR: 0.000007]
+Epoch 14/15 (Rank 0):  14%|█▍        | 4/28 [03:38<17:29, 43.72s/it, Loss: 0.3274, V_MAE: 0.3001, A_MAE: 0.0273, LR: 0.000007]
+Epoch 14/15 (Rank 0):  18%|█▊        | 5/28 [03:38<16:37, 43.37s/it, Loss: 0.3274, V_MAE: 0.3001, A_MAE: 0.0273, LR: 0.000007]
+Epoch 14/15 (Rank 0):  18%|█▊        | 5/28 [04:23<16:37, 43.37s/it, Loss: 0.3805, V_MAE: 0.3453, A_MAE: 0.0352, LR: 0.000007]
+                                                                                                                              
+  Epoch 14/15, Step 5/28 - Loss: 0.3805, V_MAE: 0.3453, A_MAE: 0.0352, LR: 0.000007
+
+Epoch 14/15 (Rank 0):  18%|█▊        | 5/28 [04:23<16:37, 43.37s/it, Loss: 0.3805, V_MAE: 0.3453, A_MAE: 0.0352, LR: 0.000007]
+Epoch 14/15 (Rank 0):  21%|██▏       | 6/28 [04:23<16:07, 43.98s/it, Loss: 0.3805, V_MAE: 0.3453, A_MAE: 0.0352, LR: 0.000007]
+Epoch 14/15 (Rank 0):  21%|██▏       | 6/28 [05:09<16:07, 43.98s/it, Loss: 0.3626, V_MAE: 0.3295, A_MAE: 0.0331, LR: 0.000007]
+Epoch 14/15 (Rank 0):  25%|██▌       | 7/28 [05:09<15:33, 44.43s/it, Loss: 0.3626, V_MAE: 0.3295, A_MAE: 0.0331, LR: 0.000007]
+Epoch 14/15 (Rank 0):  25%|██▌       | 7/28 [05:52<15:33, 44.43s/it, Loss: 0.3704, V_MAE: 0.3351, A_MAE: 0.0353, LR: 0.000006]
+Epoch 14/15 (Rank 0):  29%|██▊       | 8/28 [05:52<14:41, 44.07s/it, Loss: 0.3704, V_MAE: 0.3351, A_MAE: 0.0353, LR: 0.000006]
+Epoch 14/15 (Rank 0):  29%|██▊       | 8/28 [06:44<14:41, 44.07s/it, Loss: 0.3190, V_MAE: 0.2890, A_MAE: 0.0300, LR: 0.000006]
+Epoch 14/15 (Rank 0):  32%|███▏      | 9/28 [06:44<14:43, 46.50s/it, Loss: 0.3190, V_MAE: 0.2890, A_MAE: 0.0300, LR: 0.000006]
+Epoch 14/15 (Rank 0):  32%|███▏      | 9/28 [07:29<14:43, 46.50s/it, Loss: 0.3661, V_MAE: 0.3335, A_MAE: 0.0326, LR: 0.000006]
+Epoch 14/15 (Rank 0):  36%|███▌      | 10/28 [07:29<13:48, 46.00s/it, Loss: 0.3661, V_MAE: 0.3335, A_MAE: 0.0326, LR: 0.000006]
+Epoch 14/15 (Rank 0):  36%|███▌      | 10/28 [08:15<13:48, 46.00s/it, Loss: 0.3413, V_MAE: 0.3126, A_MAE: 0.0287, LR: 0.000006]
+                                                                                                                               
+  Epoch 14/15, Step 10/28 - Loss: 0.3413, V_MAE: 0.3126, A_MAE: 0.0287, LR: 0.000006
+
+Epoch 14/15 (Rank 0):  36%|███▌      | 10/28 [08:15<13:48, 46.00s/it, Loss: 0.3413, V_MAE: 0.3126, A_MAE: 0.0287, LR: 0.000006]
+Epoch 14/15 (Rank 0):  39%|███▉      | 11/28 [08:15<13:01, 46.00s/it, Loss: 0.3413, V_MAE: 0.3126, A_MAE: 0.0287, LR: 0.000006]
+Epoch 14/15 (Rank 0):  39%|███▉      | 11/28 [09:01<13:01, 46.00s/it, Loss: 0.3919, V_MAE: 0.3578, A_MAE: 0.0341, LR: 0.000005]
+Epoch 14/15 (Rank 0):  43%|████▎     | 12/28 [09:01<12:18, 46.14s/it, Loss: 0.3919, V_MAE: 0.3578, A_MAE: 0.0341, LR: 0.000005]
+Epoch 14/15 (Rank 0):  43%|████▎     | 12/28 [09:49<12:18, 46.14s/it, Loss: 0.3533, V_MAE: 0.3178, A_MAE: 0.0355, LR: 0.000005]
+Epoch 14/15 (Rank 0):  46%|████▋     | 13/28 [09:49<11:39, 46.66s/it, Loss: 0.3533, V_MAE: 0.3178, A_MAE: 0.0355, LR: 0.000005]
+Epoch 14/15 (Rank 0):  46%|████▋     | 13/28 [10:34<11:39, 46.66s/it, Loss: 0.3469, V_MAE: 0.3202, A_MAE: 0.0268, LR: 0.000005]
+Epoch 14/15 (Rank 0):  50%|█████     | 14/28 [10:34<10:48, 46.29s/it, Loss: 0.3469, V_MAE: 0.3202, A_MAE: 0.0268, LR: 0.000005]
+Epoch 14/15 (Rank 0):  50%|█████     | 14/28 [11:20<10:48, 46.29s/it, Loss: 0.3385, V_MAE: 0.3078, A_MAE: 0.0307, LR: 0.000005]
+Epoch 14/15 (Rank 0):  54%|█████▎    | 15/28 [11:20<10:00, 46.16s/it, Loss: 0.3385, V_MAE: 0.3078, A_MAE: 0.0307, LR: 0.000005]
+Epoch 14/15 (Rank 0):  54%|█████▎    | 15/28 [12:08<10:00, 46.16s/it, Loss: 0.3473, V_MAE: 0.3138, A_MAE: 0.0335, LR: 0.000004]
+                                                                                                                               
+  Epoch 14/15, Step 15/28 - Loss: 0.3473, V_MAE: 0.3138, A_MAE: 0.0335, LR: 0.000004
+
+Epoch 14/15 (Rank 0):  54%|█████▎    | 15/28 [12:08<10:00, 46.16s/it, Loss: 0.3473, V_MAE: 0.3138, A_MAE: 0.0335, LR: 0.000004]
+Epoch 14/15 (Rank 0):  57%|█████▋    | 16/28 [12:08<09:20, 46.72s/it, Loss: 0.3473, V_MAE: 0.3138, A_MAE: 0.0335, LR: 0.000004]
+Epoch 14/15 (Rank 0):  57%|█████▋    | 16/28 [13:04<09:20, 46.72s/it, Loss: 0.3615, V_MAE: 0.3310, A_MAE: 0.0305, LR: 0.000004]
+Epoch 14/15 (Rank 0):  61%|██████    | 17/28 [13:04<09:03, 49.41s/it, Loss: 0.3615, V_MAE: 0.3310, A_MAE: 0.0305, LR: 0.000004]
+Epoch 14/15 (Rank 0):  61%|██████    | 17/28 [13:53<09:03, 49.41s/it, Loss: 0.3655, V_MAE: 0.3326, A_MAE: 0.0329, LR: 0.000004]
+Epoch 14/15 (Rank 0):  64%|██████▍   | 18/28 [13:53<08:12, 49.20s/it, Loss: 0.3655, V_MAE: 0.3326, A_MAE: 0.0329, LR: 0.000004]
+Epoch 14/15 (Rank 0):  64%|██████▍   | 18/28 [14:55<08:12, 49.20s/it, Loss: 0.3399, V_MAE: 0.3048, A_MAE: 0.0351, LR: 0.000004]
+Epoch 14/15 (Rank 0):  68%|██████▊   | 19/28 [14:55<07:57, 53.04s/it, Loss: 0.3399, V_MAE: 0.3048, A_MAE: 0.0351, LR: 0.000004]
+Epoch 14/15 (Rank 0):  68%|██████▊   | 19/28 [15:52<07:57, 53.04s/it, Loss: 0.3626, V_MAE: 0.3285, A_MAE: 0.0340, LR: 0.000004]
+Epoch 14/15 (Rank 0):  71%|███████▏  | 20/28 [15:52<07:15, 54.43s/it, Loss: 0.3626, V_MAE: 0.3285, A_MAE: 0.0340, LR: 0.000004]
+Epoch 14/15 (Rank 0):  71%|███████▏  | 20/28 [16:46<07:15, 54.43s/it, Loss: 0.3896, V_MAE: 0.3543, A_MAE: 0.0354, LR: 0.000003]
+                                                                                                                               
+  Epoch 14/15, Step 20/28 - Loss: 0.3896, V_MAE: 0.3543, A_MAE: 0.0354, LR: 0.000003
+
+Epoch 14/15 (Rank 0):  71%|███████▏  | 20/28 [16:46<07:15, 54.43s/it, Loss: 0.3896, V_MAE: 0.3543, A_MAE: 0.0354, LR: 0.000003]
+Epoch 14/15 (Rank 0):  75%|███████▌  | 21/28 [16:46<06:19, 54.28s/it, Loss: 0.3896, V_MAE: 0.3543, A_MAE: 0.0354, LR: 0.000003]
+Epoch 14/15 (Rank 0):  75%|███████▌  | 21/28 [17:48<06:19, 54.28s/it, Loss: 0.3375, V_MAE: 0.3075, A_MAE: 0.0301, LR: 0.000003]
+Epoch 14/15 (Rank 0):  79%|███████▊  | 22/28 [17:48<05:39, 56.53s/it, Loss: 0.3375, V_MAE: 0.3075, A_MAE: 0.0301, LR: 0.000003]
+Epoch 14/15 (Rank 0):  79%|███████▊  | 22/28 [18:43<05:39, 56.53s/it, Loss: 0.3795, V_MAE: 0.3426, A_MAE: 0.0369, LR: 0.000003]
+Epoch 14/15 (Rank 0):  82%|████████▏ | 23/28 [18:43<04:41, 56.25s/it, Loss: 0.3795, V_MAE: 0.3426, A_MAE: 0.0369, LR: 0.000003]
+Epoch 14/15 (Rank 0):  82%|████████▏ | 23/28 [19:30<04:41, 56.25s/it, Loss: 0.3626, V_MAE: 0.3308, A_MAE: 0.0318, LR: 0.000003]
+Epoch 14/15 (Rank 0):  86%|████████▌ | 24/28 [19:30<03:33, 53.38s/it, Loss: 0.3626, V_MAE: 0.3308, A_MAE: 0.0318, LR: 0.000003]
+Epoch 14/15 (Rank 0):  86%|████████▌ | 24/28 [20:16<03:33, 53.38s/it, Loss: 0.3456, V_MAE: 0.3128, A_MAE: 0.0328, LR: 0.000003]
+Epoch 14/15 (Rank 0):  89%|████████▉ | 25/28 [20:16<02:33, 51.03s/it, Loss: 0.3456, V_MAE: 0.3128, A_MAE: 0.0328, LR: 0.000003]
+Epoch 14/15 (Rank 0):  89%|████████▉ | 25/28 [21:03<02:33, 51.03s/it, Loss: 0.3930, V_MAE: 0.3619, A_MAE: 0.0311, LR: 0.000003]
+                                                                                                                               
+  Epoch 14/15, Step 25/28 - Loss: 0.3930, V_MAE: 0.3619, A_MAE: 0.0311, LR: 0.000003
+
+Epoch 14/15 (Rank 0):  89%|████████▉ | 25/28 [21:03<02:33, 51.03s/it, Loss: 0.3930, V_MAE: 0.3619, A_MAE: 0.0311, LR: 0.000003]
+Epoch 14/15 (Rank 0):  93%|█████████▎| 26/28 [21:03<01:39, 49.82s/it, Loss: 0.3930, V_MAE: 0.3619, A_MAE: 0.0311, LR: 0.000003]
+Epoch 14/15 (Rank 0):  93%|█████████▎| 26/28 [21:55<01:39, 49.82s/it, Loss: 0.4034, V_MAE: 0.3686, A_MAE: 0.0348, LR: 0.000002]
+Epoch 14/15 (Rank 0):  96%|█████████▋| 27/28 [21:55<00:50, 50.66s/it, Loss: 0.4034, V_MAE: 0.3686, A_MAE: 0.0348, LR: 0.000002]
+Epoch 14/15 (Rank 0):  96%|█████████▋| 27/28 [22:54<00:50, 50.66s/it, Loss: 0.3436, V_MAE: 0.3116, A_MAE: 0.0320, LR: 0.000002]
+Epoch 14/15 (Rank 0): 100%|██████████| 28/28 [22:54<00:00, 53.18s/it, Loss: 0.3436, V_MAE: 0.3116, A_MAE: 0.0320, LR: 0.000002]
+                                                                                                                               
+Epoch 14 Finished.
+  Average Loss (Rank 0): 0.3611
+  Average Video MAE Loss (Rank 0): 0.3284
+  Average Audio MAE Loss (Rank 0): 0.0327
+
+Epoch 15/15 (Rank 0):   0%|          | 0/28 [00:00<?, ?it/s]
+Epoch 15/15 (Rank 0):   0%|          | 0/28 [00:45<?, ?it/s, Loss: 0.3566, V_MAE: 0.3247, A_MAE: 0.0319, LR: 0.000002]
+Epoch 15/15 (Rank 0):   4%|▎         | 1/28 [00:45<20:37, 45.82s/it, Loss: 0.3566, V_MAE: 0.3247, A_MAE: 0.0319, LR: 0.000002]
+Epoch 15/15 (Rank 0):   4%|▎         | 1/28 [01:37<20:37, 45.82s/it, Loss: 0.3728, V_MAE: 0.3399, A_MAE: 0.0328, LR: 0.000002]
+Epoch 15/15 (Rank 0):   7%|▋         | 2/28 [01:37<21:27, 49.53s/it, Loss: 0.3728, V_MAE: 0.3399, A_MAE: 0.0328, LR: 0.000002]
+Epoch 15/15 (Rank 0):   7%|▋         | 2/28 [02:20<21:27, 49.53s/it, Loss: 0.3636, V_MAE: 0.3296, A_MAE: 0.0339, LR: 0.000002]
+Epoch 15/15 (Rank 0):  11%|█         | 3/28 [02:20<19:22, 46.50s/it, Loss: 0.3636, V_MAE: 0.3296, A_MAE: 0.0339, LR: 0.000002]
+Epoch 15/15 (Rank 0):  11%|█         | 3/28 [03:07<19:22, 46.50s/it, Loss: 0.3617, V_MAE: 0.3292, A_MAE: 0.0324, LR: 0.000002]
+Epoch 15/15 (Rank 0):  14%|█▍        | 4/28 [03:07<18:38, 46.62s/it, Loss: 0.3617, V_MAE: 0.3292, A_MAE: 0.0324, LR: 0.000002]
+Epoch 15/15 (Rank 0):  14%|█▍        | 4/28 [03:53<18:38, 46.62s/it, Loss: 0.3736, V_MAE: 0.3413, A_MAE: 0.0323, LR: 0.000001]
+Epoch 15/15 (Rank 0):  18%|█▊        | 5/28 [03:53<17:43, 46.24s/it, Loss: 0.3736, V_MAE: 0.3413, A_MAE: 0.0323, LR: 0.000001]
+Epoch 15/15 (Rank 0):  18%|█▊        | 5/28 [04:38<17:43, 46.24s/it, Loss: 0.3332, V_MAE: 0.2980, A_MAE: 0.0352, LR: 0.000001]
+                                                                                                                              
+  Epoch 15/15, Step 5/28 - Loss: 0.3332, V_MAE: 0.2980, A_MAE: 0.0352, LR: 0.000001
+
+Epoch 15/15 (Rank 0):  18%|█▊        | 5/28 [04:38<17:43, 46.24s/it, Loss: 0.3332, V_MAE: 0.2980, A_MAE: 0.0352, LR: 0.000001]
+Epoch 15/15 (Rank 0):  21%|██▏       | 6/28 [04:38<16:49, 45.90s/it, Loss: 0.3332, V_MAE: 0.2980, A_MAE: 0.0352, LR: 0.000001]
+Epoch 15/15 (Rank 0):  21%|██▏       | 6/28 [05:28<16:49, 45.90s/it, Loss: 0.3587, V_MAE: 0.3256, A_MAE: 0.0331, LR: 0.000001]
+Epoch 15/15 (Rank 0):  25%|██▌       | 7/28 [05:28<16:29, 47.14s/it, Loss: 0.3587, V_MAE: 0.3256, A_MAE: 0.0331, LR: 0.000001]
+Epoch 15/15 (Rank 0):  25%|██▌       | 7/28 [06:10<16:29, 47.14s/it, Loss: 0.3777, V_MAE: 0.3457, A_MAE: 0.0320, LR: 0.000001]
+Epoch 15/15 (Rank 0):  29%|██▊       | 8/28 [06:10<15:10, 45.54s/it, Loss: 0.3777, V_MAE: 0.3457, A_MAE: 0.0320, LR: 0.000001]
+Epoch 15/15 (Rank 0):  29%|██▊       | 8/28 [06:55<15:10, 45.54s/it, Loss: 0.3735, V_MAE: 0.3378, A_MAE: 0.0357, LR: 0.000001]
+Epoch 15/15 (Rank 0):  32%|███▏      | 9/28 [06:55<14:26, 45.59s/it, Loss: 0.3735, V_MAE: 0.3378, A_MAE: 0.0357, LR: 0.000001]
+Epoch 15/15 (Rank 0):  32%|███▏      | 9/28 [07:41<14:26, 45.59s/it, Loss: 0.3745, V_MAE: 0.3415, A_MAE: 0.0330, LR: 0.000001]
+Epoch 15/15 (Rank 0):  36%|███▌      | 10/28 [07:41<13:40, 45.59s/it, Loss: 0.3745, V_MAE: 0.3415, A_MAE: 0.0330, LR: 0.000001]
+Epoch 15/15 (Rank 0):  36%|███▌      | 10/28 [08:31<13:40, 45.59s/it, Loss: 0.3389, V_MAE: 0.3077, A_MAE: 0.0312, LR: 0.000001]
+                                                                                                                               
+  Epoch 15/15, Step 10/28 - Loss: 0.3389, V_MAE: 0.3077, A_MAE: 0.0312, LR: 0.000001
+
+Epoch 15/15 (Rank 0):  36%|███▌      | 10/28 [08:31<13:40, 45.59s/it, Loss: 0.3389, V_MAE: 0.3077, A_MAE: 0.0312, LR: 0.000001]
+Epoch 15/15 (Rank 0):  39%|███▉      | 11/28 [08:31<13:18, 46.97s/it, Loss: 0.3389, V_MAE: 0.3077, A_MAE: 0.0312, LR: 0.000001]
+Epoch 15/15 (Rank 0):  39%|███▉      | 11/28 [09:19<13:18, 46.97s/it, Loss: 0.3764, V_MAE: 0.3461, A_MAE: 0.0303, LR: 0.000001]
+Epoch 15/15 (Rank 0):  43%|████▎     | 12/28 [09:19<12:37, 47.33s/it, Loss: 0.3764, V_MAE: 0.3461, A_MAE: 0.0303, LR: 0.000001]
+Epoch 15/15 (Rank 0):  43%|████▎     | 12/28 [10:11<12:37, 47.33s/it, Loss: 0.3851, V_MAE: 0.3526, A_MAE: 0.0325, LR: 0.000001]
+Epoch 15/15 (Rank 0):  46%|████▋     | 13/28 [10:11<12:08, 48.57s/it, Loss: 0.3851, V_MAE: 0.3526, A_MAE: 0.0325, LR: 0.000001]
+Epoch 15/15 (Rank 0):  46%|████▋     | 13/28 [11:05<12:08, 48.57s/it, Loss: 0.3487, V_MAE: 0.3202, A_MAE: 0.0286, LR: 0.000001]
+Epoch 15/15 (Rank 0):  50%|█████     | 14/28 [11:05<11:43, 50.27s/it, Loss: 0.3487, V_MAE: 0.3202, A_MAE: 0.0286, LR: 0.000001]
+Epoch 15/15 (Rank 0):  50%|█████     | 14/28 [11:53<11:43, 50.27s/it, Loss: 0.3398, V_MAE: 0.3092, A_MAE: 0.0307, LR: 0.000000]
+Epoch 15/15 (Rank 0):  54%|█████▎    | 15/28 [11:53<10:45, 49.64s/it, Loss: 0.3398, V_MAE: 0.3092, A_MAE: 0.0307, LR: 0.000000]
+Epoch 15/15 (Rank 0):  54%|█████▎    | 15/28 [12:45<10:45, 49.64s/it, Loss: 0.4083, V_MAE: 0.3680, A_MAE: 0.0403, LR: 0.000000]
+                                                                                                                               
+  Epoch 15/15, Step 15/28 - Loss: 0.4083, V_MAE: 0.3680, A_MAE: 0.0403, LR: 0.000000
+
+Epoch 15/15 (Rank 0):  54%|█████▎    | 15/28 [12:45<10:45, 49.64s/it, Loss: 0.4083, V_MAE: 0.3680, A_MAE: 0.0403, LR: 0.000000]
+Epoch 15/15 (Rank 0):  57%|█████▋    | 16/28 [12:45<10:03, 50.28s/it, Loss: 0.4083, V_MAE: 0.3680, A_MAE: 0.0403, LR: 0.000000]
+Epoch 15/15 (Rank 0):  57%|█████▋    | 16/28 [13:39<10:03, 50.28s/it, Loss: 0.3369, V_MAE: 0.3051, A_MAE: 0.0318, LR: 0.000000]
+Epoch 15/15 (Rank 0):  61%|██████    | 17/28 [13:39<09:24, 51.32s/it, Loss: 0.3369, V_MAE: 0.3051, A_MAE: 0.0318, LR: 0.000000]
+Epoch 15/15 (Rank 0):  61%|██████    | 17/28 [14:43<09:24, 51.32s/it, Loss: 0.3358, V_MAE: 0.3065, A_MAE: 0.0293, LR: 0.000000]
+Epoch 15/15 (Rank 0):  64%|██████▍   | 18/28 [14:43<09:12, 55.21s/it, Loss: 0.3358, V_MAE: 0.3065, A_MAE: 0.0293, LR: 0.000000]
+Epoch 15/15 (Rank 0):  64%|██████▍   | 18/28 [15:33<09:12, 55.21s/it, Loss: 0.3452, V_MAE: 0.3169, A_MAE: 0.0282, LR: 0.000000]
+Epoch 15/15 (Rank 0):  68%|██████▊   | 19/28 [15:33<08:02, 53.61s/it, Loss: 0.3452, V_MAE: 0.3169, A_MAE: 0.0282, LR: 0.000000]
+Epoch 15/15 (Rank 0):  68%|██████▊   | 19/28 [16:25<08:02, 53.61s/it, Loss: 0.3653, V_MAE: 0.3319, A_MAE: 0.0334, LR: 0.000000]
+Epoch 15/15 (Rank 0):  71%|███████▏  | 20/28 [16:25<07:04, 53.12s/it, Loss: 0.3653, V_MAE: 0.3319, A_MAE: 0.0334, LR: 0.000000]
+Epoch 15/15 (Rank 0):  71%|███████▏  | 20/28 [17:11<07:04, 53.12s/it, Loss: 0.3333, V_MAE: 0.2995, A_MAE: 0.0338, LR: 0.000000]
+                                                                                                                               
+  Epoch 15/15, Step 20/28 - Loss: 0.3333, V_MAE: 0.2995, A_MAE: 0.0338, LR: 0.000000
+
+Epoch 15/15 (Rank 0):  71%|███████▏  | 20/28 [17:11<07:04, 53.12s/it, Loss: 0.3333, V_MAE: 0.2995, A_MAE: 0.0338, LR: 0.000000]
+Epoch 15/15 (Rank 0):  75%|███████▌  | 21/28 [17:11<05:56, 50.98s/it, Loss: 0.3333, V_MAE: 0.2995, A_MAE: 0.0338, LR: 0.000000]
+Epoch 15/15 (Rank 0):  75%|███████▌  | 21/28 [17:56<05:56, 50.98s/it, Loss: 0.3852, V_MAE: 0.3498, A_MAE: 0.0354, LR: 0.000000]
+Epoch 15/15 (Rank 0):  79%|███████▊  | 22/28 [17:56<04:56, 49.40s/it, Loss: 0.3852, V_MAE: 0.3498, A_MAE: 0.0354, LR: 0.000000]
+Epoch 15/15 (Rank 0):  79%|███████▊  | 22/28 [18:43<04:56, 49.40s/it, Loss: 0.3676, V_MAE: 0.3372, A_MAE: 0.0303, LR: 0.000000]
+Epoch 15/15 (Rank 0):  82%|████████▏ | 23/28 [18:43<04:02, 48.42s/it, Loss: 0.3676, V_MAE: 0.3372, A_MAE: 0.0303, LR: 0.000000]
+Epoch 15/15 (Rank 0):  82%|████████▏ | 23/28 [19:28<04:02, 48.42s/it, Loss: 0.3370, V_MAE: 0.3044, A_MAE: 0.0325, LR: 0.000000]
+Epoch 15/15 (Rank 0):  86%|████████▌ | 24/28 [19:28<03:10, 47.56s/it, Loss: 0.3370, V_MAE: 0.3044, A_MAE: 0.0325, LR: 0.000000]
+Epoch 15/15 (Rank 0):  86%|████████▌ | 24/28 [20:15<03:10, 47.56s/it, Loss: 0.3373, V_MAE: 0.3056, A_MAE: 0.0318, LR: 0.000000]
+Epoch 15/15 (Rank 0):  89%|████████▉ | 25/28 [20:15<02:22, 47.40s/it, Loss: 0.3373, V_MAE: 0.3056, A_MAE: 0.0318, LR: 0.000000]
+Epoch 15/15 (Rank 0):  89%|████████▉ | 25/28 [21:07<02:22, 47.40s/it, Loss: 0.3419, V_MAE: 0.3114, A_MAE: 0.0306, LR: 0.000000]
+                                                                                                                               
+  Epoch 15/15, Step 25/28 - Loss: 0.3419, V_MAE: 0.3114, A_MAE: 0.0306, LR: 0.000000
+
+Epoch 15/15 (Rank 0):  89%|████████▉ | 25/28 [21:07<02:22, 47.40s/it, Loss: 0.3419, V_MAE: 0.3114, A_MAE: 0.0306, LR: 0.000000]
+Epoch 15/15 (Rank 0):  93%|█████████▎| 26/28 [21:07<01:37, 48.68s/it, Loss: 0.3419, V_MAE: 0.3114, A_MAE: 0.0306, LR: 0.000000]
+Epoch 15/15 (Rank 0):  93%|█████████▎| 26/28 [21:55<01:37, 48.68s/it, Loss: 0.3596, V_MAE: 0.3276, A_MAE: 0.0320, LR: 0.000000]
+Epoch 15/15 (Rank 0):  96%|█████████▋| 27/28 [21:55<00:48, 48.52s/it, Loss: 0.3596, V_MAE: 0.3276, A_MAE: 0.0320, LR: 0.000000]
+Epoch 15/15 (Rank 0):  96%|█████████▋| 27/28 [22:48<00:48, 48.52s/it, Loss: 0.3478, V_MAE: 0.3163, A_MAE: 0.0315, LR: 0.000000]
+Epoch 15/15 (Rank 0): 100%|██████████| 28/28 [22:48<00:00, 49.99s/it, Loss: 0.3478, V_MAE: 0.3163, A_MAE: 0.0315, LR: 0.000000]
+                                                                                                                               
+Epoch 15 Finished.
+  Average Loss (Rank 0): 0.3584
+  Average Video MAE Loss (Rank 0): 0.3260
+  Average Audio MAE Loss (Rank 0): 0.0324
+Checkpoint saved to ./test_40_stage1_output/t3_av_stage1_epoch_15.pt
+Stage 1 MAE Training finished.

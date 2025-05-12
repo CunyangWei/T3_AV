@@ -1,0 +1,7 @@
+Loading ffmpeg/gcc/11.3.0/zen2/6.0
+  Loading requirement: gcc/11.3.0
+1
+4
+slurmstepd: error: *** JOB 11672239 ON gpu-a6-8 CANCELLED AT 2025-05-08T23:42:57 ***
+slurmstepd: error: *** STEP 11672239.0 ON gpu-a6-8 CANCELLED AT 2025-05-08T23:42:57 ***
+srun: Job step aborted: Waiting up to 32 seconds for job step to finish.

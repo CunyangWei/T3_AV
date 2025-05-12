@@ -1,0 +1,33 @@
+Loading ffmpeg/gcc/11.3.0/zen2/6.0
+  Loading requirement: gcc/11.3.0
+1
+4
+Warning: LOCAL_RANK not set, attempting basic DDP init. Use torchrun for robust DDP.
+Traceback (most recent call last):
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 381, in <module>
+Warning: LOCAL_RANK not set, attempting basic DDP init. Use torchrun for robust DDP.
+Traceback (most recent call last):
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 381, in <module>
+    main(args) 
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 109, in main
+    main(args) 
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 109, in main
+    raise RuntimeError("DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.")
+RuntimeError: DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.
+    raise RuntimeError("DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.")
+RuntimeError: DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.
+Warning: LOCAL_RANK not set, attempting basic DDP init. Use torchrun for robust DDP.
+Traceback (most recent call last):
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 381, in <module>
+    main(args) 
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 109, in main
+Warning: LOCAL_RANK not set, attempting basic DDP init. Use torchrun for robust DDP.
+Traceback (most recent call last):
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 381, in <module>
+    raise RuntimeError("DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.")
+RuntimeError: DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.
+    main(args) 
+  File "/scratch/zt1/project/bhatele-lab/user/cunyang/sync/T3_AV/train_stage1.py", line 109, in main
+    raise RuntimeError("DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.")
+RuntimeError: DDP enabled but LOCAL_RANK not set. Please use torchrun or a similar launch utility.
+srun: error: gpu-a6-8: tasks 0-3: Exited with exit code 1
